@@ -16,7 +16,7 @@ namespace DAL.Models.SpecialistModel
         public int? SpecialistId { get; set; }
         public virtual Specialist? Specialist { get; set; }
         public int? PatientId { get; set; }
-        public virtual Patient? Patient { get; set; }
+        //public virtual Patient? Patient { get; set; }
         public virtual List<Chear>? Chears { get; set; }
     }
 }
