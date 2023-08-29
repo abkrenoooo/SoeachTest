@@ -26,14 +26,14 @@ namespace BLL.Services.Services
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly JWT _jwt; 
+        private readonly JWT _jwt;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AuthService(UserManager<ApplicationUser> UserManager, IOptions<JWT> jwt, ApplicationDbContext db , IHttpContextAccessor httpContextAccessor)
+        public AuthService(UserManager<ApplicationUser> UserManager, IOptions<JWT> jwt, ApplicationDbContext db, IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
             _userManager = UserManager;
-            _jwt = jwt.Value; 
-           _httpContextAccessor = httpContextAccessor;
+            _jwt = jwt.Value;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #region Authentication Services
@@ -43,13 +43,13 @@ namespace BLL.Services.Services
             {
                 // Check if email or password true or not
                 var user = await _userManager.FindByEmailAsync(login.Email);
+
+                if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
+                    return new() { Message = "Invalid password or email" };
                 if (!user.Active)
                 {
                     return new() { Message = "email is not active" };
                 }
-                if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
-                    return new() { Message = "Invalid password or email" };
-
 
                 // create token for the user
                 var jwtSecurityToken = await CreateJwtToken(user);
@@ -119,7 +119,7 @@ namespace BLL.Services.Services
                 await _userManager.AddToRoleAsync(user, Roles.User.ToString());
                 if (model.ImageOfSpecializationCertificate is not null)
                 {
-                  
+
                     var FileVedio = UploadFileHelper.SaveFile(model.ImageOfSpecializationCertificate, "ImageOfSpecializationCertificate");
                     model.ImageOfSpecializationCertificatePath = _httpContextAccessor.HttpContext.Request.Host.Value + "/ImageOfSpecializationCertificate/" + FileVedio[0];
                 }
@@ -127,13 +127,13 @@ namespace BLL.Services.Services
                 Specialist specialist = new Specialist()
                 {
                     UserId = _userManager.FindByNameAsync(model.Username).Result.Id,
-                    State = model.Status,
-                    Country=model.Country,
-                    City =model.City,
-                    Accepted=false,
-                    Hospital=model.Hospital,
-                    IdNumber=model.IdNumber,
-                    ImageOfSpecializationCertificate=model.ImageOfSpecializationCertificatePath,
+                    Status = model.Status,
+                    Country = model.Country,
+                    City = model.City,
+                    Accepted = false,
+                    Hospital = model.Hospital,
+                    IdNumber = model.IdNumber,
+                    ImageOfSpecializationCertificate = model.ImageOfSpecializationCertificatePath,
                 };
 
                 //specialist.UserId = _userManager.FindByNameAsync(model.Username).Result.Id;

@@ -11,6 +11,8 @@ using System.Text;
 using BLL.Seeds;
 using BLL.Services.IServices;
 using BLL.Services.Services;
+using DAL.Repository.IRepository;
+using DAL.Repository.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +56,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //Services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAdminRepo, AdminRepo>();
+builder.Services.AddScoped<IAdminSevices, AdminSevices>();
 //builder.Services.AddScoped<IStudentsJoinToTeachers,StudentsJoinToTeachers>();
 
 //Repo

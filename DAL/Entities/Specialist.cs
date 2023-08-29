@@ -13,8 +13,8 @@ namespace SpeakEase.DAL.Entities
         public string Country { get; set; }
         public string City { get; set; }
         public string IdNumber { get; set; }
-        public MaritalStatus State { get; set; }
-        public bool Accepted { get; set; } =false;
+        public MaritalStatus Status { get; set; }
+        public bool Accepted { get; set; } = false;
         [ForeignKey(nameof(UserId))]
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }

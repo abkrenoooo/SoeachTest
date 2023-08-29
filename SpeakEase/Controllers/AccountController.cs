@@ -31,7 +31,6 @@ namespace EductionPlatform.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-
             }
             var result = await _userService.RegisterUserAsync(model);
 

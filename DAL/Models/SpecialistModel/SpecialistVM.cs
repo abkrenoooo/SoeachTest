@@ -6,7 +6,7 @@ namespace DAL.Models.SpecialistModel
 {
     public class SpecialistVM
     {
-        public int? SpecialistID { get; set; }
+        public int SpecialistId { get; set; }
         [MaxLength(15)]
         [MinLength(2)]
         [Required]
@@ -51,6 +51,8 @@ namespace DAL.Models.SpecialistModel
         public string City { get; set; }
         [Required]
         public string IdNumber { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
+        public bool Accepted { get; set; } = false;
+
     }
 }

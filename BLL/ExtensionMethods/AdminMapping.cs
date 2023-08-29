@@ -7,18 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.ExtensionMethods
+namespace Bll.ExtensionMethods
 {
     public static class AdminMapping
     {
-        public static ApplicationUser ToApplicationUser(this AdminUserVM admin)
+        public static async Task<ApplicationUser> ToApplicationUser(this AdminUserVM admin)
         {
             return new()
             {
                 Id = Guid.NewGuid().ToString(),
-                UserName = admin.Email,
+                UserName = admin.Username,
                 Email = admin.Email,
                 FirstName = admin.FirstName,
+                SecondName = admin.SecondName,
                 LastName = admin.LastName,
                 PhoneNumber = admin.Phone,
                 Active = true,
@@ -27,23 +28,23 @@ namespace DAL.ExtensionMethods
             };
         }
 
-        public static AdminUserVM FromApplicationUser(this ApplicationUser user)
+        public static async Task<AdminUserVM> FromApplicationUser(this ApplicationUser user)
         {
             return new()
             {
-                UserId = Guid.NewGuid().ToString(),
-                Username = user.Email,
+                UserId = user.Id,
+                Username = user.UserName,
                 Email = user.Email,
                 FirstName = user.FirstName,
+                SecondName = user.SecondName,
                 LastName = user.LastName,
-                Phone= user.PhoneNumber,
+                Phone = user.PhoneNumber,
                 Active = true,
                 BirithDate = user.BirithDate,
                 Gender = user.Gender,
-                SecondName= user.SecondName,
             };
         }
 
-        
+
     }
 }

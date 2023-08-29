@@ -2,6 +2,7 @@
 using DAL.Models.SpecialistModel;
 using DAL.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SpeakEase.DAL.Data;
 using SpeakEase.DAL.Entities;
@@ -27,85 +28,41 @@ namespace DAL.Repository.Repository
             _userManager = UserManager;
         }
 
-        public async Task<Response<AdminUserVM>> AddAdminUserAsync(AdminUserVM model)
+        public async Task<bool> RemoveAdminUserAsync(string AdminUserId)
         {
-            throw new NotImplementedException();
-
-            //var user = await _userManager.FindByEmailAsync(model.Email);
-            //   if (!user.Active)
-            //   {
-            //       return new() { Message = "email is not active" };
-            //   }
-            //   if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            //       return new() { Message = "Invalid password or email" };
-
-
-            //   // create token for the user
-            //   var jwtSecurityToken = await CreateJwtToken(user);
-            //   var studentRoles = await _userManager.GetRolesAsync(user);
-
-            //var admin = model.();
-            //var result = await _userManager.CreateAsync(admin, model.Password);
-
-            ////specialist.UserId = _userManager.FindByNameAsync(model.Username).Result.Id;
-            ////specialist.State = model.Status;
-            //if (!result.Succeeded)
-            //{
-            //    var errors = string.Empty;
-
-            //    foreach (var error in result.Errors)
-            //        errors += $"{error.Description},";
-
-            //    return new Response<AdminUserVM> { Message = errors };
-            //}
-
-            //await _userManager.AddToRoleAsync(admin, Roles.Admin.ToString());
-            //return new Response<AdminUserVM>
-            //{
-            //    Success = true,
-            //    ObjectData = new AdminUserVM()
-            //    {
-            //        Email = model.Email,
-            //        ExpiresOn = jwtSecurityToken.ValidTo,
-            //        IsAuthenticated = true,
-            //        Roles = studentRoles.ToList(),
-            //        Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-            //        Username = user.UserName
-            //    }
-            //};
+            var admin = await _userManager.FindByIdAsync(AdminUserId);
+            _db.Remove(admin);
+            var result = await _db.SaveChangesAsync();
+            return result > 0 ? true : false;
         }
 
-        public Task<Response<AdminUserVM>> DeleteAdminUserAsync(int AdminUserId)
+        public Task<AdminUserVM> EditAdminUserAsync(AdminUserVM model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Response<AdminUserVM>> EditAdminUserAsync(AdminUserVM model)
+        public Task<SpecialistVM> EditeAdminUserInSpetialistRequstAsync(int SpetialistId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Response<SpecialistVM>> EditeAdminUserInSpetialistRequstAsync(int SpetialistId)
+        public async Task<List<SpecialistVM>> GetAdminUserAllSpetialistRequstAsync()
+        {
+            var data = await _db.Specialists.Where(x => x.Accepted == false).ToListAsync();
+
+        }
+
+        public Task<AdminUserVM> GetAdminUserByIdAsync(string AdminUserId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Response<IList<SpecialistVM>>> GetAdminUserAllSpetialistRequstAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Response<AdminUserVM>> GetAdminUserByIdAsync(int AdminUserId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Response<AdminUserVM>> GetAdminUsersAsync()
+        public Task<AdminUserVM> GetAdminUsersAsync()
         {
             throw new NotImplementedException();
         }
 
 
-        
+
     }
 }
