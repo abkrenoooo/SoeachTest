@@ -8,10 +8,41 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using BLL.Seeds;
 using BLL.Services.IServices;
 using BLL.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Comment
+//var host =builder.Build();
+
+//using var scope = host.Services.CreateScope();
+
+
+//var services = scope.ServiceProvider;
+//var loggerFactory = services.GetRequiredService<ILoggerProvider>();
+//var logger = loggerFactory.CreateLogger("app");
+
+//try
+//{
+//    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+//    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+//    await DefaultRoles.SeedAsync(roleManager);
+//    await DefaultUsers.SeedServerAsync(userManager, roleManager);
+//    await DefaultUsers.SeedSuperAdminUserAsync(userManager, roleManager);
+//    await DefaultUsers.SeedAdminUserAsync(userManager, roleManager);
+
+//    logger.LogInformation("Data seeded");
+//    logger.LogInformation("Application Started");
+//}
+//catch (System.Exception ex)
+//{
+//    logger.LogWarning(ex, "An error occurred while seeding data");
+//}
+#endregion
+
 // database and Identity
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
@@ -90,6 +121,27 @@ builder.Services.AddSwaggerGen(c =>
 builder.WebHost.UseContentRoot(Directory.GetCurrentDirectory());
 
 var app = builder.Build();
+using var scope = app.Services.CreateScope();
+
+
+var services = scope.ServiceProvider;
+var loggerFactory = services.GetRequiredService<ILoggerProvider>();
+
+try
+{
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    await DefaultRoles.SeedAsync(roleManager);
+    await DefaultUsers.SeedServerAsync(userManager, roleManager);
+    await DefaultUsers.SeedSuperAdminUserAsync(userManager, roleManager);
+    await DefaultUsers.SeedAdminUserAsync(userManager, roleManager);
+
+}
+catch (System.Exception ex)
+{
+
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -108,4 +160,6 @@ app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+
 app.Run();

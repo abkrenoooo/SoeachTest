@@ -10,14 +10,16 @@ namespace BLL.Seeds
 {
     public static class DefaultUsers
     {
-        public static async Task SeedHRrAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManger)
+
+        #region Server
+        public static async Task SeedServerAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManger)
         {
             var defaultUser = new ApplicationUser
             {
                 UserName = "Server",
                 FirstName = "Server",
-                SecondName= "Server",
-                LastName= "Server",
+                SecondName = "Server",
+                LastName = "Server",
                 Email = "Server@domain.com",
                 EmailConfirmed = true,
                 Active = true
@@ -30,10 +32,28 @@ namespace BLL.Seeds
                 await userManager.CreateAsync(defaultUser, "Server@123");
                 await userManager.AddToRoleAsync(defaultUser, Roles.Server.ToString());
             }
-            await roleManger.SeeDLLlClaimsForHR();
+            await roleManger.SeedServerClaims();
         }
+        private static async Task SeedServerClaims(this RoleManager<IdentityRole> roleManager)
+        {
+            var server = await roleManager.FindByNameAsync(Roles.Server.ToString());
+            await roleManager.AddServerPermissionClaims(server);
+        }
+        public static async Task AddServerPermissionClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role)
+        {
+            var allClaims = await roleManager.GetClaimsAsync(role);
+            var allPermissions = Permissions.GenerateServerPermissions();
 
-        public static async Task SeedSuperAdminUserAsync(UserManager<ApplicationUser> userManager)
+            foreach (var permission in allPermissions)
+            {
+                if (!allClaims.Any(c => c.Type == "Permission" && c.Value == permission))
+                    await roleManager.AddClaimAsync(role, new Claim("Permission", permission));
+            }
+        }
+        #endregion
+
+        #region Super Admin
+        public static async Task SeedSuperAdminUserAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManger)
         {
             var defaultUser = new ApplicationUser
             {
@@ -51,11 +71,31 @@ namespace BLL.Seeds
             if (user == null)
             {
                 await userManager.CreateAsync(defaultUser, "SuperAdmin@123");
-                await userManager.AddToRoleAsync(defaultUser,Roles.SuperAdmin.ToString() );
+                await userManager.AddToRoleAsync(defaultUser, Roles.SuperAdmin.ToString());
             }
-            
+            await roleManger.SeedSuperAdminClaims();
+
         }
-        public static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager)
+        private static async Task SeedSuperAdminClaims(this RoleManager<IdentityRole> roleManager)
+        {
+            var superAdminRole = await roleManager.FindByNameAsync(Roles.SuperAdmin.ToString());
+            await roleManager.AddSuperAdminPermissionClaims(superAdminRole);
+        }
+        public static async Task AddSuperAdminPermissionClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role)
+        {
+            var allClaims = await roleManager.GetClaimsAsync(role);
+            var allPermissions = Permissions.GenerateSuperAdminPermissions();
+
+            foreach (var permission in allPermissions)
+            {
+                if (!allClaims.Any(c => c.Type == "Permission" && c.Value == permission))
+                    await roleManager.AddClaimAsync(role, new Claim("Permission", permission));
+            }
+        }
+        #endregion
+
+        #region Admin
+        public static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManger)
         {
             var defaultUser = new ApplicationUser
             {
@@ -73,20 +113,21 @@ namespace BLL.Seeds
             if (user == null)
             {
                 await userManager.CreateAsync(defaultUser, "Admin@123");
-                await userManager.AddToRoleAsync(defaultUser,Roles.Admin.ToString() );
+                await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
             }
-            
+            await roleManger.SeedAdminClaims();
+
+        }
+        private static async Task SeedAdminClaims(this RoleManager<IdentityRole> roleManager)
+        {
+            var adminRole = await roleManager.FindByNameAsync(Roles.Admin.ToString());
+            await roleManager.AddAdminPermissionClaims(adminRole);
         }
 
-        private static async Task SeeDLLlClaimsForHR(this RoleManager<IdentityRole> roleManager)
-        {
-            var adminRole = await roleManager.FindByNameAsync(Roles.Server.ToString());
-            await roleManager.AdDLLlPermissionClaims(adminRole);
-        }
-        public static async Task AdDLLlPermissionClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role)
+        public static async Task AddAdminPermissionClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role)
         {
             var allClaims = await roleManager.GetClaimsAsync(role);
-            var allPermissions = Permissions.GenerateAllPermissions();
+            var allPermissions = Permissions.GenerateAdminPermissions();
 
             foreach (var permission in allPermissions)
             {
@@ -94,6 +135,6 @@ namespace BLL.Seeds
                     await roleManager.AddClaimAsync(role, new Claim("Permission", permission));
             }
         }
-        
+        #endregion
     }
 }

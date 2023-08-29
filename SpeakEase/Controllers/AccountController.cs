@@ -1,14 +1,15 @@
 ﻿using BLL.Services.IServices;
+using DAL.Models.SpecialistModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models.AuthModel;
-using SpeakEase.Models.SpecialistModel;
 
 namespace EductionPlatform.Controllers
 {
-    [Route("api/")]
+    [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {

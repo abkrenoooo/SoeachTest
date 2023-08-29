@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace SpeakEase.Models.SpecialistModel
+namespace DAL.Models.SpecialistModel
 {
     public class SpecialistVM
     {
@@ -51,5 +51,6 @@ namespace SpeakEase.Models.SpecialistModel
         public string City { get; set; }
         [Required]
         public string IdNumber { get; set; }
+        public string UserId { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace BLL.Seeds
         {
             var allPermissions = new List<string>();
 
-            var modules = Enum.GetValues(typeof(Modules));
+            var modules = Enum.GetValues(typeof(Modules)).Cast<Modules>().Where(z => z != Modules.SuberAdmin);
 
             foreach (var module in modules)
                 allPermissions.AddRange(GeneratePermissionsList(module.ToString()));
@@ -44,7 +44,7 @@ namespace BLL.Seeds
         {
             var allPermissions = new List<string>();
 
-            var modules = Enum.GetValues(typeof(Modules));
+            var modules = Enum.GetValues(typeof(Modules)).Cast<Modules>().Where(z=>z != Modules.SuberAdmin&&z!=Modules.Admin); 
 
             foreach (var module in modules)
                 allPermissions.AddRange(GeneratePermissionsList(module.ToString()));

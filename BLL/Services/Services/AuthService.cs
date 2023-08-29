@@ -1,6 +1,7 @@
 ﻿using BlL.Helper;
 using BLL.Services.IServices;
 using DAL.Enum;
+using DAL.Models.SpecialistModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -10,7 +11,6 @@ using SpeakEase.DAL.Data;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using SpeakEase.Models.AuthModel;
-using SpeakEase.Models.SpecialistModel;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,7 +27,7 @@ namespace BLL.Services.Services
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JWT _jwt; 
-       private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AuthService(UserManager<ApplicationUser> UserManager, IOptions<JWT> jwt, ApplicationDbContext db , IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
@@ -43,7 +43,10 @@ namespace BLL.Services.Services
             {
                 // Check if email or password true or not
                 var user = await _userManager.FindByEmailAsync(login.Email);
-
+                if (!user.Active)
+                {
+                    return new() { Message = "email is not active" };
+                }
                 if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
                     return new() { Message = "Invalid password or email" };
 

@@ -1,7 +1,7 @@
-﻿using SpeakEase.DAL.Entities;
+﻿using DAL.Models.SpecialistModel;
+using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using SpeakEase.Models.AuthModel;
-using SpeakEase.Models.SpecialistModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -18,6 +18,5 @@ namespace DAL.Enum
         Result = 6,
         [Display(Name = "Patient")]
         Patient = 7,
-
     }
 }

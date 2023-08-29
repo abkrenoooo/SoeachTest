@@ -14,6 +14,7 @@ namespace BLL.Seeds
                 await roleManger.CreateAsync(new IdentityRole(Roles.Server.ToString()));
                 await roleManger.CreateAsync(new IdentityRole(Roles.SuperAdmin.ToString()));
                 await roleManger.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
+                await roleManger.CreateAsync(new IdentityRole(Roles.User.ToString()));
             }
         }
     }
