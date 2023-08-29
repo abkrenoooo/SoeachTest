@@ -1,27 +1,55 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DAL.Enum;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace SpeakEase.Models.SpecialistModel
 {
     public class SpecialistVM
     {
-        public string? SpecialistID { get; set; }
-        [MaxLength(10)]
-        [MinLength(5)]
+        public int? SpecialistID { get; set; }
+        [MaxLength(15)]
+        [MinLength(2)]
         [Required]
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
+        [MaxLength(15)]
+        [MinLength(2)]
         [Required]
-        public string SpecialistSpecialty { get; set; }
-        
-        public string Gender { get; set; }
+        public string SecondName { get; set; }
+        [MaxLength(15)]
+        [MinLength(2)]
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public Gender Gender { get; set; }
+        [Required]
+        public MaritalStatus Status { get; set; }
         [DataType(DataType.Date)]
         [Required]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime BirithDate { get; set; }
         [Required]
-        public string PhoneNumber { get; set; }
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
         [Required]
-        public string Address { get; set; }
-        public string Qualifications { get; set; }
-        public int YearsOfExperience { get; set; }
-        public string AdditionalDetails { get; set; }
+        [DataType(DataType.Password)]
+        public string? Password { get; set; }
+        [Required]
+        [Compare(nameof(Password), ErrorMessage = "Password don't match.")]
+        [DataType(DataType.Password)]
+        public string? ConfirmPassword { get; set; }
+        [Required]
+        public string Phone { get; set; }
+        [Required]
+        public string Username { get; set; }
+        public string? ImageOfSpecializationCertificatePath { get; set; }
+        [Required]
+        public IFormFile ImageOfSpecializationCertificate { get; set; }
+        [Required]
+        public string Hospital { get; set; }
+        [Required]
+        public string Country { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string IdNumber { get; set; }
     }
 }

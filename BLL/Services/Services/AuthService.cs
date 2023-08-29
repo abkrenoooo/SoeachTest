@@ -1,11 +1,16 @@
-﻿using BLL.Services.IServices;
+﻿using BlL.Helper;
+using BLL.Services.IServices;
+using DAL.Enum;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SpeakEase.BLL.Helper;
+using SpeakEase.DAL.Data;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using SpeakEase.Models.AuthModel;
+using SpeakEase.Models.SpecialistModel;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,14 +22,18 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace BLL.Services.Services
 {
-    public class AuthService:IAuthService
+    public class AuthService : IAuthService
     {
+        private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly JWT _jwt;
-        public AuthService(UserManager<ApplicationUser> UserManager, IOptions<JWT> jwt)
+        private readonly JWT _jwt; 
+       private readonly IHttpContextAccessor _httpContextAccessor;
+        public AuthService(UserManager<ApplicationUser> UserManager, IOptions<JWT> jwt, ApplicationDbContext db , IHttpContextAccessor httpContextAccessor)
         {
+            _db = db;
             _userManager = UserManager;
-            _jwt = jwt.Value;
+            _jwt = jwt.Value; 
+           _httpContextAccessor = httpContextAccessor;
         }
 
         #region Authentication Services
@@ -46,7 +55,7 @@ namespace BLL.Services.Services
 
                 return new Response<AuthModel>
                 {
-                    Success=true,
+                    Success = true,
                     ObjectData = new AuthModel()
                     {
                         Email = user.Email,
@@ -69,7 +78,7 @@ namespace BLL.Services.Services
             }
         }
 
-        public async Task<Response<AuthModel>> RegisterUserAsync(RegisterModel model)
+        public async Task<Response<AuthModel>> RegisterUserAsync(SpecialistVM model)
         {
             try
             {
@@ -85,9 +94,11 @@ namespace BLL.Services.Services
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    SecondName=model.SecondName,
-                    BirithDate=model.BirithDate,
-                    Gender=model.Gender,
+                    SecondName = model.SecondName,
+                    BirithDate = model.BirithDate,
+                    Gender = model.Gender,
+                    Active = false,
+
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -101,16 +112,39 @@ namespace BLL.Services.Services
 
                     return new Response<AuthModel> { Message = errors };
                 }
-                
-                await _userManager.AddToRoleAsync(user, "User");
 
+                await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+                if (model.ImageOfSpecializationCertificate is not null)
+                {
+                  
+                    var FileVedio = UploadFileHelper.SaveFile(model.ImageOfSpecializationCertificate, "ImageOfSpecializationCertificate");
+                    model.ImageOfSpecializationCertificatePath = _httpContextAccessor.HttpContext.Request.Host.Value + "/ImageOfSpecializationCertificate/" + FileVedio[0];
+                }
+
+                Specialist specialist = new Specialist()
+                {
+                    UserId = _userManager.FindByNameAsync(model.Username).Result.Id,
+                    State = model.Status,
+                    Country=model.Country,
+                    City =model.City,
+                    Accepted=false,
+                    Hospital=model.Hospital,
+                    IdNumber=model.IdNumber,
+                    ImageOfSpecializationCertificate=model.ImageOfSpecializationCertificatePath,
+                };
+
+                //specialist.UserId = _userManager.FindByNameAsync(model.Username).Result.Id;
+                //specialist.State = model.Status;
+                await _db.Specialists.AddAsync(specialist);
+                await _db.SaveChangesAsync();
 
                 var jwtSecurityToken = await CreateJwtToken(user);
 
 
                 await _userManager.UpdateAsync(user);
                 var studentRoles = await _userManager.GetRolesAsync(user);
-                AuthModel objectData = new  AuthModel(){
+                AuthModel objectData = new AuthModel()
+                {
                     Email = user.Email,
                     ExpiresOn = jwtSecurityToken.ValidTo,
                     IsAuthenticated = true,
@@ -121,14 +155,17 @@ namespace BLL.Services.Services
 
                 return new Response<AuthModel>
                 {
-                    Success=true,
+                    Success = true,
                     ObjectData = objectData
                 };
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message, ex.StackTrace);
-                return new() { Message = ex.Message };
+                return new()
+                {
+                    Message = ex.Message
+                };
             }
 
         }

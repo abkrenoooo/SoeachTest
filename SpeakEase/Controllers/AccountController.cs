@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models.AuthModel;
-
+using SpeakEase.Models.SpecialistModel;
 
 namespace EductionPlatform.Controllers
 {
@@ -13,11 +13,11 @@ namespace EductionPlatform.Controllers
     public class AccountController : ControllerBase
     {
         #region Depend Injecktion
-        private readonly IAuthService userService;
+        private readonly IAuthService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         public AccountController(IAuthService userService, UserManager<ApplicationUser> userManager)
         {
-            this.userService = userService;
+            this._userService = userService;
             this._userManager = userManager;
         }
         #endregion
@@ -25,14 +25,14 @@ namespace EductionPlatform.Controllers
         #region Register
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register([FromForm] SpecialistVM model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
 
             }
-            var result = await userService.RegisterUserAsync(model);
+            var result = await _userService.RegisterUserAsync(model);
 
             return Ok(result);
         }
@@ -48,7 +48,7 @@ namespace EductionPlatform.Controllers
                 return BadRequest(ModelState);
 
             }
-            var result = await userService.LoginAsync(loginUser);
+            var result = await _userService.LoginAsync(loginUser);
             return Ok(result);
         }
         #endregion

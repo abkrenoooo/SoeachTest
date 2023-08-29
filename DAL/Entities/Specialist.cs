@@ -14,7 +14,7 @@ namespace SpeakEase.DAL.Entities
         public string City { get; set; }
         public string IdNumber { get; set; }
         public MaritalStatus State { get; set; }
-        public byte Accepted { get; set; } = 0;
+        public bool Accepted { get; set; } =false;
         [ForeignKey(nameof(UserId))]
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }

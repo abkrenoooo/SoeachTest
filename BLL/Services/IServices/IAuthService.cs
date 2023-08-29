@@ -1,6 +1,7 @@
 ﻿using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using SpeakEase.Models.AuthModel;
+using SpeakEase.Models.SpecialistModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BLL.Services.IServices
 {
     public interface IAuthService
     {
-        Task<Response<AuthModel>> RegisterUserAsync(RegisterModel model);
+        Task<Response<AuthModel>> RegisterUserAsync(SpecialistVM model);
         Task<Response<AuthModel>> LoginAsync(LoginUser login);
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpeakEase.DAL.Entities
 {
-    public class QuctionTest
+    public class QuestionTest
     {
         [Key]
         public int QuctionTestId { get; set; }
