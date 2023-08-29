@@ -31,6 +31,8 @@
 
   <ItemGroup>
     <Folder Include="Repository\IRepository\" />
+    <Folder Include="Repository\IRepository\" />
+    <Folder Include="Repository\Repository\" />
     <Folder Include="Repository\Repository\" />
   </ItemGroup>
 

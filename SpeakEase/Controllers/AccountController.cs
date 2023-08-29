@@ -53,7 +53,6 @@ namespace EductionPlatform.Controllers
         }
         #endregion
 
-
         #region Comment
         //#region Update Profile
         //[HttpPost("Update/Profile")]
