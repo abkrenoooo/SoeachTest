@@ -15,10 +15,10 @@ namespace EductionPlatform.Controllers
         #region Depend Injecktion
         private readonly IAuthService userService;
         private readonly UserManager<ApplicationUser> _userManager;
-        public AccountController(IAuthService userService,UserManager<ApplicationUser> userManager)
+        public AccountController(IAuthService userService, UserManager<ApplicationUser> userManager)
         {
-                this.userService=userService;
-                this._userManager=userManager;
+            this.userService = userService;
+            this._userManager = userManager;
         }
         #endregion
 
@@ -27,13 +27,13 @@ namespace EductionPlatform.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
 
             }
-            var result= await userService.RegisterUserAsync(model); 
-            
+            var result = await userService.RegisterUserAsync(model);
+
             return Ok(result);
         }
         #endregion
@@ -53,6 +53,8 @@ namespace EductionPlatform.Controllers
         }
         #endregion
 
+
+        #region Comment
         //#region Update Profile
         //[HttpPost("Update/Profile")]
         //[Authorize]
@@ -118,11 +120,12 @@ namespace EductionPlatform.Controllers
         //    var user= await _userManager.FindByIdAsync(id);
         //    if (user == null)
         //        return NotFound();
-            
+
 
         //    return Ok(user);
         //}
         //#endregion
+        #endregion
 
     }
 }
