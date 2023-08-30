@@ -23,7 +23,22 @@ namespace Bll.ExtensionMethods
                 ImageOfSpecializationCertificate = specialistVM.ImageOfSpecializationCertificatePath,
                 MaritalStatus = specialistVM.MaritalStatus,
                 SpecialistId = specialistVM.SpecialistId,
-                UserId = specialistVM.UserId
+                UserId = specialistVM.UserId,
+            };
+        }
+        public static async Task<Specialist> ToSpecialistToSpecialistVMEdit(this SpecialistVMEdit specialistVM)
+        {
+            return new()
+            {
+                IsAccepted = specialistVM.Accepted,
+                City = specialistVM.City,
+                Country = specialistVM.Country,
+                Hospital = specialistVM.Hospital,
+                IdNumber = specialistVM.IdNumber,
+                ImageOfSpecializationCertificate = specialistVM.ImageOfSpecializationCertificatePath,
+                MaritalStatus = specialistVM.MaritalStatus,
+                SpecialistId = specialistVM.SpecialistId,
+                UserId = specialistVM.UserId,
             };
         }
 
@@ -39,7 +54,39 @@ namespace Bll.ExtensionMethods
                 ImageOfSpecializationCertificatePath = specialist.ImageOfSpecializationCertificate,
                 MaritalStatus = specialist.MaritalStatus,
                 SpecialistId = specialist.SpecialistId,
-                UserId = specialist.UserId
+                UserId = specialist.UserId,
+                BirithDate=specialist.User.BirithDate,
+                Email=specialist.User.Email,
+                Username=specialist.User.UserName,
+                FirstName=specialist.User.FirstName,
+                SecondName = specialist.User.SecondName,
+                LastName = specialist.User.LastName,
+                Gender  = specialist.User.Gender,
+                Phone=specialist.User.PhoneNumber,
+            };
+        }
+
+        public static async Task<SpecialistVMEdit> FromSpecialistToSpecialistVMEdit(this Specialist specialist)
+        {
+            return new()
+            {
+                Accepted = specialist.IsAccepted ,
+                City = specialist.City,
+                Country = specialist.Country,
+                Hospital = specialist.Hospital,
+                IdNumber = specialist.IdNumber,
+                ImageOfSpecializationCertificatePath = specialist.ImageOfSpecializationCertificate,
+                MaritalStatus = specialist.MaritalStatus,
+                SpecialistId = specialist.SpecialistId,
+                UserId = specialist.UserId,
+                BirithDate=specialist.User.BirithDate,
+                Email=specialist.User.Email,
+                Username=specialist.User.UserName,
+                FirstName=specialist.User.FirstName,
+                SecondName = specialist.User.SecondName,
+                LastName = specialist.User.LastName,
+                Gender  = specialist.User.Gender,
+                Phone = specialist.User.PhoneNumber,
             };
         }
 

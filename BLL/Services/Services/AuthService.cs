@@ -101,6 +101,7 @@ namespace BLL.Services.Services
                     BirithDate = model.BirithDate,
                     Gender = model.Gender,
                     Active = false,
+                    PhoneNumber=model.Phone,
 
                 };
 

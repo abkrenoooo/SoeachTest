@@ -27,7 +27,6 @@ namespace BLL.Services.Services
                 Test test = new Test();
                 test.TestId = TestVM.TestId;
                 test.TestDate = TestVM.TestDate;
-                test.PatientId = TestVM.PatientId;
                 test.SpecialistId = SpecialictId;
 
                 var result = await _testRepo.Create_TestRepo(test);
@@ -117,7 +116,6 @@ namespace BLL.Services.Services
                 Test test = new Test();
                 test.TestId = TestVM.TestId;
                 test.TestDate = TestVM.TestDate;
-                test.PatientId = TestVM.PatientId;
                 test.SpecialistId = SpecialictId;
 
                 var result = await _testRepo.Update_TestRepo(Id,test);

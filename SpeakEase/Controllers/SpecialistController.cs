@@ -57,7 +57,7 @@ namespace SpeakEase.Controllers
         #region Edit Spetialist 
         [HttpPut("Edit Spetialist")]
         [AllowAnonymous]
-        public async Task<IActionResult> EditSpecialistInSpetialistRequestAsync(SpecialistVM specialist)
+        public async Task<IActionResult> EditSpecialistInSpetialistRequestAsync([FromForm] SpecialistVMEdit specialist)
         {
             if (!ModelState.IsValid)
             {

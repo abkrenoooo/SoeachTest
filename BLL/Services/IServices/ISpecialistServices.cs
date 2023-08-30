@@ -11,9 +11,9 @@ namespace BLL.Services.IServices
 {
     public interface ISpecialistServices
     {
-        Task<Response<SpecialistVM>> EditSpecialistAsync(SpecialistVM SpecialistVM);
+        Task<Response<SpecialistVM>> EditSpecialistAsync(SpecialistVMEdit SpecialistVM);
         Task<Response<SpecialistVM>> DeleteSpecialistAsync(int Id);
         Task<Response<SpecialistVM>> GetSpecialistAsync(int Id);
-        Task<Response<Specialist>> GetAllSpecialistAsync(int paggingNumber);
+        Task<Response<SpecialistVM>> GetAllSpecialistAsync(int paggingNumber);
     }
 }

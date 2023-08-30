@@ -54,11 +54,11 @@ namespace BLL.Services.Services
             }
         }
 
-        public async Task<Response<SpecialistVM>> EditSpecialistAsync(SpecialistVM specialist)
+        public async Task<Response<SpecialistVM>> EditSpecialistAsync(SpecialistVMEdit specialist)
         {
             try
             {
-                var data = await _specialistRepo.EditSpecialistAsync(specialist.ToSpecialist().Result);
+                var data = await _specialistRepo.EditSpecialistAsync(specialist.ToSpecialistToSpecialistVMEdit().Result);
 
                 if (data == null)
                 {
@@ -71,7 +71,7 @@ namespace BLL.Services.Services
                 }
                 return new Response<SpecialistVM>
                 {
-                    ObjectData = specialist,
+                    ObjectData =await data.FromSpecialist(),
                     Success = true,
                     Message = "Spetialist  is Updated",
                     status_code = "200",
@@ -88,7 +88,7 @@ namespace BLL.Services.Services
             }
         }
 
-        public async Task<Response<Specialist>> GetAllSpecialistAsync(int paggingNumber)
+        public async Task<Response<SpecialistVM>> GetAllSpecialistAsync(int paggingNumber)
         {
             try
             {
@@ -106,11 +106,20 @@ namespace BLL.Services.Services
                         result.paggingNumber = (int)pagging + 1;
                     }
                 }
-                return result;
+                return new Response<SpecialistVM>
+                {
+                    Success = result.Success,
+                    Data =result.Data==null?null: result.Data.ToList().ConvertAll(x=>x.FromSpecialist().Result),
+                    error = result.error,
+                    Message = result.Message,
+                    CountOfData = result.CountOfData,
+                    paggingNumber = result.paggingNumber,
+                    status_code=result.status_code,
+                };
             }
             catch (Exception ex)
             {
-                return new Response<Specialist>
+                return new Response<SpecialistVM>
                 {
                     Success = true,
                     Message = ex.Message,

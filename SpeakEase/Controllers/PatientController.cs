@@ -22,7 +22,7 @@ namespace SpeakEase.Controllers
             _patientService = patientService;
         }
         [Authorize]
-        [HttpPost("AddPatient")]
+        [HttpPost("Add Patient")]
         public async Task<IActionResult> AddPatient(PatientVM patientVM)
         {
             var id =User.FindFirstValue("uid");
@@ -31,29 +31,32 @@ namespace SpeakEase.Controllers
             var result=await _patientService.CreatePatientAsync(patientVM,id);
             return Ok(result);
         }
+
         [Authorize]
-        [HttpGet("GetAllPatient")]
+        [HttpGet("Get All Patient")]
         public async Task<IActionResult> GetAllPatient(int pagging)
         {
-            var result=_patientService.GetAllPatientAsync(pagging);
+            var result=await _patientService.GetAllPatientAsync(pagging);
             return Ok(result);
         }
+
         [Authorize]
-        [HttpGet("GetPatient")]
+        [HttpGet("Get Patient")]
         public async Task<IActionResult> GetPatient(int Id)
         {
-            var result = _patientService.GetPatientAsync(Id);
+            var result =await _patientService.GetPatientAsync(Id);
             return Ok(result);
         }
+
         [Authorize]
-        [HttpDelete("DeletePatient")]
+        [HttpDelete("Delete Patient")]
         public async Task<IActionResult> DeletePatient(int Id)
         {
             var result=await _patientService.DeletePatientAsync(Id);
             return Ok(result);
         }
         [Authorize]
-        [HttpPut("UpdatePatient")]
+        [HttpPut("Update Patient")]
         public async Task<IActionResult> EditPatient( PatientVM patientVM)
         {
             var result=await _patientService.EditPatientAsync(patientVM);

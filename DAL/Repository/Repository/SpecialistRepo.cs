@@ -1,4 +1,5 @@
-﻿using DAL.Repository.IRepository;
+﻿using DAL.Models.SpecialistModel;
+using DAL.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SpeakEase.DAL.Data;
@@ -39,7 +40,7 @@ namespace DAL.Repository.Repository
             try
             {
                 int AllPatientcount = await _db.Specialists.Where(x => x.IsAccepted == true).CountAsync();
-                var AllPatient = await _db.Specialists.Where(x => x.IsAccepted == true).Skip((paggingNumber - 1) * 10).Take(10).ToListAsync();
+                var AllPatient = await _db.Specialists.Include(x=>x.User).Where(x => x.IsAccepted == true).Skip((paggingNumber - 1) * 10).Take(10).ToListAsync();
                 return new Response<Specialist>
                 {
                     Success = true,
@@ -64,7 +65,7 @@ namespace DAL.Repository.Repository
 
         public async Task<Specialist> GetSpecialistByIdAsync(int Id)
         {
-            return await _db.Specialists.FindAsync(Id);
+            return await _db.Specialists.Include(x=>x.User).FirstOrDefaultAsync(x=>x.SpecialistId==Id);
         }
 
         public async Task<Specialist> EditSpecialistAsync(Specialist specialist)
@@ -72,7 +73,7 @@ namespace DAL.Repository.Repository
             try
             {
                 var specialist01 = await _db.Specialists.Include(x => x.User).FirstOrDefaultAsync(x => x.SpecialistId == specialist.SpecialistId);
-                specialist.User = await _userManager.FindByIdAsync(specialist.UserId);
+                specialist.User = await _userManager.FindByIdAsync(specialist01.UserId);
                 if (specialist != null && specialist01 != null&& specialist.User!=null)
                 {
                     specialist01.MaritalStatus = specialist.MaritalStatus == null ? specialist01.MaritalStatus : specialist.MaritalStatus; 
@@ -93,7 +94,7 @@ namespace DAL.Repository.Repository
                     var result = await _db.SaveChangesAsync();
                     if (result > 0)
                     {
-                        return specialist;
+                        return specialist01;
                     }
                     return null;
                 }

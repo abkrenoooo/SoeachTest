@@ -11,7 +11,6 @@ namespace DAL.Models.TestModel
     {
         public int TestId { get; set; }
         public DateTime? TestDate { get; set; }
-        public int? PatientId { get; set; }
         
     }
 }

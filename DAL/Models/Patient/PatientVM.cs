@@ -10,6 +10,7 @@ namespace DAL.Models.Patient
 {
     public class PatientVM
     {
+        public int PatientId { get; set; }
         [MaxLength(15)]
         [MinLength(2)]
         [Required]

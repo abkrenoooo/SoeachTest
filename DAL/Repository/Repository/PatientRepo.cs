@@ -11,13 +11,15 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Repository
 {
-    public class PatientRepo:IPatientRepo
+    public class PatientRepo : IPatientRepo
     {
         private readonly ApplicationDbContext db;
+        private readonly ITestRepo _testRepo;
 
-        public PatientRepo(ApplicationDbContext db)
+        public PatientRepo(ApplicationDbContext db, ITestRepo testRepo)
         {
             this.db = db;
+            _testRepo = testRepo;
         }
 
         public async Task<Response<Patient>> Create_PatientAsync(Patient patient, string id)
@@ -34,17 +36,26 @@ namespace DAL.Repository.Repository
                         status_code = "404"
                     };
                 }
-                
-                db.Attach(patient);
+                Test test = new Test()
+                {
+                    TestName = String.Concat(patient.FirstName, " ", patient.SecondName, " ", patient.LastName, "Test"),
+                    TestDate = DateTime.Now,
+                    SpecialistId= specialist.SpecialistId
+                };
+                await _testRepo.Create_TestRepo(test);
+                await db.SaveChangesAsync();
                 db.Entry(patient).Property(p => p.SpecialistId).IsModified = true;
                 patient.SpecialistId = specialist.SpecialistId;
+                patient.TestId = test.TestId;
                 await db.Patients.AddAsync(patient);
                 await db.SaveChangesAsync();
+
                 return new Response<Patient>
                 {
                     Success = true,
+                    ObjectData=patient,
                     Message = "Created the patient",
-                    status_code="200"
+                    status_code = "200"
                 };
             }
             catch (Exception e)
@@ -53,7 +64,7 @@ namespace DAL.Repository.Repository
                 {
                     Success = false,
                     error = e.Message,
-                    status_code="500"
+                    status_code = "500"
                 };
             }
         }
@@ -67,8 +78,8 @@ namespace DAL.Repository.Repository
                 {
                     return new Response<Patient>
                     {
-                        Success=false,
-                        Message="Can not found this patient",
+                        Success = false,
+                        Message = "Can not found this patient",
                         status_code = "200"
                     };
                 }
@@ -78,7 +89,7 @@ namespace DAL.Repository.Repository
                 return new Response<Patient>
                 {
                     Success = true,
-                    Message = "Deleted this patient",
+                    Message = "patient is Deleted",
                     status_code = "200"
                 };
 
@@ -99,15 +110,14 @@ namespace DAL.Repository.Repository
             try
             {
                 int AllPatientcount = await db.Patients.CountAsync();
-                int c = (paggingNumber - 1) * 10;
-                var AllPatient = await db.Patients.Skip(c).Take(10).ToListAsync();
+                var AllPatient = await db.Patients.Skip((paggingNumber - 1) * 10).Take(10).ToListAsync(); ;
                 return new Response<Patient>
                 {
                     Success = true,
                     Message = "All patient",
-                    Data=AllPatient,
-                    CountOfData=AllPatientcount,
-                    paggingNumber=paggingNumber,
+                    Data = AllPatient,
+                    CountOfData = AllPatientcount,
+                    paggingNumber = paggingNumber,
                     status_code = "200"
                 };
 
@@ -132,9 +142,9 @@ namespace DAL.Repository.Repository
                 {
                     return new Response<Patient>
                     {
-                        Success=false,
-                        status_code="200",
-                        Message="Not found",
+                        Success = false,
+                        status_code = "200",
+                        Message = "Not found",
 
                     };
                 }
@@ -143,7 +153,7 @@ namespace DAL.Repository.Repository
                     Success = true,
                     Message = "the patient",
                     status_code = "200",
-                    ObjectData=patient
+                    ObjectData = patient
                 };
 
             }
@@ -164,7 +174,7 @@ namespace DAL.Repository.Repository
             try
             {
                 var patient2 = await db.Patients.Where(n => n.PatientId == patient.PatientId).SingleOrDefaultAsync();
-                if (patient == null||patient2 == null)
+                if (patient == null || patient2 == null)
                 {
                     return new Response<Patient>
                     {
@@ -174,7 +184,7 @@ namespace DAL.Repository.Repository
 
                     };
                 }
-                patient2.FirstName=patient.FirstName;
+                patient2.FirstName = patient.FirstName;
                 patient2.SecondName = patient.SecondName;
                 patient2.LastName = patient.LastName;
                 patient2.BirithDate = patient.BirithDate;
@@ -187,7 +197,8 @@ namespace DAL.Repository.Repository
                 return new Response<Patient>
                 {
                     Success = true,
-                    Message = "Update the patient",
+                    ObjectData=patient2,
+                    Message = "patient is Updated",
                     status_code = "200"
                 };
 
@@ -198,7 +209,7 @@ namespace DAL.Repository.Repository
                 {
                     Success = false,
                     error = e.Message,
-                    status_code="500"
+                    status_code = "500"
                 };
             }
         }

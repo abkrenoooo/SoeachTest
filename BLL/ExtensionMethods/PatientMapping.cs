@@ -26,7 +26,8 @@ namespace Bll.ExtensionMethods
                    EducationState = patientVM.EducationState,
                    OME = patientVM.OME,
                    SecondName = patientVM.SecondName,
-                   SpecialistId = patientVM.SpecialistId
+                   SpecialistId = patientVM.SpecialistId,
+                   PatientId = patientVM.PatientId,
             };
         }
 
