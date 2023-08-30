@@ -59,11 +59,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAdminSevices, AdminSevices>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<ISpecialistServices, SpecialistServices>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 //Repo
 builder.Services.AddScoped<IPatientRepo, PatientRepo>();
 builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 builder.Services.AddScoped<ISpecialistRepo, SpecialistRepo>();
+builder.Services.AddScoped<ITestRepo, TestRepo>();
 
 builder.Services.AddAuthentication(options =>
 {

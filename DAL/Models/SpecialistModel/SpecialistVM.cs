@@ -25,7 +25,7 @@ namespace DAL.Models.SpecialistModel
         public MaritalStatus MaritalStatus { get; set; }
         [DataType(DataType.Date)]
         [Required]
-        public DateTime BirithDate { get; set; }
+        public DateOnly BirithDate { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }

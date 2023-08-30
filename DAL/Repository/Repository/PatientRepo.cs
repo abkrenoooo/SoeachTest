@@ -99,7 +99,8 @@ namespace DAL.Repository.Repository
             try
             {
                 int AllPatientcount = await db.Patients.CountAsync();
-                var AllPatient = await db.Patients.Skip((paggingNumber - 1) * 10).Take(10).ToListAsync();
+                int c = (paggingNumber - 1) * 10;
+                var AllPatient = await db.Patients.Skip(c).Take(10).ToListAsync();
                 return new Response<Patient>
                 {
                     Success = true,
