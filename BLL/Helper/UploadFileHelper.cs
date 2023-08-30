@@ -29,11 +29,11 @@ namespace BlL.Helper
             return arr;
         }
 
-        public static void RemoveFile(string RemovedFileName)
+        public static void RemoveFile(string Filepath)
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "/wwwroot"  + RemovedFileName))
+            if (File.Exists(Directory.GetCurrentDirectory() + Filepath))
             {
-                File.Delete(Directory.GetCurrentDirectory() + "/wwwroot"  + RemovedFileName);
+                File.Delete(Directory.GetCurrentDirectory() + Filepath);
             }
 
         }

@@ -23,7 +23,7 @@ namespace SpeakEase.Controllers
             _userManager = userManager;
             _testServic = testServic;
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("AddTest")]
         public async Task<IActionResult> AddTest(TestVM testVM)
         {
@@ -40,28 +40,28 @@ namespace SpeakEase.Controllers
                 return Ok(e.Message);
             }
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet("GetAllTest")]
         public async Task<IActionResult> GetAllTest(int pagging)
         {
             var result = _testServic.GetAllTestAsync(pagging);
             return Ok(result);
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet("GetTest")]
         public async Task<IActionResult> GetTest(int Id)
         {
             var result = _testServic.GetTestAsync(Id);
             return Ok(result);
         }
-        [Authorize]
+        //[Authorize]
         [HttpDelete("DeleteTest")]
         public async Task<IActionResult> DeleteTest(int Id)
         {
             var result = await _testServic.DeleteTestAsync(Id);
             return Ok(result);
         }
-        [Authorize]
+        //[Authorize]
         [HttpPut("UpdateTest")]
         public async Task<IActionResult> UpdateTest(int Id, TestVM testVM)
         {

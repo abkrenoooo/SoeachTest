@@ -21,11 +21,12 @@ namespace SpeakEase.Controllers
             _userManager = userManager;
             _patientService = patientService;
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("AddPatient")]
         public async Task<IActionResult> AddPatient(PatientVM patientVM)
         {
-            var id =User.FindFirstValue("uid");
+            //var id =User.FindFirstValue("uid");
+            var id = 1;
             patientVM.SpecialitId=Convert.ToInt32(id);
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result=await _patientService.CreatePatientAsync(patientVM);

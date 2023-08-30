@@ -58,10 +58,12 @@ builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<ITestService, TestService>();
+builder.Services.AddScoped<IChearService, ChearService>();
 
 //Repo
 builder.Services.AddScoped<IPatientRepo, PatientRepo>();
 builder.Services.AddScoped<ITestRepo, TestRepo>();
+builder.Services.AddScoped<IChearRepo, ChearRepo>();
 
 builder.Services.AddAuthentication(options =>
 {
