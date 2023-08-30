@@ -12,10 +12,10 @@ namespace BLL.Services.IServices
 {
     public interface IPatientService
     {
-        Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM);
+        Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM, string id);
+        Task<Response<Patient>> EditPatientAsync(PatientVM patientVM);
         Task<Response<Patient>> DeletePatientAsync(int Id);
         Task<Response<Patient>> GetPatientAsync(int Id);
         Task<Response<Patient>> GetAllPatientAsync(int paggingNumber);
-        Task<Response<Patient>> UpdatePatientAsync(int Id, PatientVM patientVM);
     }
 }

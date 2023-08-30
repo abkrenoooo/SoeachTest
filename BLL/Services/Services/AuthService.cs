@@ -127,10 +127,10 @@ namespace BLL.Services.Services
                 Specialist specialist = new Specialist()
                 {
                     UserId = _userManager.FindByNameAsync(model.Username).Result.Id,
-                    Status = model.Status,
+                    MaritalStatus = model.MaritalStatus,
                     Country = model.Country,
                     City = model.City,
-                    Accepted = false,
+                    IsAccepted = false,
                     Hospital = model.Hospital,
                     IdNumber = model.IdNumber,
                     ImageOfSpecializationCertificate = model.ImageOfSpecializationCertificatePath,

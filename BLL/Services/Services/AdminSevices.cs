@@ -34,47 +34,64 @@ namespace BLL.Services.Services
             _jwt = jwt.Value;
             _userManager = UserManager;
             _adminRepo = adminRepo;
-
         }
         public async Task<Response<AuthModel>> AddAdminUserAsync(AdminUserVM model)
         {
-            if (await _userManager.FindByEmailAsync(model.Email) is not null)
-                return new Response<AuthModel> { Message = "Email is already registered!" };
-
-            if (await _userManager.FindByNameAsync(model.Username) is not null)
-                return new Response<AuthModel> { Message = "Username is already registered!" };
-
-            var admin = await model.ToApplicationUser();
-            var result = await _userManager.CreateAsync(admin, model.Password);
-
-            if (!result.Succeeded)
+            try
             {
-                var errors = string.Empty;
+                if (await _userManager.FindByEmailAsync(model.Email) is not null)
+                    return new Response<AuthModel> { Message = "Email is already registered!" };
 
-                foreach (var error in result.Errors)
-                    errors += $"{error.Description},";
+                if (await _userManager.FindByNameAsync(model.Username) is not null)
+                    return new Response<AuthModel> { Message = "Username is already registered!" };
 
-                return new Response<AuthModel> { Message = errors };
-            }
-            //create token for the user
+                var admin = await model.ToApplicationUser();
+                var result = await _userManager.CreateAsync(admin, model.Password);
 
-            var jwtSecurityToken = await CreateJwtToken(admin);
-            var studentRoles = await _userManager.GetRolesAsync(admin);
-
-            await _userManager.AddToRoleAsync(admin, Roles.Admin.ToString());
-            return new Response<AuthModel>
-            {
-                Success = true,
-                ObjectData = new AuthModel()
+                if (!result.Succeeded)
                 {
-                    Email = model.Email,
-                    ExpiresOn = jwtSecurityToken.ValidTo,
-                    IsAuthenticated = true,
-                    Roles = studentRoles.ToList(),
-                    Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                    Username = admin.UserName
+                    var errors = string.Empty;
+
+                    foreach (var error in result.Errors)
+                        errors += $"{error.Description},";
+                    return new Response<AuthModel>
+                    {
+                        Success = false,
+                        Message = errors,
+                        status_code = "400",
+                    };
                 }
-            };
+                //create token for the user
+
+                var jwtSecurityToken = await CreateJwtToken(admin);
+                var studentRoles = await _userManager.GetRolesAsync(admin);
+
+                await _userManager.AddToRoleAsync(admin, Roles.Admin.ToString());
+                return new Response<AuthModel>
+                {
+                    Success = true,
+                    ObjectData = new AuthModel()
+                    {
+                        Email = model.Email,
+                        ExpiresOn = jwtSecurityToken.ValidTo,
+                        IsAuthenticated = true,
+                        Roles = studentRoles.ToList(),
+                        Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                        Username = admin.UserName
+                    },
+                    status_code = "200",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AuthModel>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    status_code = "400",
+                };
+            }
+
         }
 
         public async Task<Response<AdminUserVM>> RemoveAdminUserAsync(string AdminUserId)
@@ -87,7 +104,7 @@ namespace BLL.Services.Services
                     {
                         Success = false,
                         Message = "error!",
-                        status_code = "404",
+                        status_code = "400",
                     };
                 }
                 return new Response<AdminUserVM>
@@ -101,31 +118,184 @@ namespace BLL.Services.Services
             {
                 return new Response<AdminUserVM>
                 {
-                    Success = true,
+                    Success = false,
                     Message = ex.Message,
-                    status_code = "200",
+                    status_code = "400",
                 };
             }
         }
 
-        public Task<Response<SpecialistVM>> EditeAdminUserInSpetialistRequstAsync(int SpetialistId)
+        public async Task<Response<SpecialistVM>> EditAdminUserInSpetialistRequestAsync(int SpetialistId, bool Accepted)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = await _adminRepo.EditAdminUserInSpetialistRequestAsync(SpetialistId, Accepted);
+                if (Accepted)
+                {
+                    if (data == null)
+                    {
+                        return new Response<SpecialistVM>
+                        {
+                            Success = false,
+                            Message = "Error",
+                            status_code = "400",
+                        };
+                    }
+                    return new Response<SpecialistVM>
+                    {
+                        ObjectData = await data.FromSpecialist(),
+                        Success = true,
+                        Message = "Spetialist Request is Accepted",
+                        status_code = "200",
+                    };
+                }
+                else
+                {
+                    return new Response<SpecialistVM>
+                    {
+                        Success = true,
+                        Message = "Spetialist Request is Refused",
+                        status_code = "200",
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<SpecialistVM>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    status_code = "400",
+                };
+            }
         }
 
-        public Task<Response<IList<SpecialistVM>>> GetAdminUserAllSpetialistRequstAsync()
+        public async Task<Response<Specialist>> GetAdminUserAllSpetialistRequstAsync(int paggingNumber)
         {
-            await _adminRepo.GetAdminUserAllSpetialistRequstAsync();
+            try
+            {
+                var result = await _adminRepo.GetAdminUserAllSpetialistRequstAsync(paggingNumber);
+
+                if (result.Success)
+                {
+                    double pagging = Convert.ToInt32(result.CountOfData) / 10;
+                    if (pagging % 10 == 0)
+                    {
+                        result.paggingNumber = (int)pagging;
+                    }
+                    else
+                    {
+                        result.paggingNumber = (int)pagging + 1;
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new Response<Specialist>
+                {
+                    Success = true,
+                    Message = ex.Message,
+                    status_code = "400",
+                };
+            }
         }
 
-        public Task<Response<AdminUserVM>> GetAdminUserByIdAsync(string AdminUserId)
+        public async Task<Response<AdminUserVM>> GetAdminUserByIdAsync(string AdminUserId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = await _adminRepo.GetAdminUserByIdAsync(AdminUserId);
+                if (data == null)
+                {
+                    return new Response<AdminUserVM>
+                    {
+                        Success = false,
+                        Message = "Error",
+                        status_code = "404",
+                    };
+                }
+                return new Response<AdminUserVM>
+                {
+                    Success = true,
+                    ObjectData = await data.FromApplicationUser(),
+                    Message = "Data Found",
+                    status_code = "200",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AdminUserVM>
+                {
+                    Success = true,
+                    Message = ex.Message,
+                    status_code = "400",
+                };
+            }
         }
 
-        public Task<Response<AdminUserVM>> GetAdminUsersAsync()
+        public async Task<Response<AdminUserVM>> EditAdminUserAsync(AdminUserVM model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = await _adminRepo.EditAdminUserAsync(model.ToApplicationUserWithSamId().Result);
+                if (data == null)
+                {
+                    return new Response<AdminUserVM>
+                    {
+                        Success = false,
+                        Message = "Error",
+                        status_code = "404",
+                    };
+                }
+                return new Response<AdminUserVM>
+                {
+                    Success = true,
+                    ObjectData = await data.FromApplicationUser(),
+                    Message = "Data Found",
+                    status_code = "200",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AdminUserVM>
+                {
+                    Success = true,
+                    Message = ex.Message,
+                    status_code = "400",
+                };
+            }
+        }
+        public async Task<Response<ApplicationUser>> GetAdminUsersAsync(int paggingNumber)
+        {
+            try
+            {
+                var result = await _adminRepo.GetAllAdminAsync(paggingNumber);
+
+                if (result.Success)
+                {
+                    double pagging = Convert.ToInt32(result.CountOfData) / 10;
+                    if (pagging % 10 == 0)
+                    {
+                        result.paggingNumber = (int)pagging;
+                    }
+                    else
+                    {
+                        result.paggingNumber = (int)pagging + 1;
+                    }
+                }
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                return new Response<ApplicationUser>
+                {
+                    Success = true,
+                    Message = ex.Message,
+                    status_code = "400",
+                };
+            }
         }
 
 

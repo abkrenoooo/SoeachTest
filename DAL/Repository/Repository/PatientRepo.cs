@@ -20,10 +20,24 @@ namespace DAL.Repository.Repository
             this.db = db;
         }
 
-        public async Task<Response<Patient>> Create_PatientAsync(Patient patient)
+        public async Task<Response<Patient>> Create_PatientAsync(Patient patient, string id)
         {
             try
             {
+                var specialist = await db.Specialists.FirstOrDefaultAsync(x => x.UserId == id);
+                if (specialist == null)
+                {
+                    return new Response<Patient>
+                    {
+                        Success = true,
+                        Message = "Specialist not correct",
+                        status_code = "404"
+                    };
+                }
+                
+                db.Attach(patient);
+                db.Entry(patient).Property(p => p.SpecialistId).IsModified = true;
+                patient.SpecialistId = specialist.SpecialistId;
                 await db.Patients.AddAsync(patient);
                 await db.SaveChangesAsync();
                 return new Response<Patient>
@@ -143,12 +157,13 @@ namespace DAL.Repository.Repository
             }
         }
 
-        public async Task<Response<Patient>> Update_PatientAsync(int Id, Patient patient)
+        public async Task<Response<Patient>> EditPatientAsync(Patient patient)
+
         {
             try
             {
-                var patient2 = await db.Patients.Where(n => n.PatientId == Id).SingleOrDefaultAsync();
-                if (patient == null)
+                var patient2 = await db.Patients.Where(n => n.PatientId == patient.PatientId).SingleOrDefaultAsync();
+                if (patient == null||patient2 == null)
                 {
                     return new Response<Patient>
                     {

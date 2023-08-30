@@ -323,7 +323,7 @@ namespace DAL.Migrations
                     b.ToTable("Patients");
                 });
 
-            modelBuilder.Entity("SpeakEase.DAL.Entities.QuctionTest", b =>
+            modelBuilder.Entity("SpeakEase.DAL.Entities.QuestionTest", b =>
                 {
                     b.Property<int>("QuctionTestId")
                         .ValueGeneratedOnAdd()
@@ -378,9 +378,6 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecialistId"), 1L, 1);
 
-                    b.Property<byte>("Accepted")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -401,7 +398,10 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("State")
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaritalStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -517,7 +517,7 @@ namespace DAL.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("SpeakEase.DAL.Entities.QuctionTest", b =>
+            modelBuilder.Entity("SpeakEase.DAL.Entities.QuestionTest", b =>
                 {
                     b.HasOne("SpeakEase.DAL.Entities.Chear", "Chear")
                         .WithMany()

@@ -1,4 +1,5 @@
 ﻿using DAL.Models.SpecialistModel;
+using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using SpeakEase.Models.AuthModel;
 using System;
@@ -11,12 +12,13 @@ namespace BLL.Services.IServices
 {
     public interface IAdminSevices
     {
-        Task<Response<AuthModel>> AddAdminUserAsync(AdminUserVM model);//
-        Task<Response<AdminUserVM>> RemoveAdminUserAsync(string AdminUserId);//
-        Task<Response<AdminUserVM>> GetAdminUserByIdAsync(string AdminUserId);
-        Task<Response<AdminUserVM>> GetAdminUsersAsync();
-        Task<Response<IList<SpecialistVM>>> GetAdminUserAllSpetialistRequstAsync();//
-        Task<Response<SpecialistVM>> EditeAdminUserInSpetialistRequstAsync(int SpetialistId);
+        public Task<Response<AuthModel>> AddAdminUserAsync(AdminUserVM model);//
+        public Task<Response<AdminUserVM>> RemoveAdminUserAsync(string AdminUserId);//
+        public Task<Response<AdminUserVM>> GetAdminUserByIdAsync(string AdminUserId);
+        public Task<Response<ApplicationUser>> GetAdminUsersAsync(int paggingNumber);
+        public Task<Response<AdminUserVM>> EditAdminUserAsync(AdminUserVM model);
+        public Task<Response<Specialist>> GetAdminUserAllSpetialistRequstAsync(int paggingNumber);//
+        public Task<Response<SpecialistVM>> EditAdminUserInSpetialistRequestAsync(int SpetialistId, bool Accepted);
 
     }
 }

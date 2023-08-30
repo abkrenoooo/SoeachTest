@@ -22,7 +22,7 @@ namespace DAL.Models.SpecialistModel
         [Required]
         public Gender Gender { get; set; }
         [Required]
-        public MaritalStatus Status { get; set; }
+        public MaritalStatus MaritalStatus { get; set; }
         [DataType(DataType.Date)]
         [Required]
         public DateTime BirithDate { get; set; }

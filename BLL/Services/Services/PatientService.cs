@@ -1,4 +1,5 @@
-﻿using BLL.Services.IServices;
+﻿using Bll.ExtensionMethods;
+using BLL.Services.IServices;
 using DAL.Models.Patient;
 using DAL.Repository.IRepository;
 using SpeakEase.DAL.Entities;
@@ -20,22 +21,11 @@ namespace BLL.Services.Services
             _patientRepo = patientRepo;
         }
 
-        public async Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM)
+        public async Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM,string id)
         {
             try
             {
-                Patient patient = new Patient();
-                patient.BirithDate = patientVM.BirithDate;
-                patient.FirstName = patientVM.FirstName;
-                patient.SecondName = patientVM.SecondName;
-                patient.LastName = patientVM.LastName;
-                patient.Note = patientVM.Note;
-                patient.Gender = patientVM.Gender;
-                patient.EducationState = patientVM.EducationState;
-                patient.OME = patientVM.OME;
-                patient.SpecialistId = patientVM.SpecialitId;
-
-                var result = await _patientRepo.Create_PatientAsync(patient);
+                var result = await _patientRepo.Create_PatientAsync(patientVM.ToPatient().Result, id);
                 return result;
 
             }
@@ -113,22 +103,11 @@ namespace BLL.Services.Services
             }
         }
 
-        public async Task<Response<Patient>> UpdatePatientAsync(int Id, PatientVM patientVM)
+        public async Task<Response<Patient>> EditPatientAsync(PatientVM patientVM)
         {
             try
             {
-                Patient patient = new Patient();
-                patient.BirithDate = patientVM.BirithDate;
-                patient.FirstName = patientVM.FirstName;
-                patient.SecondName = patientVM.SecondName;
-                patient.LastName = patientVM.LastName;
-                patient.Note = patientVM.Note;
-                patient.Gender = patientVM.Gender;
-                patient.EducationState = patientVM.EducationState;
-                patient.OME = patientVM.OME;
-                patient.SpecialistId = patientVM.SpecialitId;
-
-                var result = await _patientRepo.Update_PatientAsync(Id, patient);
+                var result = await _patientRepo.EditPatientAsync(patientVM.ToPatient().Result);
                 return result;
             }
             catch (Exception e)

@@ -12,7 +12,7 @@ using SpeakEase.DAL.Data;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230829001239_Start")]
+    [Migration("20230830013408_Start")]
     partial class Start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -257,10 +257,7 @@ namespace DAL.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TestId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TestId1")
+                    b.Property<int?>("TestId")
                         .HasColumnType("int");
 
                     b.Property<string>("Word")
@@ -268,7 +265,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ChearId");
 
-                    b.HasIndex("TestId1");
+                    b.HasIndex("TestId");
 
                     b.ToTable("Chears");
                 });
@@ -328,7 +325,7 @@ namespace DAL.Migrations
                     b.ToTable("Patients");
                 });
 
-            modelBuilder.Entity("SpeakEase.DAL.Entities.QuctionTest", b =>
+            modelBuilder.Entity("SpeakEase.DAL.Entities.QuestionTest", b =>
                 {
                     b.Property<int>("QuctionTestId")
                         .ValueGeneratedOnAdd()
@@ -383,9 +380,6 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecialistId"), 1L, 1);
 
-                    b.Property<byte>("Accepted")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -406,7 +400,10 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("State")
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaritalStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -428,42 +425,21 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestId"), 1L, 1);
 
-                    b.Property<double?>("FullMark")
-                        .HasColumnType("float");
-
-                    b.Property<string>("PatientId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SpecialistId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SpecialistId1")
+                    b.Property<int?>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<double?>("SuccessMark")
-                        .HasColumnType("float");
+                    b.Property<int?>("SpecialistId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("TestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TestDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("TestFaildResult")
-                        .HasColumnType("float");
-
-                    b.Property<string>("TestMaterials")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("TestName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("TestSuccesResult")
-                        .HasColumnType("float");
-
                     b.HasKey("TestId");
 
-                    b.HasIndex("SpecialistId1");
+                    b.HasIndex("SpecialistId");
 
                     b.ToTable("Tests");
                 });
@@ -523,7 +499,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("SpeakEase.DAL.Entities.Test", "Test")
                         .WithMany("Chears")
-                        .HasForeignKey("TestId1");
+                        .HasForeignKey("TestId");
 
                     b.Navigation("Test");
                 });
@@ -543,7 +519,7 @@ namespace DAL.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("SpeakEase.DAL.Entities.QuctionTest", b =>
+            modelBuilder.Entity("SpeakEase.DAL.Entities.QuestionTest", b =>
                 {
                     b.HasOne("SpeakEase.DAL.Entities.Chear", "Chear")
                         .WithMany()
@@ -582,7 +558,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("SpeakEase.DAL.Entities.Specialist", "Specialist")
                         .WithMany("Tests")
-                        .HasForeignKey("SpecialistId1");
+                        .HasForeignKey("SpecialistId");
 
                     b.Navigation("Specialist");
                 });

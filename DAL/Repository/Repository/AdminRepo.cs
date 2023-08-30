@@ -31,38 +31,155 @@ namespace DAL.Repository.Repository
         public async Task<bool> RemoveAdminUserAsync(string AdminUserId)
         {
             var admin = await _userManager.FindByIdAsync(AdminUserId);
-            _db.Remove(admin);
-            var result = await _db.SaveChangesAsync();
-            return result > 0 ? true : false;
+            if (admin != null)
+            {
+                _db.Users.Remove(admin);
+                var result = await _db.SaveChangesAsync();
+                return result > 0 ? true : false;
+            }
+            return false;
         }
 
-        public Task<AdminUserVM> EditAdminUserAsync(AdminUserVM model)
+        public async Task<ApplicationUser> EditAdminUserAsync(ApplicationUser model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user != null && model != null)
+                {
+                    user.SecondName = model.SecondName;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Gender = model.Gender;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.BirithDate = model.BirithDate;
+                    user.UserName = model.UserName;
+                }
+                await _userManager.UpdateAsync(user);
+                await _db.SaveChangesAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        public Task<SpecialistVM> EditeAdminUserInSpetialistRequstAsync(int SpetialistId)
+        public async Task<Specialist> EditAdminUserInSpetialistRequestAsync(int SpetialistId, bool Accepted)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (Accepted)
+                {
+                    var spetialist = await _db.Specialists.Include(x => x.User).FirstOrDefaultAsync(x => x.SpecialistId == SpetialistId);
+                    if (spetialist != null)
+                    {
+                        spetialist.IsAccepted = true;
+                        spetialist.User.Active = true;
+                        var result = await _db.SaveChangesAsync();
+                        if (result > 0)
+                        {
+                            return spetialist;
+                        }
+                        return null;
+                    }
+                    return null;
+                }
+                else
+                {
+
+                    var spetialist = await _db.Specialists.FindAsync(SpetialistId);
+                    if (spetialist != null)
+                    {
+                        var user = await _userManager.FindByIdAsync(spetialist.UserId);
+                        if (user != null)
+                        {
+                            _db.Users.Remove(user);
+                            _db.Specialists.Remove(spetialist);
+                            var result = await _db.SaveChangesAsync();
+                            if (result > 0)
+                            {
+                                return null;
+                            }
+                        }
+                        return null;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
-        public async Task<List<SpecialistVM>> GetAdminUserAllSpetialistRequstAsync()
+        public async Task<Response<Specialist>> GetAdminUserAllSpetialistRequstAsync(int paggingNumber)
         {
-            var data = await _db.Specialists.Where(x => x.Accepted == false).ToListAsync();
+            try
+            {
+                int AllPatientcount = await _db.Specialists.Where(x => x.IsAccepted == false).CountAsync();
+                var AllPatient = await _db.Specialists.Where(x => x.IsAccepted == false).Skip((paggingNumber - 1) * 10).Take(10).ToListAsync();
+                return new Response<Specialist>
+                {
+                    Success = true,
+                    Message = "All Admins",
+                    Data = AllPatient,
+                    CountOfData = AllPatientcount,
+                    paggingNumber = paggingNumber,
+                    status_code = "200"
+                };
 
+            }
+            catch (Exception e)
+            {
+                return new Response<Specialist>
+                {
+                    Success = false,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
         }
 
-        public Task<AdminUserVM> GetAdminUserByIdAsync(string AdminUserId)
+        public async Task<ApplicationUser> GetAdminUserByIdAsync(string AdminUserId)
         {
-            throw new NotImplementedException();
+            return await _userManager.FindByIdAsync(AdminUserId);
+
         }
 
-        public Task<AdminUserVM> GetAdminUsersAsync()
+        public async Task<List<ApplicationUser>> GetAdminUsersAsync()
         {
-            throw new NotImplementedException();
+            return await _db.Users.ToListAsync();
         }
 
+        public async Task<Response<ApplicationUser>> GetAllAdminAsync(int paggingNumber)
+        {
+            try
+            {
+                IList<ApplicationUser> admins = await _userManager.GetUsersInRoleAsync(Roles.Admin.ToString());
+                int AllAdminCount = admins.Count();
+                var AllAdmin = admins.Skip((paggingNumber - 1) * 10).Take(10);
+                return new Response<ApplicationUser>
+                {
+                    Success = true,
+                    Message = "All Admins",
+                    Data = AllAdmin,
+                    CountOfData = AllAdminCount,
+                    paggingNumber = paggingNumber,
+                    status_code = "200"
+                };
 
+            }
+            catch (Exception e)
+            {
+                return new Response<ApplicationUser>
+                {
+                    Success = false,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
+        }
 
     }
 }

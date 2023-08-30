@@ -26,6 +26,22 @@ namespace Bll.ExtensionMethods
                 BirithDate = admin.BirithDate,
                 Gender = admin.Gender,
             };
+        } 
+        public static async Task<ApplicationUser> ToApplicationUserWithSamId(this AdminUserVM admin)
+        {
+            return new()
+            {
+                Id = admin.UserId,
+                UserName = admin.Username,
+                Email = admin.Email,
+                FirstName = admin.FirstName,
+                SecondName = admin.SecondName,
+                LastName = admin.LastName,
+                PhoneNumber = admin.Phone,
+                Active = true,
+                BirithDate = admin.BirithDate,
+                Gender = admin.Gender,
+            };
         }
 
         public static async Task<AdminUserVM> FromApplicationUser(this ApplicationUser user)

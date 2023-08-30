@@ -26,9 +26,9 @@ namespace SpeakEase.Controllers
         public async Task<IActionResult> AddPatient(PatientVM patientVM)
         {
             var id =User.FindFirstValue("uid");
-            patientVM.SpecialitId=Convert.ToInt32(id);
+            //patientVM.SpecialistId=Convert.ToInt32(id);
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var result=await _patientService.CreatePatientAsync(patientVM);
+            var result=await _patientService.CreatePatientAsync(patientVM,id);
             return Ok(result);
         }
         [Authorize]
@@ -54,9 +54,9 @@ namespace SpeakEase.Controllers
         }
         [Authorize]
         [HttpPut("UpdatePatient")]
-        public async Task<IActionResult> UpdatePatient(int Id,PatientVM patientVM)
+        public async Task<IActionResult> EditPatient( PatientVM patientVM)
         {
-            var result=await _patientService.UpdatePatientAsync(Id, patientVM);
+            var result=await _patientService.EditPatientAsync(patientVM);
             return Ok(result);
         }
     }
