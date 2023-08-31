@@ -16,18 +16,19 @@ namespace Bll.ExtensionMethods
         {
             return new()
             {
-                   Note=patientVM.Note,
-                   TestId=patientVM.TestId,
-                   HearingTest = patientVM.HearingTest,
-                   Gender = patientVM.Gender,
-                   FirstName = patientVM.FirstName,
-                   LastName = patientVM.LastName,
-                   BirithDate = patientVM.BirithDate,
-                   EducationState = patientVM.EducationState,
-                   OME = patientVM.OME,
-                   SecondName = patientVM.SecondName,
-                   SpecialistId = patientVM.SpecialistId,
-                   PatientId = patientVM.PatientId,
+                Note = patientVM.Note,
+                HearingTest = patientVM.HearingTest,
+                Gender = patientVM.Gender,
+                FirstName = patientVM.FirstName,
+                LastName = patientVM.LastName,
+                BirithDate = patientVM.BirithDate,
+                EducationState = patientVM.EducationState,
+                OME = patientVM.OME,
+                SecondName = patientVM.SecondName,
+                SpecialistId = patientVM.SpecialistId,
+                PatientId = patientVM.PatientId,
+                StartDate = patientVM.StartDate,
+
             };
         }
 
@@ -36,7 +37,6 @@ namespace Bll.ExtensionMethods
             return new()
             {
                 Note = patient.Note,
-                TestId = patient.TestId,
                 HearingTest = patient.HearingTest,
                 Gender = patient.Gender,
                 FirstName = patient.FirstName,
@@ -45,7 +45,10 @@ namespace Bll.ExtensionMethods
                 EducationState = patient.EducationState,
                 OME = patient.OME,
                 SecondName = patient.SecondName,
-                SpecialistId = patient.SpecialistId
+                StartDate = patient.StartDate,
+                SpecialistId = patient.SpecialistId,
+                PatientId = patient.PatientId,
+                
             };
         }
 

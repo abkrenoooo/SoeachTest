@@ -61,9 +61,6 @@ namespace SpeakEase.DAL.Data
         //public DbSet<Note> Notes { get; set; }
         //public DbSet<HistoryVistor> HistoryVistors { get; set; }
         #endregion
-
-
-        public DbSet<Test> Tests { get; set; }
         public DbSet<Specialist> Specialists { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<Patient> Patients { get; set; }

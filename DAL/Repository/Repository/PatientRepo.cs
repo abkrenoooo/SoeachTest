@@ -13,14 +13,17 @@ namespace DAL.Repository.Repository
 {
     public class PatientRepo : IPatientRepo
     {
-        private readonly ApplicationDbContext db;
-        private readonly ITestRepo _testRepo;
+        #region Depend Injection
 
-        public PatientRepo(ApplicationDbContext db, ITestRepo testRepo)
+        private readonly ApplicationDbContext db;
+
+        public PatientRepo(ApplicationDbContext db)
         {
             this.db = db;
-            _testRepo = testRepo;
         }
+        #endregion
+
+        #region Create
 
         public async Task<Response<Patient>> Create_PatientAsync(Patient patient, string id)
         {
@@ -36,17 +39,9 @@ namespace DAL.Repository.Repository
                         status_code = "404"
                     };
                 }
-                Test test = new Test()
-                {
-                    TestName = String.Concat(patient.FirstName, " ", patient.SecondName, " ", patient.LastName, "Test"),
-                    TestDate = DateTime.Now,
-                    SpecialistId= specialist.SpecialistId
-                };
-                await _testRepo.Create_TestRepo(test);
                 await db.SaveChangesAsync();
                 db.Entry(patient).Property(p => p.SpecialistId).IsModified = true;
                 patient.SpecialistId = specialist.SpecialistId;
-                patient.TestId = test.TestId;
                 await db.Patients.AddAsync(patient);
                 await db.SaveChangesAsync();
 
@@ -68,6 +63,9 @@ namespace DAL.Repository.Repository
                 };
             }
         }
+        #endregion
+
+        #region Delete 
 
         public async Task<Response<Patient>> Delete_PatientAsync(int Id)
         {
@@ -104,6 +102,9 @@ namespace DAL.Repository.Repository
                 };
             }
         }
+        #endregion
+
+        #region Get All
 
         public async Task<Response<Patient>> GetAll_PatientAsync(int paggingNumber)
         {
@@ -132,6 +133,9 @@ namespace DAL.Repository.Repository
                 };
             }
         }
+        #endregion
+
+        #region Get 
 
         public async Task<Response<Patient>> Get_PatientAsync(int Id)
         {
@@ -167,6 +171,9 @@ namespace DAL.Repository.Repository
                 };
             }
         }
+        #endregion
+
+        #region Update 
 
         public async Task<Response<Patient>> EditPatientAsync(Patient patient)
 
@@ -213,5 +220,6 @@ namespace DAL.Repository.Repository
                 };
             }
         }
+        #endregion
     }
 }

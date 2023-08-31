@@ -21,8 +21,8 @@ namespace DAL.Models.Chear
         [Required]
         public IFormFile Audio { get; set; }
         [Required]
-        public int? TestId { get; set; }
         public ChearPosition ChearPosition { get; set; }
+        [Required]
         public Character Character { get; set; }
         public bool IsDeleted { get; set; } = false;
         public bool IsHiden { get; set; } = false;

@@ -15,6 +15,8 @@ namespace DAL.Repository.Repository
 {
     public class SpecialistRepo : ISpecialistRepo
     {
+        #region Depend Injection
+
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -23,6 +25,10 @@ namespace DAL.Repository.Repository
             _db = db;
             _userManager = UserManager;
         }
+        #endregion
+
+        #region Delete 
+
         public async Task<bool> DeleteSpecialistAsync(int Id)
         {
             var specialist = await _db.Specialists.FindAsync(Id);
@@ -34,6 +40,9 @@ namespace DAL.Repository.Repository
             }
             return false;
         }
+        #endregion
+
+        #region Get All 
 
         public async Task<Response<Specialist>> GetAllSpecialistAsync(int paggingNumber)
         {
@@ -62,11 +71,17 @@ namespace DAL.Repository.Repository
                 };
             }
         }
+        #endregion
+
+        #region Get 
 
         public async Task<Specialist> GetSpecialistByIdAsync(int Id)
         {
             return await _db.Specialists.Include(x=>x.User).FirstOrDefaultAsync(x=>x.SpecialistId==Id);
         }
+        #endregion
+
+        #region Update
 
         public async Task<Specialist> EditSpecialistAsync(Specialist specialist)
         {
@@ -106,7 +121,7 @@ namespace DAL.Repository.Repository
             }
 
         }
-
+        #endregion
 
     }
 }

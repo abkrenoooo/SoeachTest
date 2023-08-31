@@ -15,6 +15,5 @@ namespace DAL.Repository.IRepository
         Task<Response<Chear>> GetAll_ChearAsync(int Pagging);
         Task<Response<Chear>> Get_ChearAsync(int ChearId);
         Task<Response<Chear>> Update_ChearAsync(Chear chear);
-
     }
 }

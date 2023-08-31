@@ -11,13 +11,13 @@ namespace DAL.Models.Chear
 {
     public class ChearEditVM
     {
+        [Required]
         public int ChearId { get; set; }
         public string? Word { get; set; }
         public string? ImagePath { get; set; }
         public string? AudioPath { get; set; }
         public IFormFile? Image { get; set; }
         public IFormFile? Audio { get; set; }
-        public int? TestId { get; set; }
         public ChearPosition? ChearPosition { get; set; }
         public Character? Character { get; set; }
         public bool? IsDeleted { get; set; } = false;

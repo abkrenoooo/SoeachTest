@@ -19,7 +19,6 @@ namespace SpeakEase.DAL.Entities
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual List<Patient>? Patients { get; set; }
-        public virtual List<Test>? Tests { get; set; }
 
     }
 }

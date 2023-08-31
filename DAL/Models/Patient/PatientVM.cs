@@ -26,6 +26,8 @@ namespace DAL.Models.Patient
         [DataType(DataType.Date)]
         [Required]
         public DateTime? BirithDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? StartDate { get; set; }
         [Required]
         public Gender Gender { get; set; }
         [Required]
@@ -36,6 +38,5 @@ namespace DAL.Models.Patient
         public EducationState? EducationState { get; set; }
         public string? Note { get; set; }
         public int? SpecialistId { get; set; }
-        public int? TestId { get; set; }
     }
 }

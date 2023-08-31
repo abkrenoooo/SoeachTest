@@ -13,6 +13,8 @@ namespace SpeakEase.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
+        #region Depend Injection
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPatientService _patientService;
 
@@ -21,6 +23,9 @@ namespace SpeakEase.Controllers
             _userManager = userManager;
             _patientService = patientService;
         }
+        #endregion
+
+        #region Create 
         [Authorize]
         [HttpPost("Add Patient")]
         public async Task<IActionResult> AddPatient(PatientVM patientVM)
@@ -31,7 +36,9 @@ namespace SpeakEase.Controllers
             var result=await _patientService.CreatePatientAsync(patientVM,id);
             return Ok(result);
         }
+        #endregion
 
+        #region Get All 
         [Authorize]
         [HttpGet("Get All Patient")]
         public async Task<IActionResult> GetAllPatient(int pagging)
@@ -39,7 +46,9 @@ namespace SpeakEase.Controllers
             var result=await _patientService.GetAllPatientAsync(pagging);
             return Ok(result);
         }
+        #endregion
 
+        #region Get 
         [Authorize]
         [HttpGet("Get Patient")]
         public async Task<IActionResult> GetPatient(int Id)
@@ -47,7 +56,9 @@ namespace SpeakEase.Controllers
             var result =await _patientService.GetPatientAsync(Id);
             return Ok(result);
         }
+        #endregion
 
+        #region Delete 
         [Authorize]
         [HttpDelete("Delete Patient")]
         public async Task<IActionResult> DeletePatient(int Id)
@@ -55,6 +66,9 @@ namespace SpeakEase.Controllers
             var result=await _patientService.DeletePatientAsync(Id);
             return Ok(result);
         }
+        #endregion
+
+        #region Update
         [Authorize]
         [HttpPut("Update Patient")]
         public async Task<IActionResult> EditPatient( PatientVM patientVM)
@@ -62,5 +76,6 @@ namespace SpeakEase.Controllers
             var result=await _patientService.EditPatientAsync(patientVM);
             return Ok(result);
         }
+        #endregion
     }
 }

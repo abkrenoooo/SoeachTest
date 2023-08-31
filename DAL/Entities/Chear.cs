@@ -19,9 +19,6 @@ namespace SpeakEase.DAL.Entities
         public string? Word { get; set; }
         public string? Image { get; set; }
         public string? Audio { get; set; }
-        [ForeignKey(nameof(TestId))]
-        public int? TestId { get; set; }
-        public virtual Test? Test { get; set; }
         public bool IsDeleted { get; set; } = false;
         public bool IsHiden { get; set; } = false;
     }

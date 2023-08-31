@@ -10,44 +10,68 @@ namespace SpeakEase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChearController : ControllerBase
+    public class QuestionController : ControllerBase
     {
+        #region Depend Injection
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IChearService _chearService;
 
-        public ChearController(UserManager<ApplicationUser> userManager, IChearService chearService)
+        public QuestionController(UserManager<ApplicationUser> userManager, IChearService chearService)
         {
             _userManager = userManager;
             _chearService = chearService;
         }
+        #endregion
+
+        #region Create
         //[Authorize]
-        [HttpPost("AddChear")]
+        [HttpPost("Add Chear")]
         public async Task<IActionResult> AddChear([FromForm] ChearVM chear)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await _chearService.CreateChearAsync(chear);
             return Ok(result);
         }
+        #endregion
+
+        #region Get
         //[Authorize]
-        [HttpGet("GetChear")]
+        [HttpGet("Get Chear")]
         public async Task<IActionResult> GetChear(int ChearId)
         {
             var result = await _chearService.GetChearAsync(ChearId);
             return Ok(result);
         }
+        #endregion
+
+        #region Get All
         //[Authorize]
-        [HttpDelete("DeleteChear")]
+        [HttpGet("Get All Chear")]
+        public async Task<IActionResult> GetAllChear(int Pagging)
+        {
+            var result = await _chearService.GetAllChearAsync(Pagging);
+            return Ok(result);
+        }
+        #endregion
+
+        #region Delete
+        //[Authorize]
+        [HttpDelete("Delete Chear")]
         public async Task<IActionResult> DeleteChear(int ChearId)
         {
             var result = await _chearService.DeleteChearAsync(ChearId);
             return Ok(result);
         }
+        #endregion
+
+        #region Updete
         //[Authorize]
-        [HttpPut("UpdateChear")]
+        [HttpPut("Update Chear")]
         public async Task<IActionResult> UpdateChear([FromForm] ChearEditVM chear)
         {
             var result = await _chearService.UpdateChearAsync(chear);
             return Ok(result);
         }
+        #endregion
     }
 }

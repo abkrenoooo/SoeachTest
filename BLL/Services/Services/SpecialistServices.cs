@@ -15,8 +15,11 @@ using System.Threading.Tasks;
 
 namespace BLL.Services.Services
 {
+
     public class SpecialistServices : ISpecialistServices
-    {
+    {    
+        #region Depend Injection
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ISpecialistRepo _specialistRepo;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -27,6 +30,10 @@ namespace BLL.Services.Services
             _specialistRepo = specialistRepo;
             _httpContextAccessor = httpContextAccessor;
         }
+        #endregion
+
+        #region Delete 
+
         public async Task<Response<SpecialistVM>> DeleteSpecialistAsync(int Id)
         {
             try
@@ -43,11 +50,11 @@ namespace BLL.Services.Services
                         status_code = "400",
                     };
                 }
-                if (spetialistvm is not null&& spetialistvm.ObjectData!=null && spetialistvm.ObjectData.ImageOfSpecializationCertificatePath is not null)
+                if (spetialistvm is not null && spetialistvm.ObjectData != null && spetialistvm.ObjectData.ImageOfSpecializationCertificatePath is not null)
                 {
                     var spetialist = spetialistvm.ObjectData.ToSpecialist().Result;
                     await _userManager.DeleteAsync(_userManager.FindByIdAsync(spetialist.UserId).Result);
-                    var path = spetialist.ImageOfSpecializationCertificate.Replace(_httpContextAccessor.HttpContext.Request.Host.Value , "");
+                    var path = spetialist.ImageOfSpecializationCertificate.Replace(_httpContextAccessor.HttpContext.Request.Host.Value, "");
                     UploadFileHelper.RemoveFile(path);
                 }
                 return new Response<SpecialistVM>
@@ -67,6 +74,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Depend Update
 
         public async Task<Response<SpecialistVM>> EditSpecialistAsync(SpecialistVMEdit specialist)
         {
@@ -101,6 +111,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region get All
 
         public async Task<Response<SpecialistVM>> GetAllSpecialistAsync(int paggingNumber)
         {
@@ -141,6 +154,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Get
 
         public async Task<Response<SpecialistVM>> GetSpecialistAsync(int Id)
         {
@@ -174,5 +190,6 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
     }
 }

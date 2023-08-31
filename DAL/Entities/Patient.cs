@@ -12,13 +12,11 @@ namespace SpeakEase.DAL.Entities
         public string SecondName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirithDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public Gender Gender { get; set; }
         public OME? OME { get; set; }
         public OME? HearingTest { get; set; }
         public EducationState? EducationState { get; set; }
-        public int? TestId { get; set; }
-        [ForeignKey(nameof(TestId))]
-        public virtual Test? Test { get; set; }
         public int? SpecialistId { get; set; }
         [ForeignKey(nameof(SpecialistId))]
         public virtual Specialist? Specialist { get; set; }

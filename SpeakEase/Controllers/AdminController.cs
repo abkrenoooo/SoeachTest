@@ -14,7 +14,7 @@ namespace SpeakEase.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        #region Depend Injecktion
+        #region Depend Injection
         private readonly IAdminSevices _adminService;
         private readonly UserManager<ApplicationUser> _userManager;
         public AdminController(IAdminSevices adminService, UserManager<ApplicationUser> userManager)

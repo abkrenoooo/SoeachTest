@@ -24,6 +24,8 @@ namespace BLL.Services.Services
 {
     public class AdminSevices : IAdminSevices
     {
+        #region Depend Injection
+
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JWT _jwt;
@@ -38,6 +40,10 @@ namespace BLL.Services.Services
             _adminRepo = adminRepo;
             _specialistServices = specialistServices;
         }
+        #endregion
+
+        #region Create 
+
         public async Task<Response<AuthModel>> AddAdminUserAsync(AdminUserVM model)
         {
             try
@@ -96,6 +102,9 @@ namespace BLL.Services.Services
             }
 
         }
+        #endregion
+
+        #region Delete 
 
         public async Task<Response<AdminUserVM>> RemoveAdminUserAsync(string AdminUserId)
         {
@@ -127,6 +136,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region  Update Specialist Requst
 
         public async Task<Response<SpecialistVM>> EditAdminUserInSpetialistRequestAsync(int SpetialistId, bool Accepted)
         {
@@ -167,6 +179,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Get All Requst 
 
         public async Task<Response<Specialist>> GetAdminUserAllSpetialistRequstAsync(int paggingNumber)
         {
@@ -198,6 +213,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Get 
 
         public async Task<Response<AdminUserVM>> GetAdminUserByIdAsync(string AdminUserId)
         {
@@ -231,6 +249,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Update 
 
         public async Task<Response<AdminUserVM>> EditAdminUserAsync(AdminUserVM model)
         {
@@ -264,6 +285,10 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Get All 
+
         public async Task<Response<ApplicationUser>> GetAdminUsersAsync(int paggingNumber)
         {
             try
@@ -295,7 +320,7 @@ namespace BLL.Services.Services
                 };
             }
         }
-
+        #endregion
 
         #region Private Methods
         private async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)

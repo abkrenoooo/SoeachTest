@@ -19,6 +19,7 @@ namespace DAL.Repository.Repository
 {
     public class AdminRepo : IAdminRepo
     {
+        #region Depend Injection
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -27,6 +28,9 @@ namespace DAL.Repository.Repository
             _db = db;
             _userManager = UserManager;
         }
+        #endregion
+
+        #region Delete 
 
         public async Task<bool> RemoveAdminUserAsync(string AdminUserId)
         {
@@ -39,6 +43,9 @@ namespace DAL.Repository.Repository
             }
             return false;
         }
+        #endregion
+
+        #region Update 
 
         public async Task<ApplicationUser> EditAdminUserAsync(ApplicationUser model)
         {
@@ -64,6 +71,9 @@ namespace DAL.Repository.Repository
                 return null;
             }
         }
+        #endregion
+
+        #region Update Requst 
 
         public async Task<Specialist> EditAdminUserInSpetialistRequestAsync(int SpetialistId, bool Accepted)
         {
@@ -112,6 +122,9 @@ namespace DAL.Repository.Repository
                 return null;
             }
         }
+        #endregion
+
+        #region  Get All Spetialist 
 
         public async Task<Response<Specialist>> GetAdminUserAllSpetialistRequstAsync(int paggingNumber)
         {
@@ -140,17 +153,18 @@ namespace DAL.Repository.Repository
                 };
             }
         }
+        #endregion
+
+        #region Get 
 
         public async Task<ApplicationUser> GetAdminUserByIdAsync(string AdminUserId)
         {
             return await _userManager.FindByIdAsync(AdminUserId);
 
         }
+        #endregion
 
-        public async Task<List<ApplicationUser>> GetAdminUsersAsync()
-        {
-            return await _db.Users.ToListAsync();
-        }
+        #region Get All 
 
         public async Task<Response<ApplicationUser>> GetAllAdminAsync(int paggingNumber)
         {
@@ -180,6 +194,6 @@ namespace DAL.Repository.Repository
                 };
             }
         }
-
+        #endregion
     }
 }

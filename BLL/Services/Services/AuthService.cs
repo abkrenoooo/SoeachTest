@@ -24,6 +24,8 @@ namespace BLL.Services.Services
 {
     public class AuthService : IAuthService
     {
+        #region Depend Injection
+
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JWT _jwt;
@@ -35,8 +37,12 @@ namespace BLL.Services.Services
             _jwt = jwt.Value;
             _httpContextAccessor = httpContextAccessor;
         }
+        #endregion
 
         #region Authentication Services
+
+        #region Login
+
         public async Task<Response<AuthModel>> LoginAsync(LoginUser login)
         {
             try
@@ -80,6 +86,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Register
 
         public async Task<Response<AuthModel>> RegisterUserAsync(SpecialistVM model)
         {
@@ -173,6 +182,8 @@ namespace BLL.Services.Services
             }
 
         }
+        #endregion
+
         #endregion
 
         #region Private Methods

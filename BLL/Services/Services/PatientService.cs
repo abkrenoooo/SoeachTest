@@ -14,12 +14,17 @@ namespace BLL.Services.Services
 {
     public class PatientService:IPatientService
     {
+        #region Depend Injection
+
         private readonly IPatientRepo _patientRepo;
 
         public PatientService(IPatientRepo patientRepo)
         {
             _patientRepo = patientRepo;
         }
+        #endregion
+
+        #region Create 
 
         public async Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM,string id)
         {
@@ -38,7 +43,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
 
+        #region Delete
         public async Task<Response<Patient>> DeletePatientAsync(int Id)
         {
             try
@@ -55,7 +62,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
 
+        #region Get All
         public async Task<Response<Patient>> GetAllPatientAsync(int paggingNumber)
         {
             try
@@ -85,6 +94,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Get 
 
         public async Task<Response<Patient>> GetPatientAsync(int Id)
         {
@@ -102,6 +114,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
+
+        #region Update 
 
         public async Task<Response<Patient>> EditPatientAsync(PatientVM patientVM)
         {
@@ -119,5 +134,6 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
     }
 }

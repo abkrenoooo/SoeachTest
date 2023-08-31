@@ -23,8 +23,7 @@ namespace SpeakEase.Controllers
         }
         #endregion
  
-
-        #region Get Specialist By Id
+        #region Get 
         [HttpGet ("Get Specialist By Id")]
         [AllowAnonymous]
         public async Task<IActionResult> GetSpecialistByIdAsync(int specialistId)
@@ -39,7 +38,7 @@ namespace SpeakEase.Controllers
         }
         #endregion
 
-        #region Get Specialists
+        #region Get All
         [HttpGet("Get Specialists")]
         [AllowAnonymous]
         public async Task<IActionResult> GetSpecialistsAsync(int paggingNumber)
@@ -54,7 +53,7 @@ namespace SpeakEase.Controllers
         }
         #endregion
 
-        #region Edit Spetialist 
+        #region Update  
         [HttpPut("Edit Spetialist")]
         [AllowAnonymous]
         public async Task<IActionResult> EditSpecialistInSpetialistRequestAsync([FromForm] SpecialistVMEdit specialist)
@@ -69,9 +68,7 @@ namespace SpeakEase.Controllers
         }
         #endregion
 
-
-
-        #region Remove Specialist
+        #region Delete 
         [HttpDelete("Remove Specialist")]
         [AllowAnonymous]
         public async Task<IActionResult> RemoveSpecialistAsync(int SpecialistId)
