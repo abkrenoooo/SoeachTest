@@ -25,13 +25,24 @@ namespace DAL.Repository.Repository
         {
             try
             {
-                await db.Chears.AddAsync(chear);
-                await db.SaveChangesAsync();
+                var chearsCount=  await db.Chears.Where(x=>x.Character==chear.Character&&x.ChearPosition==chear.ChearPosition).CountAsync();
+                if (chearsCount == 0)
+                {
+                    await db.Chears.AddAsync(chear);
+                    await db.SaveChangesAsync();
+                    return new Response<Chear>
+                    {
+                        Success = true,
+                        Message = "Created Chear",
+                        status_code = "200",
+                        ObjectData=chear    
+                    };
+                }
                 return new Response<Chear>
                 {
                     Success = true,
-                    Message="Created Chear",
-                    status_code = "200"
+                    Message = "Qustion With the same Character and Character Position is found before",
+                    status_code = "500",
                 };
             }
             catch (Exception e)
@@ -140,11 +151,11 @@ namespace DAL.Repository.Repository
             }
         }
 
-        public async Task<Response<Chear>> Update_ChearAsync(int Id, Chear chear2)
+        public async Task<Response<Chear>> Update_ChearAsync(Chear chear2)
         {
             try
             {
-                var chear = await db.Chears.Where(n => n.ChearId == Id).SingleOrDefaultAsync();
+                var chear = await db.Chears.Where(n => n.ChearId == chear2.ChearId).SingleOrDefaultAsync();
                 if (chear == null)
                 {
                     return new Response<Chear>
@@ -154,10 +165,20 @@ namespace DAL.Repository.Repository
                         status_code = "200"
                     };
                 }
-                chear.Audio = chear2.Audio;
-                chear.Word = chear2.Word;
-                chear.Image = chear2.Image;
-                chear.TestId = chear2.TestId;
+                var chearsCount = await db.Chears.Where(x => x.Character == chear.Character && x.ChearPosition == chear.ChearPosition).CountAsync();
+                if (chearsCount != 0)
+                {
+                    return new Response<Chear>
+                    {
+                        Success = true,
+                        Message = "Qustion With the same Character and Character Position is found before",
+                        status_code = "500",
+                    };
+                }
+                chear.Audio = chear2.Audio==null? chear.Audio: chear2.Audio;
+                chear.Word = chear2.Word == null ? chear.Word : chear2.Word; 
+                chear.Image = chear2.Image == null ? chear.Image : chear2.Image;
+                chear.TestId = chear2.TestId == null ? chear.TestId : chear2.TestId;
 
                 await db.SaveChangesAsync();
 

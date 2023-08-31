@@ -1,6 +1,6 @@
 ﻿using BLL.Services.IServices;
 using BLL.Services.Services;
-using DAL.Models.SpecialistModel;
+using DAL.Models.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

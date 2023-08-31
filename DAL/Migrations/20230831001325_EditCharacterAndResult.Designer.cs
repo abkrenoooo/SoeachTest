@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpeakEase.DAL.Data;
 
@@ -11,9 +12,10 @@ using SpeakEase.DAL.Data;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230831001325_EditCharacterAndResult")]
+    partial class EditCharacterAndResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,9 +330,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("SpecialistId");
 
-                    b.HasIndex("TestId")
-                        .IsUnique()
-                        .HasFilter("[TestId] IS NOT NULL");
+                    b.HasIndex("TestId");
 
                     b.ToTable("Patients");
                 });
@@ -524,8 +524,8 @@ namespace DAL.Migrations
                         .HasForeignKey("SpecialistId");
 
                     b.HasOne("SpeakEase.DAL.Entities.Test", "Test")
-                        .WithOne("Patient")
-                        .HasForeignKey("SpeakEase.DAL.Entities.Patient", "TestId");
+                        .WithMany()
+                        .HasForeignKey("TestId");
 
                     b.Navigation("Specialist");
 
@@ -586,8 +586,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("SpeakEase.DAL.Entities.Test", b =>
                 {
                     b.Navigation("Chears");
-
-                    b.Navigation("Patient");
                 });
 #pragma warning restore 612, 618
         }

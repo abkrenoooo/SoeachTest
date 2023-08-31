@@ -1,5 +1,5 @@
 ﻿
-using DAL.Models.SpecialistModel;
+using DAL.Models.Admin;
 using SpeakEase.DAL.Entities;
 using System;
 using System.Collections.Generic;

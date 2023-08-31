@@ -1,4 +1,5 @@
-﻿using DAL.Models.SpecialistModel;
+﻿using DAL.Models.Admin;
+using DAL.Models.SpecialistModel;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using SpeakEase.Models.AuthModel;

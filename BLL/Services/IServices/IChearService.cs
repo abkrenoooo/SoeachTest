@@ -1,4 +1,4 @@
-﻿using DAL.Models.TestModel;
+﻿using DAL.Models.Chear;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using System;
@@ -14,7 +14,7 @@ namespace BLL.Services.IServices
         Task<Response<Chear>> CreateChearAsync(ChearVM chear);
         Task<Response<Chear>> DeleteChearAsync(int ChearId);
         Task<Response<Chear>> GetAllChearAsync(int Pagging);
-        Task<Response<object>> GetChearAsync(int ChearId);
-        Task<Response<Chear>> UpdateChearAsync(int Id, ChearVM chear);
+        Task<Response<Chear>> GetChearAsync(int ChearId);
+        Task<Response<Chear>> UpdateChearAsync(ChearEditVM chear);
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Models.SpecialistModel
+namespace DAL.Models.Admin
 {
     public class AdminUserVM
     {
@@ -36,6 +36,6 @@ namespace DAL.Models.SpecialistModel
         public string Phone { get; set; }
         [Required]
         public string Username { get; set; }
-       
+
     }
 }

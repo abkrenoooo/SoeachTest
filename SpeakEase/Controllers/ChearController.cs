@@ -1,5 +1,5 @@
 ﻿using BLL.Services.IServices;
-using DAL.Models.TestModel;
+using DAL.Models.Chear;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +22,8 @@ namespace SpeakEase.Controllers
         }
         //[Authorize]
         [HttpPost("AddChear")]
-        public async Task<IActionResult> AddChear([FromForm]ChearVM chear) {
+        public async Task<IActionResult> AddChear([FromForm] ChearVM chear)
+        {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await _chearService.CreateChearAsync(chear);
             return Ok(result);
@@ -43,9 +44,9 @@ namespace SpeakEase.Controllers
         }
         //[Authorize]
         [HttpPut("UpdateChear")]
-        public async Task<IActionResult> UpdateChear(int ChearId,[FromForm]ChearVM chear)
+        public async Task<IActionResult> UpdateChear([FromForm] ChearEditVM chear)
         {
-            var result = await _chearService.UpdateChearAsync(ChearId,chear);
+            var result = await _chearService.UpdateChearAsync(chear);
             return Ok(result);
         }
     }

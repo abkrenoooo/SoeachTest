@@ -1,7 +1,9 @@
 ﻿using BlL.Helper;
 using BLL.Services.IServices;
-using DAL.Models.TestModel;
+using DAL.Enum;
+using DAL.Models.Chear;
 using DAL.Repository.IRepository;
+using Microsoft.AspNetCore.Http;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using System;
@@ -13,28 +15,42 @@ using System.Threading.Tasks;
 
 namespace BLL.Services.Services
 {
-    public class ChearService:IChearService
+    public class ChearService : IChearService
     {
         private readonly IChearRepo _chearRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ChearService(IChearRepo chearRepo)
+        public ChearService(IChearRepo chearRepo, IHttpContextAccessor httpContextAccessor)
         {
             _chearRepo = chearRepo;
+            _httpContextAccessor = httpContextAccessor;
         }
 
+
+        #region Create
         public async Task<Response<Chear>> CreateChearAsync(ChearVM chear)
         {
             try
             {
-                var UploadFileAudo = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
-                var UploadFileImage = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+
+                //var UploadFileAudo = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
+                //var UploadFileImage = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
 
                 Chear chear1 = new Chear();
-                chear1.Audio = UploadFileAudo[1];
-                chear1.Image = UploadFileImage[1];
                 chear1.Word = chear.Word;
-                chear1.TestId = chear.TestId;
-
+                chear1.TestId = null;
+                chear1.IsDeleted = chear.IsDeleted;
+                chear1.TestId = null;
+                if (chear.Audio is not null)
+                {
+                    var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
+                    chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
+                }
+                if (chear.Image is not null)
+                {
+                    var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+                    chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
+                }
                 var result = await _chearRepo.Create_ChearAsync(chear1);
                 return result;
 
@@ -49,19 +65,29 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
 
+        #region Delete 
         public async Task<Response<Chear>> DeleteChearAsync(int ChearId)
         {
             try
             {
-                var rsult = await _chearRepo.Delete_ChearAsync(ChearId);
-                if (rsult.Success==true&&rsult.status_code=="200")
+                var Chear = GetChearAsync(ChearId).Result.ObjectData;
+                var result = await _chearRepo.Delete_ChearAsync(ChearId);
+                if (result.Success && result.status_code == "200" && Chear is not null)
                 {
-                    string Aduo = rsult.ObjectData.Audio;
-                    UploadFileHelper.RemoveFile(Aduo);
-                    UploadFileHelper.RemoveFile(rsult.ObjectData.Image);
+                    if (Chear.Audio is not null)
+                    {
+                        var path = Chear.Audio.Replace(_httpContextAccessor.HttpContext.Request.Host.Value, "");
+                        UploadFileHelper.RemoveFile(path);
+                    }
+                    if (Chear.Image is not null)
+                    {
+                        var path = Chear.Image.Replace(_httpContextAccessor.HttpContext.Request.Host.Value, "");
+                        UploadFileHelper.RemoveFile(path);
+                    }
                 }
-                return rsult;
+                return result;
             }
             catch (Exception e)
             {
@@ -73,7 +99,9 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
 
+        #region Get All
         public async Task<Response<Chear>> GetAllChearAsync(int Pagging)
         {
             try
@@ -94,41 +122,37 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
 
-        public async Task<Response<object>> GetChearAsync(int ChearId)
+        #region Get By Id
+        public async Task<Response<Chear>> GetChearAsync(int ChearId)
         {
             try
             {
                 var result = await _chearRepo.Get_ChearAsync(ChearId);
-                List<byte[]> filesData = new List<byte[]>
+                if (result.ObjectData is not null)
                 {
-                    System.IO.File.ReadAllBytes(result.ObjectData.Audio),
-                    System.IO.File.ReadAllBytes(result.ObjectData.Image)
-                    // Add more files as needed
-                };
+                    return new Response<Chear>
+                    {
+                        Success = true,
+                        Message = "Chear Found",
+                        ObjectData = result.ObjectData,
+                        status_code = "200",
 
-                // Create a dictionary to hold the file names and their corresponding data
-                Dictionary<string, byte[]> filesDictionary = new Dictionary<string, byte[]>();
-                filesDictionary.Add("Aduo", filesData[0]);
-                filesDictionary.Add("Image", filesData[1]);
-
-
-
-
-                // Convert the dictionary to JSON and return it as the response
-                return new Response<object>
+                    };
+                }
+                return new Response<Chear>
                 {
                     Success = true,
-                    ObjectData = new
-                    {
-                        files = filesDictionary,
-                        word = result.ObjectData.Word,
-                    },
+                    Message = "Error",
+                    ObjectData = null,
+                    status_code = "404",
+
                 };
             }
             catch (Exception e)
             {
-                return new Response<Object>
+                return new Response<Chear>
                 {
                     Success = false,
                     status_code = "500",
@@ -136,21 +160,42 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
 
-        public async Task<Response<Chear>> UpdateChearAsync(int Id, ChearVM chear)
+        #region update
+        public async Task<Response<Chear>> UpdateChearAsync(ChearEditVM chear)
         {
             try
             {
-                var UploadFileAudo = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
-                var UploadFileImage = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-
-                Chear chear1 = new Chear();
-                chear1.Audio = UploadFileAudo[1];
-                chear1.Image = UploadFileImage[1];
-                chear1.Word = chear.Word;
-                chear1.TestId = chear.TestId;
-
-                var resul = await _chearRepo.Update_ChearAsync(Id, chear1);
+                //var UploadFileAudo = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
+                //var UploadFileImage = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+                var oldChear = GetChearAsync(chear.ChearId).Result.ObjectData;
+                if (true)
+                {
+                    return new Response<Chear>
+                    {
+                        Success = false,
+                        status_code = "404",
+                        error = "question is not Found"
+                    };
+                }
+                if (chear.Audio is not null)
+                {
+                    var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
+                    oldChear.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
+                }
+                if (chear.Image is not null)
+                {
+                    var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+                    oldChear.Image = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
+                }
+                oldChear.Word = chear.Word == null ? oldChear.Word : chear.Word;
+                oldChear.IsHiden = chear.IsHiden == null ? oldChear.IsHiden : (bool)chear.IsHiden;
+                oldChear.IsDeleted = chear.IsDeleted == null ? oldChear.IsDeleted : (bool)chear.IsDeleted;
+                oldChear.TestId =null;
+                oldChear.Character = chear.Character == null ? oldChear.Character : (Character)chear.Character;
+                oldChear.ChearPosition = chear.ChearPosition == null ? oldChear.ChearPosition : (ChearPosition)chear.ChearPosition;
+                var resul = await _chearRepo.Update_ChearAsync(oldChear);
                 return resul;
             }
             catch (Exception e)
@@ -163,5 +208,6 @@ namespace BLL.Services.Services
                 };
             }
         }
+        #endregion
     }
 }

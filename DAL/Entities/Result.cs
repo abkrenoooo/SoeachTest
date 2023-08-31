@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-
+using DAL.Enum;
 
 namespace SpeakEase.DAL.Entities
 {
@@ -8,9 +8,11 @@ namespace SpeakEase.DAL.Entities
     {
         [Key]
         public int ResultId { get; set; }
-        public int Degree { get; set; }
-        public int? TestId { get; set; }
-        [ForeignKey(nameof(TestId))]
-        public virtual Test? Test { get; set; }
+        public ChearState ChearState { get; set; }
+        public Character? AnotherCharacter { get; set; }
+        public ChearPositionResult ChearPositionResult { get; set; }
+        public int? ChearId { get; set; }
+        [ForeignKey(nameof(ChearId))]
+        public virtual Chear? Chear { get; set; }
     }
 }

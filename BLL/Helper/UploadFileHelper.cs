@@ -31,9 +31,9 @@ namespace BlL.Helper
 
         public static void RemoveFile(string Filepath)
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + Filepath))
+            if (File.Exists(Directory.GetCurrentDirectory() + "/wwwroot" + Filepath))
             {
-                File.Delete(Directory.GetCurrentDirectory() + Filepath);
+                File.Delete(Directory.GetCurrentDirectory() + "/wwwroot" + Filepath);
             }
 
         }

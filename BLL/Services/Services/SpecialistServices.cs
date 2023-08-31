@@ -1,7 +1,9 @@
 ﻿using Bll.ExtensionMethods;
+using BlL.Helper;
 using BLL.Services.IServices;
 using DAL.Models.SpecialistModel;
 using DAL.Repository.IRepository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
@@ -17,24 +19,36 @@ namespace BLL.Services.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ISpecialistRepo _specialistRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SpecialistServices(UserManager<ApplicationUser> UserManager, ISpecialistRepo specialistRepo)
+        public SpecialistServices(UserManager<ApplicationUser> UserManager, ISpecialistRepo specialistRepo, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = UserManager;
             _specialistRepo = specialistRepo;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<Response<SpecialistVM>> DeleteSpecialistAsync(int Id)
         {
             try
             {
+                var spetialistvm = GetSpecialistAsync(Id).Result;
+
                 if (!await _specialistRepo.DeleteSpecialistAsync(Id))
                 {
+
                     return new Response<SpecialistVM>
                     {
                         Success = false,
                         Message = "error!",
                         status_code = "400",
                     };
+                }
+                if (spetialistvm is not null&& spetialistvm.ObjectData!=null && spetialistvm.ObjectData.ImageOfSpecializationCertificatePath is not null)
+                {
+                    var spetialist = spetialistvm.ObjectData.ToSpecialist().Result;
+                    await _userManager.DeleteAsync(_userManager.FindByIdAsync(spetialist.UserId).Result);
+                    var path = spetialist.ImageOfSpecializationCertificate.Replace(_httpContextAccessor.HttpContext.Request.Host.Value , "");
+                    UploadFileHelper.RemoveFile(path);
                 }
                 return new Response<SpecialistVM>
                 {
@@ -71,7 +85,7 @@ namespace BLL.Services.Services
                 }
                 return new Response<SpecialistVM>
                 {
-                    ObjectData =await data.FromSpecialist(),
+                    ObjectData = await data.FromSpecialist(),
                     Success = true,
                     Message = "Spetialist  is Updated",
                     status_code = "200",
@@ -109,12 +123,12 @@ namespace BLL.Services.Services
                 return new Response<SpecialistVM>
                 {
                     Success = result.Success,
-                    Data =result.Data==null?null: result.Data.ToList().ConvertAll(x=>x.FromSpecialist().Result),
+                    Data = result.Data == null ? null : result.Data.ToList().ConvertAll(x => x.FromSpecialist().Result),
                     error = result.error,
                     Message = result.Message,
                     CountOfData = result.CountOfData,
                     paggingNumber = result.paggingNumber,
-                    status_code=result.status_code,
+                    status_code = result.status_code,
                 };
             }
             catch (Exception ex)

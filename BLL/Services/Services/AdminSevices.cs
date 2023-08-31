@@ -1,6 +1,7 @@
 ﻿using Bll.ExtensionMethods;
 using BLL.Services.IServices;
 using DAL.Enum;
+using DAL.Models.Admin;
 using DAL.Models.SpecialistModel;
 using DAL.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
@@ -27,13 +28,15 @@ namespace BLL.Services.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JWT _jwt;
         private readonly IAdminRepo _adminRepo;
+        private readonly ISpecialistServices _specialistServices;
 
-        public AdminSevices(UserManager<ApplicationUser> UserManager, ApplicationDbContext db, IOptions<JWT> jwt, IAdminRepo adminRepo)
+        public AdminSevices(UserManager<ApplicationUser> UserManager, ApplicationDbContext db, IOptions<JWT> jwt, IAdminRepo adminRepo, ISpecialistServices specialistServices)
         {
             _db = db;
             _jwt = jwt.Value;
             _userManager = UserManager;
             _adminRepo = adminRepo;
+            _specialistServices = specialistServices;
         }
         public async Task<Response<AuthModel>> AddAdminUserAsync(AdminUserVM model)
         {
@@ -151,12 +154,7 @@ namespace BLL.Services.Services
                 }
                 else
                 {
-                    return new Response<SpecialistVM>
-                    {
-                        Success = true,
-                        Message = "Spetialist Request is Refused",
-                        status_code = "200",
-                    };
+                    return await _specialistServices.DeleteSpecialistAsync(SpetialistId);
                 }
             }
             catch (Exception ex)
