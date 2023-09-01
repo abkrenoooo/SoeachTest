@@ -64,8 +64,7 @@ namespace SpeakEase.DAL.Data
         public DbSet<Specialist> Specialists { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<QuestionTest> QuctionTests { get; set; }
-        public DbSet<Chear> Chears { get; set; }
+        public DbSet<Question> Questions { get; set; }
         protected override async void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

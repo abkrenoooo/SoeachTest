@@ -10,11 +10,11 @@ using DAL.Enum;
 
 namespace SpeakEase.DAL.Entities
 {
-    public class Chear
+    public class Question
     {
         [Key]
         public int ChearId { get; set; }
-        public ChearPosition ChearPosition { get; set; }
+        public CharacterPosition CharacterPosition { get; set; }
         public Character Character { get; set; }
         public string? Word { get; set; }
         public string? Image { get; set; }

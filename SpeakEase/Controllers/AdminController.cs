@@ -1,5 +1,6 @@
 ﻿using BLL.Services.IServices;
 using BLL.Services.Services;
+using DAL.Enum;
 using DAL.Models.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,24 +10,27 @@ using SpeakEase.DAL.Entities;
 
 namespace SpeakEase.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AdminController : ControllerBase
     {
         #region Depend Injection
         private readonly IAdminSevices _adminService;
         private readonly UserManager<ApplicationUser> _userManager;
-        public AdminController(IAdminSevices adminService, UserManager<ApplicationUser> userManager)
+        private readonly IAuthorizationService _authorizationService;
+
+        public AdminController(IAdminSevices adminService, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
         {
             _adminService = adminService;
             _userManager = userManager;
+            _authorizationService = authorizationService;
         }
         #endregion
 
         #region Add Admin
         [HttpPost("Add Admin")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> AddAdminUserAsync(AdminUserVM model)
         {
             if (!ModelState.IsValid)
@@ -41,7 +45,8 @@ namespace SpeakEase.Controllers
 
         #region Get All Spetialist Requst
         [HttpGet("Get All Spetialist Requst")]
-        [AllowAnonymous]
+        [Authorize]
+
         public async Task<IActionResult> GetAdminUserAllSpetialistRequstAsync(int paggingNumber)
         {
             if (!ModelState.IsValid)
@@ -55,8 +60,9 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get Admin By Id
-        [HttpGet ("Get Admin By Id")]
-        [AllowAnonymous]
+        [HttpGet("Get Admin By Id")]
+        [Authorize]
+
         public async Task<IActionResult> GetAdminUserByIdAsync(string AdminUserId)
         {
             if (!ModelState.IsValid)
@@ -71,9 +77,16 @@ namespace SpeakEase.Controllers
 
         #region Get Admins
         [HttpGet("Get Admins")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> GetAdminUsersAsync(int paggingNumber)
         {
+        //    var isAdminEvaluationResult =
+        //await _authorizationService.AuthorizeAsync(User, null, "Permissions.Admin.View");
+
+        //    if (!isAdminEvaluationResult.Succeeded)
+        //    {
+        //        return Forbid();
+        //    }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -86,7 +99,8 @@ namespace SpeakEase.Controllers
 
         #region Edit In Spetialist Requst
         [HttpPut("Edit In Spetialist Requst")]
-        [AllowAnonymous]
+        [Authorize]
+
         public async Task<IActionResult> EditAdminUserInSpetialistRequestAsync(int SpetialistId, bool Accepted)
         {
             if (!ModelState.IsValid)
@@ -101,7 +115,8 @@ namespace SpeakEase.Controllers
 
         #region Edit Admin
         [HttpPut("Edit Admin")]
-        [AllowAnonymous]
+        [Authorize]
+
         public async Task<IActionResult> EditAdminUserAsync(AdminUserVM model)
         {
             if (!ModelState.IsValid)
@@ -116,7 +131,8 @@ namespace SpeakEase.Controllers
 
         #region Remove Admin
         [HttpDelete("Remove Admin")]
-        [AllowAnonymous]
+        [Authorize]
+
         public async Task<IActionResult> RemoveAdminUserAsync(string AdminId)
         {
             if (!ModelState.IsValid)

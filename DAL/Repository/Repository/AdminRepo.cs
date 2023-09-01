@@ -135,7 +135,7 @@ namespace DAL.Repository.Repository
                 return new Response<Specialist>
                 {
                     Success = true,
-                    Message = "All Admins",
+                    Message = "All Spetialist Requst",
                     Data = AllPatient,
                     CountOfData = AllPatientcount,
                     paggingNumber = paggingNumber,

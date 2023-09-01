@@ -1,5 +1,6 @@
 ﻿using BLL.Services.IServices;
-using DAL.Models.Chear;
+using DAL.Enum;
+using DAL.Models.Question;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,68 +9,93 @@ using SpeakEase.DAL.Entities;
 
 namespace SpeakEase.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
         #region Depend Injection
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IChearService _chearService;
+        private readonly IQuestionService _QuestionService;
 
-        public QuestionController(UserManager<ApplicationUser> userManager, IChearService chearService)
+        public QuestionController(UserManager<ApplicationUser> userManager, IQuestionService QuestionService)
         {
             _userManager = userManager;
-            _chearService = chearService;
+            _QuestionService = QuestionService;
         }
         #endregion
 
         #region Create
-        //[Authorize]
-        [HttpPost("Add Chear")]
-        public async Task<IActionResult> AddChear([FromForm] ChearVM chear)
+        [Authorize]
+
+        [HttpPost("Add Question")]
+        public async Task<IActionResult> AddQuestion([FromForm] QuestionVM Question)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var result = await _chearService.CreateChearAsync(chear);
+            var result = await _QuestionService.CreateQuestionAsync(Question);
             return Ok(result);
         }
         #endregion
 
         #region Get
-        //[Authorize]
-        [HttpGet("Get Chear")]
-        public async Task<IActionResult> GetChear(int ChearId)
+        [Authorize]
+        [HttpGet("Get Question")]
+        public async Task<IActionResult> GetQuestion(int QuestionId)
         {
-            var result = await _chearService.GetChearAsync(ChearId);
+            var result = await _QuestionService.GetQuestionAsync(QuestionId);
+            return Ok(result);
+        }
+        #endregion
+
+        #region Get Secound Question
+        [Authorize]
+        [HttpGet("Get Secound Question")]
+        public async Task<IActionResult> GetSecoundQuestion(int QuestionId)
+        {
+            var result = await _QuestionService.GetSecoundQuestionAsync(QuestionId);
+            return Ok(result);
+        }
+        #endregion
+
+        #region Replace Question
+        [Authorize]
+
+        [HttpGet(" Replace Question")]
+        public async Task<IActionResult> GetReplaceQuestion(int QuestionId)
+        {
+            var result = await _QuestionService.GetReplaceQuestionAsync(QuestionId);
             return Ok(result);
         }
         #endregion
 
         #region Get All
-        //[Authorize]
-        [HttpGet("Get All Chear")]
-        public async Task<IActionResult> GetAllChear(int Pagging)
+        [Authorize]
+
+        [HttpGet("Get All Question")]
+        public async Task<IActionResult> GetAllQuestion(int Pagging)
         {
-            var result = await _chearService.GetAllChearAsync(Pagging);
+            var result = await _QuestionService.GetAllQuestionAsync(Pagging);
             return Ok(result);
         }
         #endregion
 
         #region Delete
-        //[Authorize]
-        [HttpDelete("Delete Chear")]
-        public async Task<IActionResult> DeleteChear(int ChearId)
+        [Authorize]
+        [HttpDelete("Delete Question")]
+        public async Task<IActionResult> DeleteQuestion(int QuestionId)
         {
-            var result = await _chearService.DeleteChearAsync(ChearId);
+            var result = await _QuestionService.DeleteQuestionAsync(QuestionId);
             return Ok(result);
         }
         #endregion
 
         #region Updete
-        //[Authorize]
-        [HttpPut("Update Chear")]
-        public async Task<IActionResult> UpdateChear([FromForm] ChearEditVM chear)
+        [Authorize]
+
+        [HttpPut("Update Question")]
+        public async Task<IActionResult> UpdateQuestion([FromForm] QuestionEditVM Question)
         {
-            var result = await _chearService.UpdateChearAsync(chear);
+            var result = await _QuestionService.UpdateQuestionAsync(Question);
             return Ok(result);
         }
         #endregion

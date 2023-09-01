@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Enum
 {
-    public enum ChearPositionResult
+    public enum CharacterPositionResult
     {
         [Display(Name = "Berfore")]
         Berfore = 1,

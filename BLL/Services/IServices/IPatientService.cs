@@ -15,7 +15,9 @@ namespace BLL.Services.IServices
         Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM, string id);
         Task<Response<Patient>> EditPatientAsync(PatientVM patientVM);
         Task<Response<Patient>> DeletePatientAsync(int Id);
-        Task<Response<Patient>> GetPatientAsync(int Id);
+        Task<Response<Patient>> GetPatientAsync(string userId, int patientId);
+        Task<Response<Patient>> GetAllPatientAsync(string userId,int paggingNumber);
+        Task<Response<Patient>> GetPatientAsync(int patientId);
         Task<Response<Patient>> GetAllPatientAsync(int paggingNumber);
     }
 }

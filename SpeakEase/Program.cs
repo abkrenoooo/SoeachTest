@@ -13,6 +13,10 @@ using BLL.Services.IServices;
 using BLL.Services.Services;
 using DAL.Repository.IRepository;
 using DAL.Repository.Repository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using BLL.Filters;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +56,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+
+    options.AddPolicy("Admin",
+        authBuilder =>
+        {
+            authBuilder.RequireRole("Admin,Server,SuperAdmin");
+        });
+
+});
 //JWT
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //Services
@@ -59,18 +76,21 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAdminSevices, AdminSevices>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<ISpecialistServices, SpecialistServices>();
-builder.Services.AddScoped<IChearService, ChearService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IResultServices, ResultServices>();
 
 //Repo
 builder.Services.AddScoped<IPatientRepo, PatientRepo>();
 builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 builder.Services.AddScoped<ISpecialistRepo, SpecialistRepo>();
-builder.Services.AddScoped<IChearRepo, ChearRepo>();
+builder.Services.AddScoped<IQuestionRepo, QuestionRepo>();
+builder.Services.AddScoped<IResultRepo, ResultRepo>();
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     .AddJwtBearer(o =>
     {
@@ -144,6 +164,7 @@ try
     await DefaultUsers.SeedServerAsync(userManager, roleManager);
     await DefaultUsers.SeedSuperAdminUserAsync(userManager, roleManager);
     await DefaultUsers.SeedAdminUserAsync(userManager, roleManager);
+    await DefaultUsers.SeedSpetilestClaims(userManager, roleManager);
 
 }
 catch (System.Exception ex)

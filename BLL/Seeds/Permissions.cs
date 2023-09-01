@@ -17,6 +17,13 @@ namespace BLL.Seeds
                 $"Permissions.{module}.Delete"
             };
         }
+        public static List<string> GeneratePermissionsForSpetialistList(string module)
+        {
+            return new List<string>()
+            {
+                $"Permissions.{module}.View"
+            };
+        }
 
         public static List<string> GenerateServerPermissions()
         {
@@ -46,6 +53,17 @@ namespace BLL.Seeds
 
             var modules = Enum.GetValues(typeof(Modules)).Cast<Modules>().Where(z=>z != Modules.SuberAdmin&&z!=Modules.Admin); 
 
+            foreach (var module in modules)
+                allPermissions.AddRange(GeneratePermissionsList(module.ToString()));
+
+            return allPermissions;
+        }
+        public static List<string> GenerateSpetialistPermissions()
+        {
+            var allPermissions = new List<string>();
+
+            var modules = Enum.GetValues(typeof(Modules)).Cast<Modules>().Where(z=>z != Modules.SuberAdmin&&z!=Modules.Admin&&z!=Modules.Specialist&&z!=Modules.Question);
+            allPermissions.AddRange(GeneratePermissionsForSpetialistList(Modules.Question.ToString()));
             foreach (var module in modules)
                 allPermissions.AddRange(GeneratePermissionsList(module.ToString()));
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Enum
 {
-    public enum ChearState
+    public enum CharacterState
     {
         [Display(Name = "Distortion")]
         Distortion = 1,

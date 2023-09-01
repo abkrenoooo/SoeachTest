@@ -39,7 +39,6 @@ namespace DAL.Repository.Repository
                         status_code = "404"
                     };
                 }
-                await db.SaveChangesAsync();
                 db.Entry(patient).Property(p => p.SpecialistId).IsModified = true;
                 patient.SpecialistId = specialist.SpecialistId;
                 await db.Patients.AddAsync(patient);
@@ -48,7 +47,7 @@ namespace DAL.Repository.Repository
                 return new Response<Patient>
                 {
                     Success = true,
-                    ObjectData=patient,
+                    ObjectData = patient,
                     Message = "Created the patient",
                     status_code = "200"
                 };
@@ -104,12 +103,102 @@ namespace DAL.Repository.Repository
         }
         #endregion
 
-        #region Get All
+        #region Get All Of Spetialist
 
-        public async Task<Response<Patient>> GetAll_PatientAsync(int paggingNumber)
+        public async Task<Response<Patient>> GetAll_PatientAsync(string userId, int paggingNumber)
         {
             try
             {
+                var specialist = await db.Specialists.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                if (specialist == null)
+                {
+                    return new Response<Patient>
+                    {
+                        Success = false,
+                        error = "This Spetialist not Found",
+                        status_code = "404"
+                    };
+                }
+                int AllPatientcount = await db.Patients.Where(x => x.SpecialistId == specialist.SpecialistId).CountAsync();
+                var AllPatient = await db.Patients.Where(x => x.SpecialistId == specialist.SpecialistId).Skip((paggingNumber - 1) * 10).Take(10).ToListAsync(); ;
+                return new Response<Patient>
+                {
+                    Success = true,
+                    Message = "All patient",
+                    Data = AllPatient,
+                    CountOfData = AllPatientcount,
+                    paggingNumber = paggingNumber,
+                    status_code = "200"
+                };
+
+            }
+            catch (Exception e)
+            {
+                return new Response<Patient>
+                {
+                    Success = false,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
+        }
+        #endregion
+
+        #region Get Of Spetialist
+
+        public async Task<Response<Patient>> Get_PatientAsync(string userId, int patientId)
+        {
+            try
+            {
+                var specialist = await db.Specialists.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                if (specialist == null)
+                {
+                    return new Response<Patient>
+                    {
+                        Success = false,
+                        error = "This Spetialist not Found",
+                        status_code = "404"
+                    };
+                }
+                var patient = await db.Patients.Where(n => n.SpecialistId == specialist.SpecialistId && n.PatientId == patientId).FirstOrDefaultAsync();
+                if (patient == null)
+                {
+                    return new Response<Patient>
+                    {
+                        Success = false,
+                        status_code = "200",
+                        Message = "Patient Not found",
+
+                    };
+                }
+                return new Response<Patient>
+                {
+                    Success = true,
+                    Message = "the patient",
+                    status_code = "200",
+                    ObjectData = patient
+                };
+
+            }
+            catch (Exception e)
+            {
+                return new Response<Patient>
+                {
+                    Success = false,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
+        }
+        #endregion
+
+        #region Get All
+
+        public async Task<Response<Patient>> GetAll_PatientAsync( int paggingNumber)
+        {
+            try
+            {
+                
                 int AllPatientcount = await db.Patients.CountAsync();
                 var AllPatient = await db.Patients.Skip((paggingNumber - 1) * 10).Take(10).ToListAsync(); ;
                 return new Response<Patient>
@@ -137,18 +226,19 @@ namespace DAL.Repository.Repository
 
         #region Get 
 
-        public async Task<Response<Patient>> Get_PatientAsync(int Id)
+        public async Task<Response<Patient>> Get_PatientAsync( int patientId)
         {
             try
             {
-                var patient = await db.Patients.Where(n => n.PatientId == Id).SingleOrDefaultAsync();
+                
+                var patient = await db.Patients.Where(n => n.PatientId == patientId).FirstOrDefaultAsync();
                 if (patient == null)
                 {
                     return new Response<Patient>
                     {
                         Success = false,
                         status_code = "200",
-                        Message = "Not found",
+                        Message = "Patient Not found",
 
                     };
                 }
@@ -204,7 +294,7 @@ namespace DAL.Repository.Repository
                 return new Response<Patient>
                 {
                     Success = true,
-                    ObjectData=patient2,
+                    ObjectData = patient2,
                     Message = "patient is Updated",
                     status_code = "200"
                 };

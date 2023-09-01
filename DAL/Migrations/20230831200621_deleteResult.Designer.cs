@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpeakEase.DAL.Data;
 
@@ -11,9 +12,10 @@ using SpeakEase.DAL.Data;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230831200621_deleteResult")]
+    partial class deleteResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,46 +328,6 @@ namespace DAL.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("SpeakEase.DAL.Entities.Result", b =>
-                {
-                    b.Property<int>("ResultId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResultId"), 1L, 1);
-
-                    b.Property<int?>("AnotherCharacter")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ChearId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ChearPositionResult")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChearState")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SpecialistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ResultId");
-
-                    b.HasIndex("ChearId");
-
-                    b.HasIndex("PatientId");
-
-                    b.HasIndex("SpecialistId");
-
-                    b.ToTable("Results");
-                });
-
             modelBuilder.Entity("SpeakEase.DAL.Entities.Specialist", b =>
                 {
                     b.Property<int>("SpecialistId")
@@ -467,27 +429,6 @@ namespace DAL.Migrations
                     b.HasOne("SpeakEase.DAL.Entities.Specialist", "Specialist")
                         .WithMany("Patients")
                         .HasForeignKey("SpecialistId");
-
-                    b.Navigation("Specialist");
-                });
-
-            modelBuilder.Entity("SpeakEase.DAL.Entities.Result", b =>
-                {
-                    b.HasOne("SpeakEase.DAL.Entities.Question", "Chear")
-                        .WithMany()
-                        .HasForeignKey("ChearId");
-
-                    b.HasOne("SpeakEase.DAL.Entities.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId");
-
-                    b.HasOne("SpeakEase.DAL.Entities.Specialist", "Specialist")
-                        .WithMany()
-                        .HasForeignKey("SpecialistId");
-
-                    b.Navigation("Chear");
-
-                    b.Navigation("Patient");
 
                     b.Navigation("Specialist");
                 });

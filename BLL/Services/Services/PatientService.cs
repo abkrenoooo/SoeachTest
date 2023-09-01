@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services.Services
 {
-    public class PatientService:IPatientService
+    public class PatientService : IPatientService
     {
         #region Depend Injection
 
@@ -26,7 +26,7 @@ namespace BLL.Services.Services
 
         #region Create 
 
-        public async Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM,string id)
+        public async Task<Response<Patient>> CreatePatientAsync(PatientVM patientVM, string id)
         {
             try
             {
@@ -38,8 +38,8 @@ namespace BLL.Services.Services
             {
                 return new Response<Patient>
                 {
-                    Success=false,
-                    error=e.Message 
+                    Success = false,
+                    error = e.Message
                 };
             }
         }
@@ -64,12 +64,64 @@ namespace BLL.Services.Services
         }
         #endregion
 
-        #region Get All
-        public async Task<Response<Patient>> GetAllPatientAsync(int paggingNumber)
+        #region Get All of Specialist
+        public async Task<Response<Patient>> GetAllPatientAsync(string userId, int paggingNumber)
         {
             try
             {
-                var result= await _patientRepo.GetAll_PatientAsync(paggingNumber);
+                var result = await _patientRepo.GetAll_PatientAsync(userId, paggingNumber);
+                if (result.Success)
+                {
+                    double pagging = Convert.ToInt32(result.CountOfData) / 10;
+                    if (pagging % 10 == 0)
+                    {
+                        result.paggingNumber = (int)pagging;
+                    }
+                    else
+                    {
+                        result.paggingNumber = (int)pagging + 1;
+                    }
+                }
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                return new Response<Patient>
+                {
+                    Success = false,
+                    error = e.Message
+                };
+            }
+        }
+        #endregion
+
+        #region Get of Specialist
+
+        public async Task<Response<Patient>> GetPatientAsync(string userId, int patientId)
+        {
+            try
+            {
+                var result = await _patientRepo.Get_PatientAsync(userId, patientId);
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new Response<Patient>
+                {
+                    Success = false,
+                    error = e.Message
+                };
+            }
+        }
+        #endregion
+
+        #region Get All
+        public async Task<Response<Patient>> GetAllPatientAsync( int paggingNumber)
+        {
+            try
+            {
+                var result = await _patientRepo.GetAll_PatientAsync(paggingNumber);
                 if (result.Success)
                 {
                     double pagging = Convert.ToInt32(result.CountOfData) / 10;
@@ -98,11 +150,11 @@ namespace BLL.Services.Services
 
         #region Get 
 
-        public async Task<Response<Patient>> GetPatientAsync(int Id)
+        public async Task<Response<Patient>> GetPatientAsync( int patientId)
         {
             try
             {
-                var result = await _patientRepo.Get_PatientAsync(Id);
+                var result = await _patientRepo.Get_PatientAsync( patientId);
                 return result;
             }
             catch (Exception e)

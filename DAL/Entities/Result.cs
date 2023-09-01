@@ -8,11 +8,18 @@ namespace SpeakEase.DAL.Entities
     {
         [Key]
         public int ResultId { get; set; }
-        public ChearState ChearState { get; set; }
+        public CharacterState ChearState { get; set; }
         public Character? AnotherCharacter { get; set; }
-        public ChearPositionResult ChearPositionResult { get; set; }
+        public CharacterPositionResult? ChearPositionResult { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public int? ChearId { get; set; }
         [ForeignKey(nameof(ChearId))]
-        public virtual Chear? Chear { get; set; }
+        public virtual Question? Chear { get; set; }
+        public int? PatientId { get; set; }
+        [ForeignKey(nameof(PatientId))]
+        public virtual Patient? Patient { get; set; }
+        public int? SpecialistId { get; set; }
+        [ForeignKey(nameof(SpecialistId))]
+        public virtual Specialist? Specialist { get; set; }
     }
 }

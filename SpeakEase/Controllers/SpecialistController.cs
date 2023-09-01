@@ -1,4 +1,5 @@
 ﻿using BLL.Services.IServices;
+using DAL.Enum;
 using DAL.Models.SpecialistModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +14,8 @@ namespace SpeakEase.Controllers
     [ApiController]
     public class SpecialistController : ControllerBase
     {
-        #region Depend Injecktion
+
+        #region Depend Injection
         private readonly ISpecialistServices _specialistServices;
         private readonly UserManager<ApplicationUser> _userManager;
         public SpecialistController(ISpecialistServices specialistServices, UserManager<ApplicationUser> userManager)
@@ -25,7 +27,8 @@ namespace SpeakEase.Controllers
  
         #region Get 
         [HttpGet ("Get Specialist By Id")]
-        [AllowAnonymous]
+        [Authorize]
+
         public async Task<IActionResult> GetSpecialistByIdAsync(int specialistId)
         {
             if (!ModelState.IsValid)
@@ -40,7 +43,8 @@ namespace SpeakEase.Controllers
 
         #region Get All
         [HttpGet("Get Specialists")]
-        [AllowAnonymous]
+        [Authorize]
+
         public async Task<IActionResult> GetSpecialistsAsync(int paggingNumber)
         {
             if (!ModelState.IsValid)
@@ -55,7 +59,7 @@ namespace SpeakEase.Controllers
 
         #region Update  
         [HttpPut("Edit Spetialist")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> EditSpecialistInSpetialistRequestAsync([FromForm] SpecialistVMEdit specialist)
         {
             if (!ModelState.IsValid)
@@ -70,7 +74,7 @@ namespace SpeakEase.Controllers
 
         #region Delete 
         [HttpDelete("Remove Specialist")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> RemoveSpecialistAsync(int SpecialistId)
         {
             if (!ModelState.IsValid)

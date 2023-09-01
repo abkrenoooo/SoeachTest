@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpeakEase.DAL.Data;
 
@@ -11,9 +12,10 @@ using SpeakEase.DAL.Data;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230831200716_addResult")]
+    partial class addResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -346,13 +348,7 @@ namespace DAL.Migrations
                     b.Property<int>("ChearState")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SpecialistId")
                         .HasColumnType("int");
 
                     b.HasKey("ResultId");
@@ -360,8 +356,6 @@ namespace DAL.Migrations
                     b.HasIndex("ChearId");
 
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("SpecialistId");
 
                     b.ToTable("Results");
                 });
@@ -481,15 +475,9 @@ namespace DAL.Migrations
                         .WithMany()
                         .HasForeignKey("PatientId");
 
-                    b.HasOne("SpeakEase.DAL.Entities.Specialist", "Specialist")
-                        .WithMany()
-                        .HasForeignKey("SpecialistId");
-
                     b.Navigation("Chear");
 
                     b.Navigation("Patient");
-
-                    b.Navigation("Specialist");
                 });
 
             modelBuilder.Entity("SpeakEase.DAL.Entities.Specialist", b =>

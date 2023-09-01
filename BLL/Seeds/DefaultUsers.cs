@@ -118,16 +118,37 @@ namespace BLL.Seeds
             await roleManger.SeedAdminClaims();
 
         }
+        public static async Task SeedSpetilestClaims(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManger)
+        {
+            await roleManger.SeedSpetilestClaims();
+
+        }
         private static async Task SeedAdminClaims(this RoleManager<IdentityRole> roleManager)
         {
             var adminRole = await roleManager.FindByNameAsync(Roles.Admin.ToString());
             await roleManager.AddAdminPermissionClaims(adminRole);
+        }
+        private static async Task SeedSpetilestClaims(this RoleManager<IdentityRole> roleManager)
+        {
+            var adminRole = await roleManager.FindByNameAsync(Roles.User.ToString());
+            await roleManager.AddSpetialistPermissionClaims(adminRole);
         }
 
         public static async Task AddAdminPermissionClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role)
         {
             var allClaims = await roleManager.GetClaimsAsync(role);
             var allPermissions = Permissions.GenerateAdminPermissions();
+
+            foreach (var permission in allPermissions)
+            {
+                if (!allClaims.Any(c => c.Type == "Permission" && c.Value == permission))
+                    await roleManager.AddClaimAsync(role, new Claim("Permission", permission));
+            }
+        }
+        public static async Task AddSpetialistPermissionClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role)
+        {
+            var allClaims = await roleManager.GetClaimsAsync(role);
+            var allPermissions = Permissions.GenerateSpetialistPermissions();
 
             foreach (var permission in allPermissions)
             {

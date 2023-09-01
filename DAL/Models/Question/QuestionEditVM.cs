@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Models.Chear
+namespace DAL.Models.Question
 {
-    public class ChearEditVM
+    public class QuestionEditVM
     {
         [Required]
         public int ChearId { get; set; }
@@ -18,7 +18,7 @@ namespace DAL.Models.Chear
         public string? AudioPath { get; set; }
         public IFormFile? Image { get; set; }
         public IFormFile? Audio { get; set; }
-        public ChearPosition? ChearPosition { get; set; }
+        public CharacterPosition? ChearPosition { get; set; }
         public Character? Character { get; set; }
         public bool? IsDeleted { get; set; } = false;
         public bool? IsHiden { get; set; } = false;

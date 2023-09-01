@@ -13,7 +13,7 @@ namespace EductionPlatform.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        #region Depend Injecktion
+        #region Depend Injection
         private readonly IAuthService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         public AccountController(IAuthService userService, UserManager<ApplicationUser> userManager)
