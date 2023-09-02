@@ -8,7 +8,6 @@ using SpeakEase.Models.AuthModel;
 
 namespace EductionPlatform.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
