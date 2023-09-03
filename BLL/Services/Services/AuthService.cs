@@ -13,6 +13,7 @@ using SpeakEase.Models;
 using SpeakEase.Models.AuthModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -27,7 +28,7 @@ namespace BLL.Services.Services
         #region Depend Injection
 
         private readonly ApplicationDbContext _db;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager; 
         private readonly JWT _jwt;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public AuthService(UserManager<ApplicationUser> UserManager, IOptions<JWT> jwt, ApplicationDbContext db, IHttpContextAccessor httpContextAccessor)
@@ -48,7 +49,8 @@ namespace BLL.Services.Services
             try
             {
                 // Check if email or password true or not
-                var user = await _userManager.FindByEmailAsync(login.Email);
+                //var user = await _userManager.FindByEmailAsync(login.Email);
+                var user = new EmailAddressAttribute().IsValid(login.Email) ?   _userManager.FindByEmailAsync(login.Email).Result:_userManager.FindByNameAsync(login.Email).Result ;
 
                 if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
                     return new() { Message = "Invalid password or email" };

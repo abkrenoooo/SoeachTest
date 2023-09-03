@@ -14,6 +14,6 @@ namespace DAL.Models.Result
         public Character? AnotherCharacter { get; set; }
         public CharacterPositionResult? ChearPositionResult { get; set; }
         public int? PatientId { get; set; }
-        public int? ChearId { get; set; }
+        public int? QuestionId { get; set; }
     }
 }

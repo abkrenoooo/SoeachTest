@@ -29,7 +29,7 @@ namespace BLL.Services.Services
             Result result1 = new Result()
             {
                 AnotherCharacter = result.AnotherCharacter,
-                ChearId = result.ChearId,
+                ChearId = result.QuestionId,
                 ChearState = result.ChearState,
                 PatientId = result.PatientId,
                 SpecialistId = result.PatientId,
@@ -57,7 +57,7 @@ namespace BLL.Services.Services
             Result result1 = new Result()
             {
                 AnotherCharacter = result.AnotherCharacter,
-                ChearId = result.ChearId,
+                ChearId = result.QuestionId,
                 ChearState = result.ChearState,
                 PatientId = result.PatientId,
                 SpecialistId = result.PatientId,
