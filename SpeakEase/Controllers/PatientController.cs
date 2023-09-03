@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace SpeakEase.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientController : ControllerBase
@@ -29,7 +29,7 @@ namespace SpeakEase.Controllers
 
         #region Create 
         [HttpPost("Add Patient")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin,User")]
 
         public async Task<IActionResult> AddPatient(PatientVM patientVM)
         {
@@ -42,7 +42,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get All Of Spetialist
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
 
         [HttpGet("Get All Patient Of Spetialist")]
         public async Task<IActionResult> GetAllPatientOfSpetialist(int pagging)
@@ -54,7 +54,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get Of Spetialist
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
 
         [HttpGet("Get Patient Of Spetialist")]
         public async Task<IActionResult> GetPatientOfSpetialist(int Id)
@@ -68,7 +68,7 @@ namespace SpeakEase.Controllers
         #region Get All 
 
         [HttpGet("Get All Patient")]
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
 
         public async Task<IActionResult> GetAllPatient(int pagging)
         {
@@ -78,7 +78,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get 
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
 
         [HttpGet("Get Patient")]
         public async Task<IActionResult> GetPatient(int Id)
@@ -90,7 +90,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Delete 
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin,User")]
 
         [HttpDelete("Delete Patient")]
         public async Task<IActionResult> DeletePatient(int Id)
@@ -101,7 +101,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Update
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin,User")]
 
         [HttpPut("Update Patient")]
         public async Task<IActionResult> EditPatient(PatientVM patientVM)

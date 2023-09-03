@@ -12,7 +12,7 @@ namespace SpeakEase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Server,SuperAdmin")]
     public class AdminController : ControllerBase
     {
         #region Depend Injection
@@ -30,7 +30,7 @@ namespace SpeakEase.Controllers
 
         #region Add Admin
         [HttpPost("Add Admin")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin")]
         public async Task<IActionResult> AddAdminUserAsync(AdminUserVM model)
         {
             if (!ModelState.IsValid)
@@ -45,7 +45,7 @@ namespace SpeakEase.Controllers
 
         #region Get All Spetialist Requst
         [HttpGet("Get All Spetialist Requst")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin")]
 
         public async Task<IActionResult> GetAdminUserAllSpetialistRequstAsync(int paggingNumber)
         {
@@ -61,7 +61,7 @@ namespace SpeakEase.Controllers
 
         #region Get Admin By Id
         [HttpGet("Get Admin By Id")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin")]
 
         public async Task<IActionResult> GetAdminUserByIdAsync(string AdminUserId)
         {
@@ -77,7 +77,7 @@ namespace SpeakEase.Controllers
 
         #region Get Admins
         [HttpGet("Get Admins")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin")]
         public async Task<IActionResult> GetAdminUsersAsync(int paggingNumber)
         {
         //    var isAdminEvaluationResult =
@@ -99,7 +99,7 @@ namespace SpeakEase.Controllers
 
         #region Edit In Spetialist Requst
         [HttpPut("Edit In Spetialist Requst")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin")]
 
         public async Task<IActionResult> EditAdminUserInSpetialistRequestAsync(int SpetialistId, bool Accepted)
         {
@@ -115,7 +115,7 @@ namespace SpeakEase.Controllers
 
         #region Edit Admin
         [HttpPut("Edit Admin")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin")]
 
         public async Task<IActionResult> EditAdminUserAsync(AdminUserVM model)
         {
@@ -131,7 +131,7 @@ namespace SpeakEase.Controllers
 
         #region Remove Admin
         [HttpDelete("Remove Admin")]
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin")]
 
         public async Task<IActionResult> RemoveAdminUserAsync(string AdminId)
         {

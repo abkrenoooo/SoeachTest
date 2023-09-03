@@ -9,7 +9,7 @@ using SpeakEase.DAL.Entities;
 
 namespace SpeakEase.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Server,Admin,SuperAdmin")]
     [Route("api/[controller]")]
     [ApiController]
     public class QuestionController : ControllerBase
@@ -26,7 +26,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Create
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
 
         [HttpPost("Add Question")]
         public async Task<IActionResult> AddQuestion([FromForm] QuestionVM Question)
@@ -38,7 +38,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpGet("Get Question")]
         public async Task<IActionResult> GetQuestion(int QuestionId)
         {
@@ -48,7 +48,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get Secound Question
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpGet("Get Secound Question")]
         public async Task<IActionResult> GetSecoundQuestion(int QuestionId)
         {
@@ -58,7 +58,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Replace Question
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
 
         [HttpGet(" Replace Question")]
         public async Task<IActionResult> GetReplaceQuestion(int QuestionId)
@@ -69,7 +69,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get All
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
 
         [HttpGet("Get All Question")]
         public async Task<IActionResult> GetAllQuestion(int Pagging)
@@ -80,7 +80,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Delete
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
         [HttpDelete("Delete Question")]
         public async Task<IActionResult> DeleteQuestion(int QuestionId)
         {
@@ -90,7 +90,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Updete
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
 
         [HttpPut("Update Question")]
         public async Task<IActionResult> UpdateQuestion([FromForm] QuestionEditVM Question)

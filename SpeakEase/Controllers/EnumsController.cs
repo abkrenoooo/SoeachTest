@@ -8,17 +8,21 @@ using System.Reflection;
 
 namespace SpeakEase.Controllers
 {
+    [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class EnumsController : ControllerBase
     {
         [HttpPost("Get Character Enum")]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
+
         public async Task<IActionResult> GetCharacterEnum()
         {
             var result = Enum.GetValues(typeof(Character)).Cast<Character>().Select(x => x.GetType().GetMember(x.ToString()).First().GetCustomAttribute<DisplayAttribute>().GetName()).ToList();
 
             return Ok(result);
         }
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get CharacterPosition Enum")]
         public async Task<IActionResult> GetCharacterPositionEnum()
         {
@@ -26,6 +30,7 @@ namespace SpeakEase.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get CharacterPositionResult Enum")]
         public async Task<IActionResult> GetCharacterPositionResultEnum()
         {
@@ -33,6 +38,7 @@ namespace SpeakEase.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get CharacterState Enum")]
         public async Task<IActionResult> GetCharacterStateEnum()
         {
@@ -40,6 +46,7 @@ namespace SpeakEase.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get EducationState Enum")]
         public async Task<IActionResult> GetEducationStateEnum()
         {
@@ -47,6 +54,7 @@ namespace SpeakEase.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get Gender Enum")]
         public async Task<IActionResult> GetGenderEnum()
         {
@@ -54,6 +62,7 @@ namespace SpeakEase.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get MaritalStatus Enum")]
         public async Task<IActionResult> GetMaritalStatusEnum()
         {
@@ -61,6 +70,7 @@ namespace SpeakEase.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get OME Enum")]
         public async Task<IActionResult> GetOMEEnum()
         {

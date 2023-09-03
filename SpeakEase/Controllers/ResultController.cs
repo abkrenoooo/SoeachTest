@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace SpeakEase.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class ResultController : ControllerBase
@@ -25,7 +25,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Create
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpPost("Add Result")]
         public async Task<IActionResult> AddResult(ResultVM Result)
         {
@@ -37,7 +37,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpGet("Get Result")]
         public async Task<IActionResult> GetResult(int ResultId)
         {
@@ -47,7 +47,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Delete Result
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin,User")]
         [HttpDelete("Delet Result")]
         public async Task<IActionResult> Delete_ResultAsync(int Id)
         {
@@ -58,7 +58,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get All Result For Patient 
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpGet("Get All Result For Patient")]
         public async Task<IActionResult> GetAll_ResultForPatientAsync(int patientId, int paggingNumber)
         {
@@ -68,7 +68,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get All Result For Patient Of Spetialist
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpGet("Get All Result For Patient Of Spetialist")]
         public async Task<IActionResult> GetAll_ResultForPatientOfSpetialistAsync(int paggingNumber)
         {
@@ -79,7 +79,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Get All Result
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
         [HttpGet("Get All Result")]
         public async Task<IActionResult> GetAll_ResultAsync(int paggingNumber)
         {
@@ -89,7 +89,7 @@ namespace SpeakEase.Controllers
         #endregion
 
         #region Updete
-        [Authorize]
+        [Authorize(Roles = "Server,SuperAdmin,User")]
         [HttpPut("Update Result")]
         public async Task<IActionResult> EditResultAsync(ResultVM result )
         {

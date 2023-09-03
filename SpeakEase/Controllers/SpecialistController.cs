@@ -9,7 +9,7 @@ using SpeakEase.DAL.Entities;
 
 namespace SpeakEase.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Server,Admin,SuperAdmin")]
     [Route("api/[controller]")]
     [ApiController]
     public class SpecialistController : ControllerBase
@@ -27,7 +27,7 @@ namespace SpeakEase.Controllers
  
         #region Get 
         [HttpGet ("Get Specialist By Id")]
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
 
         public async Task<IActionResult> GetSpecialistByIdAsync(int specialistId)
         {
@@ -43,7 +43,7 @@ namespace SpeakEase.Controllers
 
         #region Get All
         [HttpGet("Get Specialists")]
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
 
         public async Task<IActionResult> GetSpecialistsAsync(int paggingNumber)
         {
@@ -59,7 +59,7 @@ namespace SpeakEase.Controllers
 
         #region Update  
         [HttpPut("Edit Spetialist")]
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
         public async Task<IActionResult> EditSpecialistInSpetialistRequestAsync([FromForm] SpecialistVMEdit specialist)
         {
             if (!ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace SpeakEase.Controllers
 
         #region Delete 
         [HttpDelete("Remove Specialist")]
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
         public async Task<IActionResult> RemoveSpecialistAsync(int SpecialistId)
         {
             if (!ModelState.IsValid)
