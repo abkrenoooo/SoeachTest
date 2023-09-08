@@ -81,7 +81,7 @@ namespace DAL.Repository.Repository
                 }
                 chear.IsDeleted = true;
                 chear.IsHiden = true;
-                var result = Update_QuestionAsync(chear);
+                //var result = Update_QuestionAsync(chear);
 
                 //db.Chears.Remove(chear);
                 await db.SaveChangesAsync();

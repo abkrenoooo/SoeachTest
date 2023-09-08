@@ -14,8 +14,8 @@ namespace DAL.Models.Question
         [Required]
         public int ChearId { get; set; }
         public string? Word { get; set; }
-        public string? ImagePath { get; set; }
-        public string? AudioPath { get; set; }
+        //public string? ImagePath { get; set; }
+        //public string? AudioPath { get; set; }
         public IFormFile? Image { get; set; }
         public IFormFile? Audio { get; set; }
         public CharacterPosition? ChearPosition { get; set; }

@@ -33,31 +33,24 @@ namespace BLL.Services.Services
         {
             try
             {
-                //var UploadFileAudo = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
-                //var UploadFileImage = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+                
 
                 SpeakEase.DAL.Entities.Question chear1 = new SpeakEase.DAL.Entities.Question();
                 chear1.Word = chear.Word;
                 chear1.Character = chear.Character;
                 chear1.CharacterPosition = chear.ChearPosition;
-                chear1.IsDeleted = true;
-                chear1.IsHiden = true;
+                chear1.IsDeleted = chear.IsDeleted;
+                chear1.IsHiden = chear.IsHiden;
                 if (chear.Audio is not null)
                 {
                     var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
-                    chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
-
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
-                    //chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
+                    //chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
+                    chear1.Audio = FileVedio[1];
                 }
                 if (chear.Image is not null)
                 {
                     var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
                     chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
-
-
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-                    //chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
                 }
                 var result = await _QuestionRepo.Create_QuestionAsync(chear1);
                 return result;
@@ -247,8 +240,7 @@ namespace BLL.Services.Services
         {
             try
             {
-                //var UploadFileAudo = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
-                //var UploadFileImage = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+                
                 var oldChear = GetQuestionAsync(chear.ChearId).Result.ObjectData;
                 if (oldChear is null)
                 {

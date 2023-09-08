@@ -11,11 +11,11 @@ namespace DAL.Models.Question
 {
     public class QuestionVM
     {
-        public int ChearId { get; set; }
+        //public int ChearId { get; set; }
         [Required]
         public string Word { get; set; }
-        public string? ImagePath { get; set; }
-        public string? AudioPath { get; set; }
+        //public string? ImagePath { get; set; }
+        //public string? AudioPath { get; set; }
         [Required]
         public IFormFile Image { get; set; }
         [Required]
