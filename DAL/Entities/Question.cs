@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Enum;
+using DAL.Entities;
 
 namespace SpeakEase.DAL.Entities
 {
@@ -21,5 +22,7 @@ namespace SpeakEase.DAL.Entities
         public string? Audio { get; set; }
         public bool IsDeleted { get; set; } = false;
         public bool IsHiden { get; set; } = false;
+
+        public List<files>? files { get; set; }
     }
 }

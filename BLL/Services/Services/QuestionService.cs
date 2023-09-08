@@ -1,9 +1,11 @@
 ﻿using BlL.Helper;
 using BLL.Services.IServices;
+using DAL.Entities;
 using DAL.Enum;
 using DAL.Models.Question;
 using DAL.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
+using SpeakEase.DAL.Data;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using System;
@@ -20,11 +22,13 @@ namespace BLL.Services.Services
         #region Depend Injection
         private readonly IQuestionRepo _QuestionRepo;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ApplicationDbContext db;
 
-        public QuestionService(IQuestionRepo QuestionRepo, IHttpContextAccessor httpContextAccessor)
+        public QuestionService(IQuestionRepo QuestionRepo, IHttpContextAccessor httpContextAccessor, ApplicationDbContext db)
         {
             _QuestionRepo = QuestionRepo;
             _httpContextAccessor = httpContextAccessor;
+            this.db = db;
         }
         #endregion
 
@@ -33,25 +37,35 @@ namespace BLL.Services.Services
         {
             try
             {
-                
-
                 SpeakEase.DAL.Entities.Question chear1 = new SpeakEase.DAL.Entities.Question();
                 chear1.Word = chear.Word;
                 chear1.Character = chear.Character;
                 chear1.CharacterPosition = chear.ChearPosition;
                 chear1.IsDeleted = chear.IsDeleted;
                 chear1.IsHiden = chear.IsHiden;
+                List<files> files = new List<files>();
                 if (chear.Audio is not null)
                 {
-                    var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
+                    var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
+                    await db.Files.AddAsync(fileAudio);
+                    await db.SaveChangesAsync();
+                    files.Add(fileAudio);
+
+                    //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
                     //chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
-                    chear1.Audio = FileVedio[1];
+                    //var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
+                    //chear1.Audio = fileAudio;
                 }
                 if (chear.Image is not null)
                 {
-                    var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-                    chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
+                    var fileImage = await UploadFileHelper.UploadFile(chear.Image);
+                    await db.Files.AddAsync(fileImage);
+                    await db.SaveChangesAsync();
+                    files.Add(fileImage);
+                    //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+                    //chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
                 }
+                chear1.files = files;
                 var result = await _QuestionRepo.Create_QuestionAsync(chear1);
                 return result;
 
@@ -254,8 +268,8 @@ namespace BLL.Services.Services
                 }
                 if (chear.Audio is not null)
                 {
-                    var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
-                    oldChear.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
+                    //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
+                    //oldChear.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
 
 
                     //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
@@ -263,8 +277,8 @@ namespace BLL.Services.Services
                 }
                 if (chear.Image is not null)
                 {
-                    var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-                    oldChear.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
+                    //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
+                    //oldChear.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
 
                     //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
                     //oldChear.Image = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];

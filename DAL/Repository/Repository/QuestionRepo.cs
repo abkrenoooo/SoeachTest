@@ -1,4 +1,5 @@
-﻿using DAL.Enum;
+﻿using DAL.Entities;
+using DAL.Enum;
 using DAL.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using SpeakEase.DAL.Data;
@@ -110,7 +111,7 @@ namespace DAL.Repository.Repository
             try
             {
                 int AllChearCount = await db.Questions.Where(n => !n.IsDeleted).CountAsync();
-                var AllChear = await db.Questions.Skip((Pagging - 1) * 10).Take(10).
+                var AllChear = await db.Questions.Include(f=>f.files).Skip((Pagging - 1) * 10).Take(10).
 
                     ToListAsync();
                 return new Response<Question>
@@ -139,7 +140,7 @@ namespace DAL.Repository.Repository
         {
             try
             {
-                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == ChearId).SingleOrDefaultAsync();
+                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == ChearId).Include(f=>f.files).SingleOrDefaultAsync();
                 if (chear == null)
                 {
                     return new Response<Question>
@@ -188,7 +189,7 @@ namespace DAL.Repository.Repository
                 //if pass Initial State of Character
                 if (chear.CharacterPosition == CharacterPosition.InitialFirst || chear.CharacterPosition == CharacterPosition.InitialSecond)
                 {
-                    var SecoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.MiddleFirst).SingleOrDefaultAsync();
+                    var SecoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.MiddleFirst).Include(f=>f.files).SingleOrDefaultAsync();
                     if (SecoundChear == null)
                     {
                         return new Response<Question>
@@ -277,7 +278,7 @@ namespace DAL.Repository.Repository
                 }
                 else if (chear.CharacterPosition == CharacterPosition.InitialFirst)
                 {
-                    var ReplaceChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.InitialSecond).SingleOrDefaultAsync();
+                    var ReplaceChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.InitialSecond).Include(f=>f.files).SingleOrDefaultAsync();
                     return new Response<Question>
                     {
                         Success = true,
