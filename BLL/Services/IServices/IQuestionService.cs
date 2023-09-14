@@ -1,4 +1,5 @@
-﻿using DAL.Models.Question;
+﻿using DAL.Enum;
+using DAL.Models.Question;
 using SpeakEase.DAL.Entities;
 using SpeakEase.Models;
 using System;
@@ -18,5 +19,7 @@ namespace BLL.Services.IServices
         Task<Response<Question>> GetSecoundQuestionAsync(int ChearId);
         Task<Response<Question>> GetReplaceQuestionAsync(int ChearId);
         Task<Response<Question>> UpdateQuestionAsync(QuestionEditVM chear);
+        Task<Response<Question>> GetAllQuestionChearAsync(Character ChearId);
+
     }
 }

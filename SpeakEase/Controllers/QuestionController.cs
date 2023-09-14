@@ -99,5 +99,22 @@ namespace SpeakEase.Controllers
             return Ok(result);
         }
         #endregion
+        #region Get All Quction for chear
+        [Authorize]
+        [HttpGet("GetAllQuctionForChear")]
+        public async Task<IActionResult> GetAllQuctionForChear(Character character)
+        {
+            try
+            {
+                if (character == null) { return BadRequest("Chear is Null"); }
+                var result = await _QuestionService.GetAllQuestionChearAsync(character);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        #endregion
     }
 }

@@ -82,9 +82,7 @@ namespace DAL.Repository.Repository
                 }
                 chear.IsDeleted = true;
                 chear.IsHiden = true;
-                //var result = Update_QuestionAsync(chear);
 
-                //db.Chears.Remove(chear);
                 await db.SaveChangesAsync();
                 return new Response<Question>
                 {
@@ -398,6 +396,34 @@ namespace DAL.Repository.Repository
                     Success = true,
                     ObjectData = chear,
                     Message = "Question is Udpeted",
+                    status_code = "200"
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<Question>
+                {
+                    Success = true,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
+        }
+        #endregion
+        #region GetChear
+        public async Task<Response<Question>> GetAll_QuestionChearAsync(Character ChearId)
+        {
+            try
+            {
+                
+                
+                var ChearQuction = await db.Questions.Where(n => n.Character==ChearId)
+                                                     .Include(n => n.files).ToListAsync();
+                return new Response<Question>
+                {
+                    Success = true,
+                    Data=ChearQuction,
+                    Message = "All Data for Chear",
                     status_code = "200"
                 };
             }

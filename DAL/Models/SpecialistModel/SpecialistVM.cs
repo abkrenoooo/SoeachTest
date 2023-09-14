@@ -6,7 +6,7 @@ namespace DAL.Models.SpecialistModel
 {
     public class SpecialistVM
     {
-        public int SpecialistId { get; set; }
+        //public int SpecialistId { get; set; }
         [MaxLength(15)]
         [MinLength(2)]
         [Required]
@@ -40,9 +40,9 @@ namespace DAL.Models.SpecialistModel
         public string Phone { get; set; }
         [Required]
         public string Username { get; set; }
-        public string? ImageOfSpecializationCertificatePath { get; set; }
-        [Required]
-        public IFormFile ImageOfSpecializationCertificate { get; set; }
+        //public string? ImageOfSpecializationCertificatePath { get; set; }
+        //[Required]
+        //public IFormFile ImageOfSpecializationCertificate { get; set; }
         [Required]
         public string Hospital { get; set; }
         [Required]
@@ -51,8 +51,8 @@ namespace DAL.Models.SpecialistModel
         public string City { get; set; }
         [Required]
         public string IdNumber { get; set; }
-        public string? UserId { get; set; }
-        public bool Accepted { get; set; } = false;
+        //public string? UserId { get; set; }
+        //public bool Accepted { get; set; } = false;
 
     }
 }

@@ -30,8 +30,8 @@ namespace DAL.Models.SpecialistModel
         public string? ConfirmPassword { get; set; }
         public string? Phone { get; set; }
         public string? Username { get; set; }
-        public string? ImageOfSpecializationCertificatePath { get; set; }
-        public IFormFile? ImageOfSpecializationCertificate { get; set; }
+        //public string? ImageOfSpecializationCertificatePath { get; set; }
+        //public IFormFile? ImageOfSpecializationCertificate { get; set; }
         public string? Hospital { get; set; }
         public string? Country { get; set; }
         public string? City { get; set; }

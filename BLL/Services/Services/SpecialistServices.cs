@@ -50,13 +50,13 @@ namespace BLL.Services.Services
                         status_code = "400",
                     };
                 }
-                if (spetialistvm is not null && spetialistvm.ObjectData != null && spetialistvm.ObjectData.ImageOfSpecializationCertificatePath is not null)
-                {
-                    var spetialist = spetialistvm.ObjectData.ToSpecialist().Result;
-                    await _userManager.DeleteAsync(_userManager.FindByIdAsync(spetialist.UserId).Result);
-                    var path = spetialist.ImageOfSpecializationCertificate.Replace(_httpContextAccessor.HttpContext.Request.Host.Value, "");
-                    UploadFileHelper.RemoveFile(path);
-                }
+                //if (spetialistvm is not null && spetialistvm.ObjectData != null && spetialistvm.ObjectData.ImageOfSpecializationCertificatePath is not null)
+                //{
+                //    var spetialist = spetialistvm.ObjectData.ToSpecialist().Result;
+                //    await _userManager.DeleteAsync(_userManager.FindByIdAsync(spetialist.UserId).Result);
+                //    var path = spetialist.ImageOfSpecializationCertificate.Replace(_httpContextAccessor.HttpContext.Request.Host.Value, "");
+                //    UploadFileHelper.RemoveFile(path);
+                //}
                 return new Response<SpecialistVM>
                 {
                     Success = true,

@@ -15,15 +15,15 @@ namespace Bll.ExtensionMethods
         {
             return new()
             {
-                IsAccepted = specialistVM.Accepted,
+                //IsAccepted = specialistVM.Accepted,
                 City = specialistVM.City,
                 Country = specialistVM.Country,
                 Hospital = specialistVM.Hospital,
                 IdNumber = specialistVM.IdNumber,
-                ImageOfSpecializationCertificate = specialistVM.ImageOfSpecializationCertificatePath,
+                //ImageOfSpecializationCertificate = specialistVM.ImageOfSpecializationCertificatePath,
                 MaritalStatus = specialistVM.MaritalStatus,
-                SpecialistId = specialistVM.SpecialistId,
-                UserId = specialistVM.UserId,
+                //SpecialistId = specialistVM.SpecialistId,
+                //UserId = specialistVM.UserId,
             };
         }
         public static async Task<Specialist> ToSpecialistToSpecialistVMEdit(this SpecialistVMEdit specialistVM)
@@ -35,7 +35,7 @@ namespace Bll.ExtensionMethods
                 Country = specialistVM.Country,
                 Hospital = specialistVM.Hospital,
                 IdNumber = specialistVM.IdNumber,
-                ImageOfSpecializationCertificate = specialistVM.ImageOfSpecializationCertificatePath,
+                //ImageOfSpecializationCertificate = specialistVM.ImageOfSpecializationCertificatePath,
                 MaritalStatus = specialistVM.MaritalStatus,
                 SpecialistId = specialistVM.SpecialistId,
                 UserId = specialistVM.UserId,
@@ -46,15 +46,15 @@ namespace Bll.ExtensionMethods
         {
             return new()
             {
-                Accepted = specialist.IsAccepted ,
+                //Accepted = specialist.IsAccepted ,
                 City = specialist.City,
                 Country = specialist.Country,
                 Hospital = specialist.Hospital,
                 IdNumber = specialist.IdNumber,
-                ImageOfSpecializationCertificatePath = specialist.ImageOfSpecializationCertificate,
-                MaritalStatus = specialist.MaritalStatus,
-                SpecialistId = specialist.SpecialistId,
-                UserId = specialist.UserId,
+                //ImageOfSpecializationCertificatePath = specialist.ImageOfSpecializationCertificate,
+                //MaritalStatus = specialist.MaritalStatus,
+                //SpecialistId = specialist.SpecialistId,
+                //UserId = specialist.UserId,
                 BirithDate=specialist.User.BirithDate,
                 Email=specialist.User.Email,
                 Username=specialist.User.UserName,
@@ -70,13 +70,13 @@ namespace Bll.ExtensionMethods
         {
             return new()
             {
-                Accepted = specialist.IsAccepted ,
+                //Accepted = specialist.IsAccepted ,
                 City = specialist.City,
                 Country = specialist.Country,
                 Hospital = specialist.Hospital,
                 IdNumber = specialist.IdNumber,
-                ImageOfSpecializationCertificatePath = specialist.ImageOfSpecializationCertificate,
-                MaritalStatus = specialist.MaritalStatus,
+                //ImageOfSpecializationCertificatePath = specialist.ImageOfSpecializationCertificate,
+                //MaritalStatus = specialist.MaritalStatus,
                 SpecialistId = specialist.SpecialistId,
                 UserId = specialist.UserId,
                 BirithDate=specialist.User.BirithDate,

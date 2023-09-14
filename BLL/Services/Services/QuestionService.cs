@@ -301,6 +301,28 @@ namespace BLL.Services.Services
                 };
             }
         }
+
+
+        #endregion
+        #region GetChearQuction
+        public async Task<Response<Question>> GetAllQuestionChearAsync(Character ChearId)
+        {
+            try
+            {
+                var result = await _QuestionRepo.GetAll_QuestionChearAsync(ChearId);
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                return new Response<SpeakEase.DAL.Entities.Question>
+                {
+                    Success = false,
+                    status_code = "500",
+                    error = e.Message
+                };
+            }
+        }
         #endregion
     }
 }

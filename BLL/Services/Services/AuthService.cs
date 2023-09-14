@@ -129,12 +129,12 @@ namespace BLL.Services.Services
                 }
 
                 await _userManager.AddToRoleAsync(user, Roles.User.ToString());
-                if (model.ImageOfSpecializationCertificate is not null)
-                {
+                //if (model.ImageOfSpecializationCertificate is not null)
+                //{
 
-                    var FileVedio = UploadFileHelper.SaveFile(model.ImageOfSpecializationCertificate, "ImageOfSpecializationCertificate");
-                    model.ImageOfSpecializationCertificatePath = _httpContextAccessor.HttpContext.Request.Host.Value + "/ImageOfSpecializationCertificate/" + FileVedio[0];
-                }
+                //    var FileVedio = UploadFileHelper.SaveFile(model.ImageOfSpecializationCertificate, "ImageOfSpecializationCertificate");
+                //    model.ImageOfSpecializationCertificatePath = _httpContextAccessor.HttpContext.Request.Host.Value + "/ImageOfSpecializationCertificate/" + FileVedio[0];
+                //}
 
                 Specialist specialist = new Specialist()
                 {
@@ -145,7 +145,8 @@ namespace BLL.Services.Services
                     IsAccepted = false,
                     Hospital = model.Hospital,
                     IdNumber = model.IdNumber,
-                    ImageOfSpecializationCertificate = model.ImageOfSpecializationCertificatePath,
+                    
+                    //ImageOfSpecializationCertificate = model.ImageOfSpecializationCertificatePath,
                 };
 
                 //specialist.UserId = _userManager.FindByNameAsync(model.Username).Result.Id;

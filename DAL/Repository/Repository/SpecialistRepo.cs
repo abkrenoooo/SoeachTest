@@ -96,7 +96,7 @@ namespace DAL.Repository.Repository
                     specialist01.City = specialist.City == null ? specialist01.City : specialist.City; 
                     specialist01.Country = specialist.Country == null ? specialist01.Country : specialist.Country;
                     specialist01.IdNumber = specialist.IdNumber == null ? specialist01.IdNumber : specialist.IdNumber; 
-                    specialist01.ImageOfSpecializationCertificate = specialist.ImageOfSpecializationCertificate == null ? specialist01.ImageOfSpecializationCertificate : specialist.ImageOfSpecializationCertificate;
+                    //specialist01.ImageOfSpecializationCertificate = specialist.ImageOfSpecializationCertificate == null ? specialist01.ImageOfSpecializationCertificate : specialist.ImageOfSpecializationCertificate;
                     specialist01.User.FirstName = specialist.User.FirstName == null ? specialist01.User.FirstName : specialist.User.FirstName; ;
                     specialist01.User.LastName = specialist.User.LastName == null ? specialist01.User.LastName : specialist.User.LastName; ;
                     specialist01.User.SecondName = specialist.User.SecondName == null ? specialist01.User.SecondName : specialist.User.SecondName; ;
