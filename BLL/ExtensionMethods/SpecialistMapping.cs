@@ -38,7 +38,7 @@ namespace Bll.ExtensionMethods
                 //ImageOfSpecializationCertificate = specialistVM.ImageOfSpecializationCertificatePath,
                 MaritalStatus = specialistVM.MaritalStatus,
                 SpecialistId = specialistVM.SpecialistId,
-                UserId = specialistVM.UserId,
+                //UserId = specialistVM.UserId,
             };
         }
 
@@ -78,10 +78,10 @@ namespace Bll.ExtensionMethods
                 //ImageOfSpecializationCertificatePath = specialist.ImageOfSpecializationCertificate,
                 //MaritalStatus = specialist.MaritalStatus,
                 SpecialistId = specialist.SpecialistId,
-                UserId = specialist.UserId,
+                //UserId = specialist.UserId,
                 BirithDate=specialist.User.BirithDate,
-                Email=specialist.User.Email,
-                Username=specialist.User.UserName,
+                //Email=specialist.User.Email,
+                //Username=specialist.User.UserName,
                 FirstName=specialist.User.FirstName,
                 SecondName = specialist.User.SecondName,
                 LastName = specialist.User.LastName,

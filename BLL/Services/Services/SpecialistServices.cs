@@ -132,6 +132,7 @@ namespace BLL.Services.Services
                     {
                         result.paggingNumber = (int)pagging + 1;
                     }
+                    
                 }
                 return new Response<SpecialistVM>
                 {
