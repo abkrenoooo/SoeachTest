@@ -93,9 +93,9 @@ namespace SpeakEase.Controllers
         [Authorize(Roles = "Server,Admin,SuperAdmin")]
 
         [HttpPut("Update Question")]
-        public async Task<IActionResult> UpdateQuestion([FromForm] QuestionEditVM Question)
+        public async Task<IActionResult> UpdateQuestion(int Id,[FromForm] QuestionVM Question)
         {
-            var result = await _QuestionService.UpdateQuestionAsync(Question);
+            var result = await _QuestionService.UpdateQuestionAsync(Id,Question);
             return Ok(result);
         }
         #endregion

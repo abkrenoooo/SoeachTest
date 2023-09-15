@@ -250,45 +250,40 @@ namespace BLL.Services.Services
         #endregion
 
         #region update
-        public async Task<Response<SpeakEase.DAL.Entities.Question>> UpdateQuestionAsync(QuestionEditVM chear)
+        public async Task<Response<SpeakEase.DAL.Entities.Question>> UpdateQuestionAsync(int Id, QuestionVM chear)
         {
             try
             {
-                
-                var oldChear = GetQuestionAsync(chear.ChearId).Result.ObjectData;
-                if (oldChear is null)
-                {
-                    return new Response<SpeakEase.DAL.Entities.Question>
-                    {
-                        Success = false,
-                        status_code = "404",
 
-                        error = "Question is not Found"
-                    };
-                }
+                SpeakEase.DAL.Entities.Question chear1 = new SpeakEase.DAL.Entities.Question();
+                chear1.Word = chear.Word;
+                chear1.Character = chear.Character;
+                chear1.CharacterPosition = chear.ChearPosition;
+                chear1.IsDeleted = chear.IsDeleted;
+                chear1.IsHiden = chear.IsHiden;
+                List<files> files = new List<files>();
                 if (chear.Audio is not null)
                 {
+                    var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
+                    await db.Files.AddAsync(fileAudio);
+                    await db.SaveChangesAsync();
+                    files.Add(fileAudio);
+
                     //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
-                    //oldChear.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
-
-
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audo");
-                    //oldChear.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
+                    //chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
+                    //var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
+                    //chear1.Audio = fileAudio;
                 }
                 if (chear.Image is not null)
                 {
+                    var fileImage = await UploadFileHelper.UploadFile(chear.Image);
+                    await db.Files.AddAsync(fileImage);
+                    await db.SaveChangesAsync();
+                    files.Add(fileImage);
                     //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-                    //oldChear.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
-
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-                    //oldChear.Image = _httpContextAccessor.HttpContext.Request.Host.Value + FileVedio[0];
+                    //chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
                 }
-                oldChear.Word = chear.Word == null ? oldChear.Word : chear.Word;
-                oldChear.IsHiden = chear.IsHiden == null ? oldChear.IsHiden : (bool)chear.IsHiden;
-                oldChear.IsDeleted = chear.IsDeleted == null ? oldChear.IsDeleted : (bool)chear.IsDeleted;
-                oldChear.Character = chear.Character == null ? oldChear.Character : (DAL.Enum.Character)chear.Character;
-                oldChear.CharacterPosition = chear.ChearPosition == null ? oldChear.CharacterPosition : (CharacterPosition)chear.ChearPosition;
-                var resul = await _QuestionRepo.Update_QuestionAsync(oldChear);
+                chear1.files = files; var resul = await _QuestionRepo.Update_QuestionAsync(Id,chear1);
                 return resul;
             }
             catch (Exception e)

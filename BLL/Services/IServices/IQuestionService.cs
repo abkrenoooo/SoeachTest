@@ -18,7 +18,7 @@ namespace BLL.Services.IServices
         Task<Response<Question>> GetQuestionAsync(int ChearId);
         Task<Response<Question>> GetSecoundQuestionAsync(int ChearId);
         Task<Response<Question>> GetReplaceQuestionAsync(int ChearId);
-        Task<Response<Question>> UpdateQuestionAsync(QuestionEditVM chear);
+        Task<Response<Question>> UpdateQuestionAsync(int Id,QuestionVM chear);
         Task<Response<Question>> GetAllQuestionChearAsync(Character ChearId);
 
     }

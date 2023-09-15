@@ -356,11 +356,11 @@ namespace DAL.Repository.Repository
 
         #region Ubdate
 
-        public async Task<Response<Question>> Update_QuestionAsync(Question chear2)
+        public async Task<Response<Question>> Update_QuestionAsync(int Id,Question chear2)
         {
             try
             {
-                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == chear2.ChearId).SingleOrDefaultAsync();
+                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == Id).SingleOrDefaultAsync();
                 if (chear == null)
                 {
                     return new Response<Question>

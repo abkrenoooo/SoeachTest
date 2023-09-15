@@ -17,7 +17,7 @@ namespace DAL.Repository.IRepository
         Task<Response<Question>> Get_QuestionAsync(int ChearId);
         Task<Response<Question>> Get_SecoundQuestionAsync(int ChearId);
         Task<Response<Question>> Get_ReplaceQuestionAsync(int ChearId);
-        Task<Response<Question>> Update_QuestionAsync(Question chear);
+        Task<Response<Question>> Update_QuestionAsync(int Id,Question chear);
         Task<Response<Question>> GetAll_QuestionChearAsync(Character ChearId);
 
     }
