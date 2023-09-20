@@ -186,6 +186,8 @@ app.UseSwaggerUI(c =>
 app.UseHttpsRedirection();
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthentication();
+app.UseFileServer();
+app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
 

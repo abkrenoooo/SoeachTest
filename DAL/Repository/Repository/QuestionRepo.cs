@@ -1,5 +1,5 @@
-﻿using DAL.Entities;
-using DAL.Enum;
+﻿using DAL.Enum;
+using DAL.Models.Question;
 using DAL.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using SpeakEase.DAL.Data;
@@ -68,11 +68,10 @@ namespace DAL.Repository.Repository
         {
             try
             {
-                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == ChearId).SingleOrDefaultAsync();
+                var chear = await db.Questions.Where(n => !n.IsDeleted && n.QuestionId == ChearId).SingleOrDefaultAsync();
 
                 if (chear == null)
                 {
-
                     return new Response<Question>
                     {
                         Success = true,
@@ -82,7 +81,6 @@ namespace DAL.Repository.Repository
                 }
                 chear.IsDeleted = true;
                 chear.IsHiden = true;
-
                 await db.SaveChangesAsync();
                 return new Response<Question>
                 {
@@ -108,16 +106,14 @@ namespace DAL.Repository.Repository
         {
             try
             {
-                int AllChearCount = await db.Questions.Where(n => !n.IsDeleted).CountAsync();
-                var AllChear = await db.Questions.Include(f=>f.files).Skip((Pagging - 1) * 10).Take(10).
-
-                    ToListAsync();
+                int AllQuestionsCount = await db.Questions.Where(n => !n.IsDeleted).CountAsync();
+                var AllQuestions = await db.Questions.Where(n => !n.IsDeleted).Skip((Pagging - 1) * 10).Take(10).ToListAsync();
                 return new Response<Question>
                 {
                     Success = true,
                     status_code = "200",
-                    Data = AllChear,
-                    CountOfData = AllChearCount,
+                    Data = AllQuestions,
+                    CountOfData = AllQuestionsCount,
                     Message = "All Questions"
                 };
             }
@@ -138,7 +134,7 @@ namespace DAL.Repository.Repository
         {
             try
             {
-                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == ChearId).Include(f=>f.files).SingleOrDefaultAsync();
+                var chear = await db.Questions.Where(n => !n.IsDeleted && n.QuestionId == ChearId).SingleOrDefaultAsync();
                 if (chear == null)
                 {
                     return new Response<Question>
@@ -168,14 +164,81 @@ namespace DAL.Repository.Repository
         }
         #endregion
 
-        #region Get Secound Question
-        public async Task<Response<Question>> Get_SecoundQuestionAsync(int ChearId)
+        #region Get All Questions For Character
+        public async Task<Response<Question>> Get_AllQuestionForCharacterAsync(Character character)
         {
             try
             {
-                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == ChearId).SingleOrDefaultAsync();
+                var Questions = await db.Questions.Where(n => !n.IsDeleted && n.Character == character).OrderBy(z => z.CharacterPosition).ToListAsync();
+                if (Questions == null)
+                {
+                    return new Response<Question>
+                    {
+                        Success = true,
+                        Message = "Questions Not Found",
+                        status_code = "404"
+                    };
+                }
+                return new Response<Question>
+                {
+                    Success = true,
+                    Message = "Questions Found",
+                    status_code = "200",
+                    Data = Questions
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<Question>
+                {
+                    Success = true,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
+        }
+        #endregion
 
-                if (chear == null)
+        #region Get Last Question
+        public async Task<Response<Question>> Get_LastQuestionAsync(int patient, string userId)
+        {
+            try
+            {
+
+                var lastResult = await db.Results.Where(n => !n.IsDeleted && n.PatientId == patient).Include(z => z.Question).OrderByDescending(x => x.Question.Character).OrderByDescending(x => x.Question.CharacterPosition).FirstOrDefaultAsync();
+                if (lastResult == null)
+                {
+                    return new Response<Question>
+                    {
+                        Success = true,
+                        Message = "Question Not Found",
+                        status_code = "200",
+                        ObjectData = await db.Questions.Where(z => !z.IsDeleted && z.Character == Character.Character01 && z.CharacterPosition == CharacterPosition.InitialFirst).FirstOrDefaultAsync()
+                    };
+                }
+                return await Get_SecoundQuestionAsync((int)lastResult.QuestionId);
+
+            }
+            catch (Exception e)
+            {
+                return new Response<Question>
+                {
+                    Success = true,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
+        }
+        #endregion
+
+        #region Get Secound Question
+        public async Task<Response<Question>> Get_SecoundQuestionAsync(int QuestionId)
+        {
+            try
+            {
+                var Question = await db.Questions.Where(n => !n.IsDeleted && n.QuestionId == QuestionId).SingleOrDefaultAsync();
+
+                if (Question == null)
                 {
                     return new Response<Question>
                     {
@@ -185,9 +248,9 @@ namespace DAL.Repository.Repository
                     };
                 }
                 //if pass Initial State of Character
-                if (chear.CharacterPosition == CharacterPosition.InitialFirst || chear.CharacterPosition == CharacterPosition.InitialSecond)
+                if (Question.CharacterPosition == CharacterPosition.InitialFirst || Question.CharacterPosition == CharacterPosition.InitialSecond)
                 {
-                    var SecoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.MiddleFirst).Include(f=>f.files).SingleOrDefaultAsync();
+                    var SecoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == Question.Character && n.CharacterPosition == CharacterPosition.MiddleFirst).SingleOrDefaultAsync();
                     if (SecoundChear == null)
                     {
                         return new Response<Question>
@@ -206,9 +269,9 @@ namespace DAL.Repository.Repository
                     };
                 }
                 //if pass Middle State of Character
-                if (chear.CharacterPosition == CharacterPosition.MiddleFirst || chear.CharacterPosition == CharacterPosition.MiddleSecond)
+                if (Question.CharacterPosition == CharacterPosition.MiddleFirst || Question.CharacterPosition == CharacterPosition.MiddleSecond)
                 {
-                    var SecoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.FinalFirst).SingleOrDefaultAsync();
+                    var SecoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == Question.Character && n.CharacterPosition == CharacterPosition.FinalFirst).SingleOrDefaultAsync();
                     if (SecoundChear == null)
                     {
                         return new Response<Question>
@@ -228,7 +291,7 @@ namespace DAL.Repository.Repository
                 }
                 //if pass Final State of Character
 
-                var secoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == (Character)(chear.Character + 1) && n.CharacterPosition == CharacterPosition.InitialFirst).SingleOrDefaultAsync();
+                var secoundChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == (Character)(Question.Character + 1) && n.CharacterPosition == CharacterPosition.InitialFirst).SingleOrDefaultAsync();
                 if (secoundChear == null)
                 {
                     return new Response<Question>
@@ -264,7 +327,7 @@ namespace DAL.Repository.Repository
         {
             try
             {
-                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == ChearId).SingleOrDefaultAsync();
+                var chear = await db.Questions.Where(n => !n.IsDeleted && n.QuestionId == ChearId).SingleOrDefaultAsync();
                 if (chear == null)
                 {
                     return new Response<Question>
@@ -276,7 +339,7 @@ namespace DAL.Repository.Repository
                 }
                 else if (chear.CharacterPosition == CharacterPosition.InitialFirst)
                 {
-                    var ReplaceChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.InitialSecond).Include(f=>f.files).SingleOrDefaultAsync();
+                    var ReplaceChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.InitialSecond).SingleOrDefaultAsync();
                     return new Response<Question>
                     {
                         Success = true,
@@ -307,7 +370,7 @@ namespace DAL.Repository.Repository
                         ObjectData = ReplaceChear
                     };
                 }
-                else if (chear.CharacterPosition == CharacterPosition.MiddleSecond )
+                else if (chear.CharacterPosition == CharacterPosition.MiddleSecond)
                 {
                     var ReplaceChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.MiddleFirst).SingleOrDefaultAsync();
                     return new Response<Question>
@@ -318,7 +381,7 @@ namespace DAL.Repository.Repository
                         ObjectData = ReplaceChear
                     };
                 }
-                else if (chear.CharacterPosition == CharacterPosition.FinalFirst )
+                else if (chear.CharacterPosition == CharacterPosition.FinalFirst)
                 {
                     var ReplaceChear = await db.Questions.Where(n => !n.IsDeleted && n.Character == chear.Character && n.CharacterPosition == CharacterPosition.FinalSecond).SingleOrDefaultAsync();
                     return new Response<Question>
@@ -355,12 +418,11 @@ namespace DAL.Repository.Repository
         #endregion
 
         #region Ubdate
-
-        public async Task<Response<Question>> Update_QuestionAsync(int Id,Question chear2)
+        public async Task<Response<Question>> Update_QuestionAsync(int Id, Question chear2)
         {
             try
             {
-                var chear = await db.Questions.Where(n => !n.IsDeleted && n.ChearId == Id).SingleOrDefaultAsync();
+                var chear = await db.Questions.Where(n => !n.IsDeleted && n.QuestionId == Id).SingleOrDefaultAsync();
                 if (chear == null)
                 {
                     return new Response<Question>
@@ -371,7 +433,7 @@ namespace DAL.Repository.Repository
                         status_code = "404"
                     };
                 }
-                var chearsCount = await db.Questions.Where(x => x.ChearId != chear.ChearId && x.Character == chear.Character && x.CharacterPosition == chear.CharacterPosition && x.IsDeleted == false).CountAsync();
+                var chearsCount = await db.Questions.Where(x => x.QuestionId != chear.QuestionId && x.Character == chear.Character && x.CharacterPosition == chear.CharacterPosition && x.IsDeleted == false).CountAsync();
                 if (chearsCount != 0)
                 {
                     return new Response<Question>
@@ -410,33 +472,6 @@ namespace DAL.Repository.Repository
             }
         }
         #endregion
-        #region GetChear
-        public async Task<Response<Question>> GetAll_QuestionChearAsync(Character ChearId)
-        {
-            try
-            {
-                
-                
-                var ChearQuction = await db.Questions.Where(n => n.Character==ChearId)
-                                                     .Include(n => n.files).ToListAsync();
-                return new Response<Question>
-                {
-                    Success = true,
-                    Data=ChearQuction,
-                    Message = "All Data for Chear",
-                    status_code = "200"
-                };
-            }
-            catch (Exception e)
-            {
-                return new Response<Question>
-                {
-                    Success = true,
-                    error = e.Message,
-                    status_code = "500"
-                };
-            }
-        }
-        #endregion
+
     }
 }

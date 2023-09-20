@@ -30,9 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Chear\Audio\" />
-    <Folder Include="wwwroot\Chear\Image\" />
-    <Folder Include="wwwroot\ImageOfSpecializationCertificate\" />
+    <Folder Include="wwwroot\CharacterAudio\" />
+    <Folder Include="wwwroot\CharacterImage\" />
   </ItemGroup>
 
 </Project>

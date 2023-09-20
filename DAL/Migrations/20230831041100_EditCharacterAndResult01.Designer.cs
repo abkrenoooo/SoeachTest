@@ -243,13 +243,13 @@ namespace DAL.Migrations
                     b.ToTable("Users", "security");
                 });
 
-            modelBuilder.Entity("SpeakEase.DAL.Entities.Chear", b =>
+            modelBuilder.Entity("SpeakEase.DAL.Entities.Question", b =>
                 {
-                    b.Property<int>("ChearId")
+                    b.Property<int>("QuestionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChearId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionId"), 1L, 1);
 
                     b.Property<string>("Audio")
                         .HasColumnType("nvarchar(max)");
@@ -275,7 +275,7 @@ namespace DAL.Migrations
                     b.Property<string>("Word")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ChearId");
+                    b.HasKey("QuestionId");
 
                     b.HasIndex("TestId");
 
@@ -345,7 +345,7 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuctionTestId"), 1L, 1);
 
-                    b.Property<int?>("ChearId")
+                    b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ChearState")
@@ -356,7 +356,7 @@ namespace DAL.Migrations
 
                     b.HasKey("QuctionTestId");
 
-                    b.HasIndex("ChearId");
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("TestId");
 
@@ -374,7 +374,7 @@ namespace DAL.Migrations
                     b.Property<int?>("AnotherCharacter")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ChearId")
+                    b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<int>("ChearPositionResult")
@@ -385,7 +385,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ResultId");
 
-                    b.HasIndex("ChearId");
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Results");
                 });
@@ -510,7 +510,7 @@ namespace DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SpeakEase.DAL.Entities.Chear", b =>
+            modelBuilder.Entity("SpeakEase.DAL.Entities.Question", b =>
                 {
                     b.HasOne("SpeakEase.DAL.Entities.Test", "Test")
                         .WithMany("Chears")
@@ -536,26 +536,26 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("SpeakEase.DAL.Entities.QuestionTest", b =>
                 {
-                    b.HasOne("SpeakEase.DAL.Entities.Chear", "Chear")
+                    b.HasOne("SpeakEase.DAL.Entities.Question", "Question")
                         .WithMany()
-                        .HasForeignKey("ChearId");
+                        .HasForeignKey("QuestionId");
 
                     b.HasOne("SpeakEase.DAL.Entities.Test", "Test")
                         .WithMany()
                         .HasForeignKey("TestId");
 
-                    b.Navigation("Chear");
+                    b.Navigation("Question");
 
                     b.Navigation("Test");
                 });
 
             modelBuilder.Entity("SpeakEase.DAL.Entities.Result", b =>
                 {
-                    b.HasOne("SpeakEase.DAL.Entities.Chear", "Chear")
+                    b.HasOne("SpeakEase.DAL.Entities.Question", "Question")
                         .WithMany()
-                        .HasForeignKey("ChearId");
+                        .HasForeignKey("QuestionId");
 
-                    b.Navigation("Chear");
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("SpeakEase.DAL.Entities.Specialist", b =>

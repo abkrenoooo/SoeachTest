@@ -139,7 +139,6 @@ namespace BLL.Services.Services
                 Specialist specialist = new Specialist()
                 {
                     UserId = _userManager.FindByNameAsync(model.Username).Result.Id,
-                    MaritalStatus = model.MaritalStatus,
                     Country = model.Country,
                     City = model.City,
                     IsAccepted = false,
@@ -216,7 +215,7 @@ namespace BLL.Services.Services
                 issuer: _jwt.Issuer,
                 audience: _jwt.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
+                expires: DateTime.UtcNow.AddDays(_jwt.DurationInDays),
                 signingCredentials: signingCredentials);
 
             return jwtSecurityToken;

@@ -25,7 +25,7 @@ namespace EductionPlatform.Controllers
         #region Register
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm] SpecialistVM model)
+        public async Task<IActionResult> Register(SpecialistVM model)
         {
             if (!ModelState.IsValid)
             {

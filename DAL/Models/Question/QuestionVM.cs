@@ -11,7 +11,7 @@ namespace DAL.Models.Question
 {
     public class QuestionVM
     {
-        //public int ChearId { get; set; }
+        //public int QuestionId { get; set; }
         [Required]
         public string Word { get; set; }
         //public string? ImagePath { get; set; }

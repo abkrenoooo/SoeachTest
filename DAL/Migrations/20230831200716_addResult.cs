@@ -32,13 +32,13 @@ namespace DAL.Migrations
                         name: "FK_Results_Questions_ChearId",
                         column: x => x.ChearId,
                         principalTable: "Questions",
-                        principalColumn: "ChearId");
+                        principalColumn: "QuestionId");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Results_ChearId",
                 table: "Results",
-                column: "ChearId");
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Results_PatientId",

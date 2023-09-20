@@ -1,6 +1,5 @@
 ﻿using BlL.Helper;
 using BLL.Services.IServices;
-using DAL.Entities;
 using DAL.Enum;
 using DAL.Models.Question;
 using DAL.Repository.IRepository;
@@ -41,31 +40,18 @@ namespace BLL.Services.Services
                 chear1.Word = chear.Word;
                 chear1.Character = chear.Character;
                 chear1.CharacterPosition = chear.ChearPosition;
-                chear1.IsDeleted = chear.IsDeleted;
-                chear1.IsHiden = chear.IsHiden;
-                List<files> files = new List<files>();
+                chear1.IsDeleted = false;
+                chear1.IsHiden =false;
                 if (chear.Audio is not null)
                 {
-                    var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
-                    await db.Files.AddAsync(fileAudio);
-                    await db.SaveChangesAsync();
-                    files.Add(fileAudio);
-
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
-                    //chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
-                    //var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
-                    //chear1.Audio = fileAudio;
+                    var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "CharacterAudio");
+                    chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/CharacterAudio/" + FileVedio[0];
                 }
                 if (chear.Image is not null)
                 {
-                    var fileImage = await UploadFileHelper.UploadFile(chear.Image);
-                    await db.Files.AddAsync(fileImage);
-                    await db.SaveChangesAsync();
-                    files.Add(fileImage);
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-                    //chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
+                    var FileVedio = UploadFileHelper.SaveFile(chear.Image, "CharacterImage");
+                    chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/CharacterImage/" + FileVedio[0];
                 }
-                chear1.files = files;
                 var result = await _QuestionRepo.Create_QuestionAsync(chear1);
                 return result;
 
@@ -146,10 +132,47 @@ namespace BLL.Services.Services
                     return new Response<SpeakEase.DAL.Entities.Question>
                     {
                         Success = true,
-                        Message = "Chear Found",
+                        Message = "Question Found",
                         ObjectData = result.ObjectData,
                         status_code = "200",
 
+                    };
+                }
+                return new Response<SpeakEase.DAL.Entities.Question>
+                {
+                    Success = true,
+                    Message = "Error",
+                    ObjectData = null,
+                    status_code = "404",
+
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<SpeakEase.DAL.Entities.Question>
+                {
+                    Success = false,
+                    status_code = "500",
+                    error = e.Message
+                };
+            }
+        }
+        #endregion
+
+        #region Get Last Question 
+        public async Task<Response<SpeakEase.DAL.Entities.Question>> Get_LastQuestionAsync(int patient, string userId)
+        {
+            try
+            {
+                var result = await _QuestionRepo.Get_LastQuestionAsync( patient, userId);
+                if (result.ObjectData is not null)
+                {
+                    return new Response<SpeakEase.DAL.Entities.Question>
+                    {
+                        Success = true,
+                        Message = "Question Found",
+                        ObjectData = result.ObjectData,
+                        status_code = "200",
                     };
                 }
                 return new Response<SpeakEase.DAL.Entities.Question>
@@ -184,7 +207,7 @@ namespace BLL.Services.Services
                     return new Response<SpeakEase.DAL.Entities.Question>
                     {
                         Success = true,
-                        Message = "Chear Found",
+                        Message = "Question Found",
                         ObjectData = result.ObjectData,
                         status_code = "200",
 
@@ -222,7 +245,7 @@ namespace BLL.Services.Services
                     return new Response<SpeakEase.DAL.Entities.Question>
                     {
                         Success = true,
-                        Message = "Chear Found",
+                        Message = "Question Found",
                         ObjectData = result.ObjectData,
                         status_code = "200",
 
@@ -250,41 +273,30 @@ namespace BLL.Services.Services
         #endregion
 
         #region update
-        public async Task<Response<SpeakEase.DAL.Entities.Question>> UpdateQuestionAsync(int Id, QuestionVM chear)
+        public async Task<Response<Question>> UpdateQuestionAsync(int Id, QuestionVM QuestionVM)
         {
             try
             {
 
-                SpeakEase.DAL.Entities.Question chear1 = new SpeakEase.DAL.Entities.Question();
-                chear1.Word = chear.Word;
-                chear1.Character = chear.Character;
-                chear1.CharacterPosition = chear.ChearPosition;
-                chear1.IsDeleted = chear.IsDeleted;
-                chear1.IsHiden = chear.IsHiden;
-                List<files> files = new List<files>();
-                if (chear.Audio is not null)
+                Question question = new Question();
+                question.Word = QuestionVM.Word;
+                question.Character = QuestionVM.Character;
+                question.CharacterPosition = QuestionVM.ChearPosition;
+                question.IsDeleted = QuestionVM.IsDeleted;
+                question.IsHiden = QuestionVM.IsHiden;
+                if (QuestionVM.Audio is not null)
                 {
-                    var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
-                    await db.Files.AddAsync(fileAudio);
-                    await db.SaveChangesAsync();
-                    files.Add(fileAudio);
-
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "Chear/Audio");
-                    //chear1.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Audio/" + FileVedio[0];
-                    //var fileAudio = await UploadFileHelper.UploadFile(chear.Audio);
-                    //chear1.Audio = fileAudio;
+                    var FileVedio = UploadFileHelper.SaveFile(QuestionVM.Audio, "Question/Audio");
+                    question.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Question/Audio/" + FileVedio[0];
+                    
                 }
-                if (chear.Image is not null)
+                if (QuestionVM.Image is not null)
                 {
-                    var fileImage = await UploadFileHelper.UploadFile(chear.Image);
-                    await db.Files.AddAsync(fileImage);
-                    await db.SaveChangesAsync();
-                    files.Add(fileImage);
-                    //var FileVedio = UploadFileHelper.SaveFile(chear.Image, "Chear/Image");
-                    //chear1.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Chear/Image/" + FileVedio[0];
+                    var FileVedio = UploadFileHelper.SaveFile(QuestionVM.Image, "Question/Image");
+                    question.Image = _httpContextAccessor.HttpContext.Request.Host.Value + "/Question/Image/" + FileVedio[0];
                 }
-                chear1.files = files; var resul = await _QuestionRepo.Update_QuestionAsync(Id,chear1);
-                return resul;
+                var result = await _QuestionRepo.Update_QuestionAsync(Id,question);
+                return result;
             }
             catch (Exception e)
             {
@@ -299,14 +311,14 @@ namespace BLL.Services.Services
 
 
         #endregion
-        #region GetChearQuction
-        public async Task<Response<Question>> GetAllQuestionChearAsync(Character ChearId)
+
+        #region Get All Question For Charecter
+        public async Task<Response<Question>> Get_AllQuestionForCharacterAsync(Character QuestionId)
         {
             try
             {
-                var result = await _QuestionRepo.GetAll_QuestionChearAsync(ChearId);
+                var result = await _QuestionRepo.Get_AllQuestionForCharacterAsync(QuestionId);
                 return result;
-
             }
             catch (Exception e)
             {

@@ -15,10 +15,11 @@ namespace DAL.Repository.IRepository
         Task<Response<Question>> Delete_QuestionAsync(int ChearId);
         Task<Response<Question>> GetAll_QuestionAsync(int Pagging);
         Task<Response<Question>> Get_QuestionAsync(int ChearId);
+        Task<Response<Question>> Get_LastQuestionAsync(int patient,string userId);
         Task<Response<Question>> Get_SecoundQuestionAsync(int ChearId);
         Task<Response<Question>> Get_ReplaceQuestionAsync(int ChearId);
         Task<Response<Question>> Update_QuestionAsync(int Id,Question chear);
-        Task<Response<Question>> GetAll_QuestionChearAsync(Character ChearId);
+        Task<Response<Question>> Get_AllQuestionForCharacterAsync(Character ChearId);
 
     }
 }

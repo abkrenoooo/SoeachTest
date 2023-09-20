@@ -62,14 +62,7 @@ namespace SpeakEase.Controllers
 
             return Ok(result);
         }
-        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
-        [HttpPost("Get MaritalStatus Enum")]
-        public async Task<IActionResult> GetMaritalStatusEnum()
-        {
-            var result = Enum.GetValues(typeof(MaritalStatus)).Cast<MaritalStatus>().Select(x => x.GetType().GetMember(x.ToString()).First().GetCustomAttribute<DisplayAttribute>().GetName()).ToList();
-
-            return Ok(result);
-        }
+        
         [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         [HttpPost("Get OME Enum")]
         public async Task<IActionResult> GetOMEEnum()

@@ -27,7 +27,7 @@ namespace DAL.Migrations
                         name: "FK_Files_Questions_QuestionChearId",
                         column: x => x.QuestionChearId,
                         principalTable: "Questions",
-                        principalColumn: "ChearId");
+                        principalColumn: "QuestionId");
                 });
 
             migrationBuilder.CreateIndex(

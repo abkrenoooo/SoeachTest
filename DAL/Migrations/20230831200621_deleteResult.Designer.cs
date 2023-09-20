@@ -296,11 +296,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("SpeakEase.DAL.Entities.Question", b =>
                 {
-                    b.Property<int>("ChearId")
+                    b.Property<int>("QuestionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChearId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionId"), 1L, 1);
 
                     b.Property<string>("Audio")
                         .HasColumnType("nvarchar(max)");
@@ -323,7 +323,7 @@ namespace DAL.Migrations
                     b.Property<string>("Word")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ChearId");
+                    b.HasKey("QuestionId");
 
                     b.ToTable("Questions");
                 });

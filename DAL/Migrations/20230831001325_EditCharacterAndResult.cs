@@ -15,7 +15,7 @@ namespace DAL.Migrations
             migrationBuilder.RenameColumn(
                 name: "TestId",
                 table: "Results",
-                newName: "ChearId");
+                newName: "QuestionId");
 
             migrationBuilder.RenameColumn(
                 name: "Degree",
@@ -71,9 +71,9 @@ namespace DAL.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Results_Chears_ChearId",
                 table: "Results",
-                column: "ChearId",
+                column: "QuestionId",
                 principalTable: "Chears",
-                principalColumn: "ChearId");
+                principalColumn: "QuestionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -112,7 +112,7 @@ namespace DAL.Migrations
                 newName: "Degree");
 
             migrationBuilder.RenameColumn(
-                name: "ChearId",
+                name: "QuestionId",
                 table: "Results",
                 newName: "TestId");
 

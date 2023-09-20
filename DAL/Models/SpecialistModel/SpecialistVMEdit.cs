@@ -18,7 +18,6 @@ namespace DAL.Models.SpecialistModel
         [MinLength(2)]
         public string? LastName { get; set; }
         public Gender? Gender { get; set; }
-        public MaritalStatus MaritalStatus { get; set; }
         [DataType(DataType.Date)]
         public DateTime? BirithDate { get; set; }
         //[DataType(DataType.EmailAddress)]

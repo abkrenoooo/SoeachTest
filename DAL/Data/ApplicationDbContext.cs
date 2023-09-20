@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using DAL.Entities;
 
 namespace SpeakEase.DAL.Data
 {
@@ -66,7 +65,6 @@ namespace SpeakEase.DAL.Data
         public DbSet<Result> Results { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<files> Files { get; set; } 
         protected override async void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

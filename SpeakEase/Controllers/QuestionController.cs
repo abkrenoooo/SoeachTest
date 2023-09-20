@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpeakEase.DAL.Entities;
+using System.Security.Claims;
 
 namespace SpeakEase.Controllers
 {
@@ -57,6 +58,17 @@ namespace SpeakEase.Controllers
         }
         #endregion
 
+        #region Get last Question
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
+        [HttpGet("Get last Question")]
+        public async Task<IActionResult> Get_LastQuestionAsync(int patientId)
+        {
+            var id = User.FindFirstValue("uid");
+            var result = await _QuestionService.Get_LastQuestionAsync(patientId, id);
+            return Ok(result);
+        }
+        #endregion
+
         #region Replace Question
         [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
 
@@ -99,15 +111,16 @@ namespace SpeakEase.Controllers
             return Ok(result);
         }
         #endregion
-        #region Get All Quction for chear
+
+        #region Get All Quction for Character
         [Authorize]
-        [HttpGet("GetAllQuctionForChear")]
-        public async Task<IActionResult> GetAllQuctionForChear(Character character)
+        [HttpGet("Get All Question For Character")]
+        public async Task<IActionResult> Get_AllQuestionForCharacterAsync(Character character)
         {
             try
             {
-                if (character == null) { return BadRequest("Chear is Null"); }
-                var result = await _QuestionService.GetAllQuestionChearAsync(character);
+                if (character == null) { return BadRequest("Question is Null"); }
+                var result = await _QuestionService.Get_AllQuestionForCharacterAsync(character);
                 return Ok(result);
             }
             catch (Exception e)

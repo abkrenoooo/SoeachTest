@@ -12,9 +12,9 @@ namespace SpeakEase.DAL.Entities
         public Character? AnotherCharacter { get; set; }
         public CharacterPositionResult? ChearPositionResult { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public int? ChearId { get; set; }
-        [ForeignKey(nameof(ChearId))]
-        public virtual Question? Chear { get; set; }
+        public int? QuestionId { get; set; }
+        [ForeignKey(nameof(QuestionId))]
+        public virtual Question? Question { get; set; }
         public int? PatientId { get; set; }
         [ForeignKey(nameof(PatientId))]
         public virtual Patient? Patient { get; set; }

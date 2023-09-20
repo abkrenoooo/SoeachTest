@@ -77,7 +77,7 @@ namespace DAL.Migrations
                         name: "FK_QuctionTests_Chears_ChearId",
                         column: x => x.ChearId,
                         principalTable: "Chears",
-                        principalColumn: "ChearId");
+                        principalColumn: "QuestionId");
                 });
 
             migrationBuilder.CreateTable(
@@ -99,7 +99,7 @@ namespace DAL.Migrations
                         name: "FK_Results_Chears_ChearId",
                         column: x => x.ChearId,
                         principalTable: "Chears",
-                        principalColumn: "ChearId");
+                        principalColumn: "QuestionId");
                     table.ForeignKey(
                         name: "FK_Results_Patients_PatientId",
                         column: x => x.PatientId,
@@ -110,12 +110,12 @@ namespace DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_QuctionTests_ChearId",
                 table: "QuctionTests",
-                column: "ChearId");
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Results_ChearId",
                 table: "Results",
-                column: "ChearId");
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Results_PatientId",
