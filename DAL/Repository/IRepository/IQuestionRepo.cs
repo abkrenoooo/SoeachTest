@@ -14,6 +14,7 @@ namespace DAL.Repository.IRepository
         Task<Response<Question>> Create_QuestionAsync(Question chear);
         Task<Response<Question>> Delete_QuestionAsync(int ChearId);
         Task<Response<Question>> GetAll_QuestionAsync(int Pagging);
+        Task<Response<Question>> GetAll_QuestionNotHiddenAsync(int Pagging);
         Task<Response<Question>> Get_QuestionAsync(int ChearId);
         Task<Response<Question>> Get_LastQuestionAsync(int patient,string userId);
         Task<Response<Question>> Get_SecoundQuestionAsync(int ChearId);

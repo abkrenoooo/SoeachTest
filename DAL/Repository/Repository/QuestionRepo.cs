@@ -80,13 +80,41 @@ namespace DAL.Repository.Repository
                     };
                 }
                 chear.IsDeleted = true;
-                chear.IsHiden = true;
+                chear.IsHidden = true;
                 await db.SaveChangesAsync();
                 return new Response<Question>
                 {
                     Success = true,
                     Message = "Question Is Deleted",
                     status_code = "200",
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<Question>
+                {
+                    Success = true,
+                    error = e.Message,
+                    status_code = "500"
+                };
+            }
+        }
+        #endregion
+
+        #region Get All not hidden
+        public async Task<Response<Question>> GetAll_QuestionNotHiddenAsync(int Pagging)
+        {
+            try
+            {
+                int AllQuestionsCount = await db.Questions.Where(n => !n.IsDeleted && !n.IsHidden).CountAsync();
+                var AllQuestions = await db.Questions.Where(n => !n.IsDeleted && !n.IsHidden).Skip((Pagging - 1) * 10).Take(10).ToListAsync();
+                return new Response<Question>
+                {
+                    Success = true,
+                    status_code = "200",
+                    Data = AllQuestions,
+                    CountOfData = AllQuestionsCount,
+                    Message = "All Questions"
                 };
             }
             catch (Exception e)
@@ -448,7 +476,7 @@ namespace DAL.Repository.Repository
                 chear.Image = chear2.Image;
                 chear.CharacterPosition = chear2.CharacterPosition;
                 chear.Character = chear2.Character;
-                chear.IsHiden = chear2.IsHiden;
+                chear.IsHidden = chear2.IsHidden;
                 chear.IsDeleted = chear2.IsDeleted;
 
                 await db.SaveChangesAsync();

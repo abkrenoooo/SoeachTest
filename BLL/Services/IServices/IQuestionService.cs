@@ -15,11 +15,12 @@ namespace BLL.Services.IServices
         Task<Response<Question>> CreateQuestionAsync(QuestionVM question);
         Task<Response<Question>> DeleteQuestionAsync(int questionId);
         Task<Response<Question>> GetAllQuestionAsync(int Pagging);
+        Task<Response<Question>> GetAll_QuestionNotHiddenAsync(int Pagging);
         Task<Response<Question>> GetQuestionAsync(int questionId); 
         Task<Response<Question>> Get_LastQuestionAsync(int patient, string userId);
         Task<Response<Question>> GetSecoundQuestionAsync(int questionId);
         Task<Response<Question>> GetReplaceQuestionAsync(int questionId);
-        Task<Response<Question>> UpdateQuestionAsync(int Id,QuestionVM question);
+        Task<Response<Question>> UpdateQuestionAsync(int Id,QuestionEditVM question);
         Task<Response<Question>> Get_AllQuestionForCharacterAsync(Character questionId);
 
     }

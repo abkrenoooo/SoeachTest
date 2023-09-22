@@ -80,6 +80,17 @@ namespace SpeakEase.Controllers
         }
         #endregion
 
+        #region Get All Not Hidden
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
+
+        [HttpGet("Get All Questions Not Hidden")]
+        public async Task<IActionResult> GetAll_QuestionNotHiddenAsync(int Pagging)
+        {
+            var result = await _QuestionService.GetAll_QuestionNotHiddenAsync(Pagging);
+            return Ok(result);
+        }
+        #endregion
+
         #region Get All
         [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
 
@@ -87,27 +98,6 @@ namespace SpeakEase.Controllers
         public async Task<IActionResult> GetAllQuestion(int Pagging)
         {
             var result = await _QuestionService.GetAllQuestionAsync(Pagging);
-            return Ok(result);
-        }
-        #endregion
-
-        #region Delete
-        [Authorize(Roles = "Server,Admin,SuperAdmin")]
-        [HttpDelete("Delete Question")]
-        public async Task<IActionResult> DeleteQuestion(int QuestionId)
-        {
-            var result = await _QuestionService.DeleteQuestionAsync(QuestionId);
-            return Ok(result);
-        }
-        #endregion
-
-        #region Updete
-        [Authorize(Roles = "Server,Admin,SuperAdmin")]
-
-        [HttpPut("Update Question")]
-        public async Task<IActionResult> UpdateQuestion(int Id,[FromForm] QuestionVM Question)
-        {
-            var result = await _QuestionService.UpdateQuestionAsync(Id,Question);
             return Ok(result);
         }
         #endregion
@@ -127,6 +117,27 @@ namespace SpeakEase.Controllers
             {
                 return BadRequest(e);
             }
+        }
+        #endregion
+
+        #region Updete
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
+
+        [HttpPut("Update Question")]
+        public async Task<IActionResult> UpdateQuestion(int Id,[FromForm] QuestionEditVM Question)
+        {
+            var result = await _QuestionService.UpdateQuestionAsync(Id,Question);
+            return Ok(result);
+        }
+        #endregion
+
+        #region Delete
+        [Authorize(Roles = "Server,Admin,SuperAdmin")]
+        [HttpDelete("Delete Question")]
+        public async Task<IActionResult> DeleteQuestion(int QuestionId)
+        {
+            var result = await _QuestionService.DeleteQuestionAsync(QuestionId);
+            return Ok(result);
         }
         #endregion
     }

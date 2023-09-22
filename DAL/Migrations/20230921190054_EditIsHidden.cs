@@ -5,12 +5,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class Start : Migration
+    public partial class EditIsHidden : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "security");
+
+            migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    QuestionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CharacterPosition = table.Column<int>(type: "int", nullable: true),
+                    Character = table.Column<int>(type: "int", nullable: true),
+                    Word = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Audio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsHidden = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.QuestionId);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
@@ -88,13 +107,11 @@ namespace DAL.Migrations
                 {
                     SpecialistId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageOfSpecializationCertificate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Hospital = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaritalStatus = table.Column<int>(type: "int", nullable: false),
-                    IsAccepted = table.Column<bool>(type: "bit", nullable: false),
+                    Hospital = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAccepted = table.Column<bool>(type: "bit", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -204,48 +221,6 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tests",
-                columns: table => new
-                {
-                    TestId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TestName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TestDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SpecialistId = table.Column<int>(type: "int", nullable: true),
-                    PatientId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tests", x => x.TestId);
-                    table.ForeignKey(
-                        name: "FK_Tests_Specialists_SpecialistId",
-                        column: x => x.SpecialistId,
-                        principalTable: "Specialists",
-                        principalColumn: "SpecialistId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Chears",
-                columns: table => new
-                {
-                    ChearId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Word = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Audio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TestId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chears", x => x.ChearId);
-                    table.ForeignKey(
-                        name: "FK_Chears_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "TestId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
@@ -255,11 +230,11 @@ namespace DAL.Migrations
                     SecondName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirithDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     OME = table.Column<int>(type: "int", nullable: true),
                     HearingTest = table.Column<int>(type: "int", nullable: true),
                     EducationState = table.Column<int>(type: "int", nullable: true),
-                    TestId = table.Column<int>(type: "int", nullable: true),
                     SpecialistId = table.Column<int>(type: "int", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -271,11 +246,6 @@ namespace DAL.Migrations
                         column: x => x.SpecialistId,
                         principalTable: "Specialists",
                         principalColumn: "SpecialistId");
-                    table.ForeignKey(
-                        name: "FK_Patients_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "TestId");
                 });
 
             migrationBuilder.CreateTable(
@@ -284,48 +254,33 @@ namespace DAL.Migrations
                 {
                     ResultId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Degree = table.Column<int>(type: "int", nullable: false),
-                    TestId = table.Column<int>(type: "int", nullable: true)
+                    ChearState = table.Column<int>(type: "int", nullable: false),
+                    AnotherCharacter = table.Column<int>(type: "int", nullable: true),
+                    ChearPositionResult = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: true),
+                    PatientId = table.Column<int>(type: "int", nullable: true),
+                    SpecialistId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Results", x => x.ResultId);
                     table.ForeignKey(
-                        name: "FK_Results_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "TestId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "QuctionTests",
-                columns: table => new
-                {
-                    QuctionTestId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ChearState = table.Column<int>(type: "int", nullable: true),
-                    TestId = table.Column<int>(type: "int", nullable: true),
-                    ChearId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuctionTests", x => x.QuctionTestId);
+                        name: "FK_Results_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "PatientId");
                     table.ForeignKey(
-                        name: "FK_QuctionTests_Chears_ChearId",
-                        column: x => x.ChearId,
-                        principalTable: "Chears",
+                        name: "FK_Results_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
                         principalColumn: "QuestionId");
                     table.ForeignKey(
-                        name: "FK_QuctionTests_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "TestId");
+                        name: "FK_Results_Specialists_SpecialistId",
+                        column: x => x.SpecialistId,
+                        principalTable: "Specialists",
+                        principalColumn: "SpecialistId");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Chears_TestId",
-                table: "Chears",
-                column: "TestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patients_SpecialistId",
@@ -333,26 +288,19 @@ namespace DAL.Migrations
                 column: "SpecialistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Patients_TestId",
-                table: "Patients",
-                column: "TestId",
-                unique: true,
-                filter: "[TestId] IS NOT NULL");
+                name: "IX_Results_PatientId",
+                table: "Results",
+                column: "PatientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuctionTests_ChearId",
-                table: "QuctionTests",
+                name: "IX_Results_QuestionId",
+                table: "Results",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuctionTests_TestId",
-                table: "QuctionTests",
-                column: "TestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Results_TestId",
+                name: "IX_Results_SpecialistId",
                 table: "Results",
-                column: "TestId");
+                column: "SpecialistId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -372,11 +320,6 @@ namespace DAL.Migrations
                 name: "IX_Specialists_UserId",
                 table: "Specialists",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tests_SpecialistId",
-                table: "Tests",
-                column: "SpecialistId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
@@ -414,12 +357,6 @@ namespace DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Patients");
-
-            migrationBuilder.DropTable(
-                name: "QuctionTests");
-
-            migrationBuilder.DropTable(
                 name: "Results");
 
             migrationBuilder.DropTable(
@@ -443,14 +380,14 @@ namespace DAL.Migrations
                 schema: "security");
 
             migrationBuilder.DropTable(
-                name: "Chears");
+                name: "Patients");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Roles",
                 schema: "security");
-
-            migrationBuilder.DropTable(
-                name: "Tests");
 
             migrationBuilder.DropTable(
                 name: "Specialists");

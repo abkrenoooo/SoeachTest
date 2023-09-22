@@ -41,7 +41,7 @@ namespace BLL.Services.Services
                 chear1.Character = chear.Character;
                 chear1.CharacterPosition = chear.ChearPosition;
                 chear1.IsDeleted = false;
-                chear1.IsHiden =false;
+                chear1.IsHidden =false;
                 if (chear.Audio is not null)
                 {
                     var FileVedio = UploadFileHelper.SaveFile(chear.Audio, "CharacterAudio");
@@ -75,6 +75,38 @@ namespace BLL.Services.Services
             {
                 var Chear = GetQuestionAsync(ChearId).Result.ObjectData;
                 var result = await _QuestionRepo.Delete_QuestionAsync(ChearId);
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new Response<SpeakEase.DAL.Entities.Question>
+                {
+                    Success = false,
+                    status_code = "500",
+                    error = e.Message
+                };
+            }
+        }
+        #endregion
+
+        #region Get All Not Hidden
+        public async Task<Response<SpeakEase.DAL.Entities.Question>> GetAll_QuestionNotHiddenAsync(int Pagging)
+        {
+            try
+            {
+                var result = await _QuestionRepo.GetAll_QuestionNotHiddenAsync(Pagging);
+                if (result.Success)
+                {
+                    double pagging = Convert.ToInt32(result.CountOfData) / 10;
+                    if (pagging % 10 == 0)
+                    {
+                        result.paggingNumber = (int)pagging;
+                    }
+                    else
+                    {
+                        result.paggingNumber = (int)pagging + 1;
+                    }
+                }
                 return result;
             }
             catch (Exception e)
@@ -273,7 +305,7 @@ namespace BLL.Services.Services
         #endregion
 
         #region update
-        public async Task<Response<Question>> UpdateQuestionAsync(int Id, QuestionVM QuestionVM)
+        public async Task<Response<Question>> UpdateQuestionAsync(int Id, QuestionEditVM QuestionVM)
         {
             try
             {
@@ -283,7 +315,7 @@ namespace BLL.Services.Services
                 question.Character = QuestionVM.Character;
                 question.CharacterPosition = QuestionVM.ChearPosition;
                 question.IsDeleted = QuestionVM.IsDeleted;
-                question.IsHiden = QuestionVM.IsHiden;
+                question.IsHidden = QuestionVM.IsHidden;
                 if (QuestionVM.Audio is not null)
                 {
                     var FileVedio = UploadFileHelper.SaveFile(QuestionVM.Audio, "Question/Audio");

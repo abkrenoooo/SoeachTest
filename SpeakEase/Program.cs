@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using BLL.Filters;
 using System.Security.Claims;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,19 +57,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddControllers();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
-builder.Services.AddAuthorization(options =>
-{
+//builder.Services.AddAuthorization(options =>
+//{
 
-    options.AddPolicy("Admin",
-        authBuilder =>
-        {
-            authBuilder.RequireRole("Admin,Server,SuperAdmin");
-        });
+//    options.AddPolicy("Admin",
+//        authBuilder =>
+//        {
+//            authBuilder.RequireRole("Admin,Server,SuperAdmin");
+//        });
 
-});
+//});
 //JWT
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //Services
@@ -85,7 +87,6 @@ builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 builder.Services.AddScoped<ISpecialistRepo, SpecialistRepo>();
 builder.Services.AddScoped<IQuestionRepo, QuestionRepo>();
 builder.Services.AddScoped<IResultRepo, ResultRepo>();
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -114,7 +115,6 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SpeakEase", Version = "v1" });
@@ -172,11 +172,8 @@ catch (System.Exception ex)
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseFileServer();
+app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -184,12 +181,14 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
-app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-app.UseAuthentication();
-app.UseFileServer();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllers();
 
+app.UseStaticFiles();
+
+app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

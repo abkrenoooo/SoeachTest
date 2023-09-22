@@ -14,12 +14,12 @@ namespace SpeakEase.DAL.Entities
     {
         [Key]
         public int QuestionId { get; set; }
-        public CharacterPosition CharacterPosition { get; set; }
-        public Character Character { get; set; }
+        public CharacterPosition? CharacterPosition { get; set; }
+        public Character? Character { get; set; }
         public string? Word { get; set; }
         public string? Image { get; set; }
         public string? Audio { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public bool IsHiden { get; set; } = false;
+        public bool IsHidden { get; set; } = false;
     }
 }

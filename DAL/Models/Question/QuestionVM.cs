@@ -24,7 +24,5 @@ namespace DAL.Models.Question
         public CharacterPosition ChearPosition { get; set; }
         [Required]
         public Character Character { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public bool IsHiden { get; set; } = false;
     }
 }

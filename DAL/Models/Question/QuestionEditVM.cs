@@ -14,13 +14,11 @@ namespace DAL.Models.Question
         [Required]
         public int ChearId { get; set; }
         public string? Word { get; set; }
-        //public string? ImagePath { get; set; }
-        //public string? AudioPath { get; set; }
         public IFormFile? Image { get; set; }
         public IFormFile? Audio { get; set; }
         public CharacterPosition? ChearPosition { get; set; }
         public Character? Character { get; set; }
-        public bool? IsDeleted { get; set; } = false;
-        public bool? IsHiden { get; set; } = false;
+        public bool IsDeleted { get; set; } 
+        public bool IsHidden { get; set; } 
     }
 }

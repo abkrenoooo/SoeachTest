@@ -59,7 +59,7 @@ namespace SpeakEase.Controllers
 
         #region Update  
         [HttpPut("Edit Spetialist")]
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         public async Task<IActionResult> EditSpecialistInSpetialistRequestAsync([FromForm] SpecialistVMEdit specialist)
         {
             if (!ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace SpeakEase.Controllers
 
         #region Delete 
         [HttpDelete("Remove Specialist")]
-        [Authorize]
+        [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
         public async Task<IActionResult> RemoveSpecialistAsync(int SpecialistId)
         {
             if (!ModelState.IsValid)

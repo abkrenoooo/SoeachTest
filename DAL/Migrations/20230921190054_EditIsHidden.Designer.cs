@@ -12,8 +12,8 @@ using SpeakEase.DAL.Data;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230831213202_addSpecialistinRuslt")]
-    partial class addSpecialistinRuslt
+    [Migration("20230921190054_EditIsHidden")]
+    partial class EditIsHidden
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -305,10 +305,10 @@ namespace DAL.Migrations
                     b.Property<string>("Audio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Character")
+                    b.Property<int?>("Character")
                         .HasColumnType("int");
 
-                    b.Property<int>("CharacterPosition")
+                    b.Property<int?>("CharacterPosition")
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
@@ -317,7 +317,7 @@ namespace DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsHiden")
+                    b.Property<bool>("IsHidden")
                         .HasColumnType("bit");
 
                     b.Property<string>("Word")
@@ -339,16 +339,19 @@ namespace DAL.Migrations
                     b.Property<int?>("AnotherCharacter")
                         .HasColumnType("int");
 
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ChearPositionResult")
                         .HasColumnType("int");
 
                     b.Property<int>("ChearState")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SpecialistId")
@@ -356,9 +359,9 @@ namespace DAL.Migrations
 
                     b.HasKey("ResultId");
 
-                    b.HasIndex("QuestionId");
-
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("SpecialistId");
 
@@ -374,30 +377,19 @@ namespace DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecialistId"), 1L, 1);
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Hospital")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageOfSpecializationCertificate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAccepted")
+                    b.Property<bool?>("IsAccepted")
                         .HasColumnType("bit");
-
-                    b.Property<int>("MaritalStatus")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -472,21 +464,21 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("SpeakEase.DAL.Entities.Result", b =>
                 {
-                    b.HasOne("SpeakEase.DAL.Entities.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId");
-
                     b.HasOne("SpeakEase.DAL.Entities.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId");
+
+                    b.HasOne("SpeakEase.DAL.Entities.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId");
 
                     b.HasOne("SpeakEase.DAL.Entities.Specialist", "Specialist")
                         .WithMany()
                         .HasForeignKey("SpecialistId");
 
-                    b.Navigation("Question");
-
                     b.Navigation("Patient");
+
+                    b.Navigation("Question");
 
                     b.Navigation("Specialist");
                 });
