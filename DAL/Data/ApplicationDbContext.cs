@@ -9,8 +9,7 @@ namespace SpeakEase.DAL.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
-        }
+        } 
         #region Comment
         //protected override void OnModelCreating(ModelBuilder builder)
         //{
@@ -76,5 +75,6 @@ namespace SpeakEase.DAL.Data
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", "security");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", "security");
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DAL.Enum;
+using DAL.Models.Patient;
 using DAL.Models.Question;
 using DAL.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -232,8 +233,17 @@ namespace DAL.Repository.Repository
         {
             try
             {
-
-                var lastResult = await db.Results.Where(n => !n.IsDeleted && n.PatientId == patient).Include(z => z.Question).OrderByDescending(x => x.Question.Character).OrderByDescending(x => x.Question.CharacterPosition).FirstOrDefaultAsync();
+                var specialist = await db.Specialists.FirstOrDefaultAsync(x => x.UserId == userId);
+                if (specialist == null)
+                {
+                    return new Response<Question>
+                    {
+                        Success = false,
+                        error = "This Spetialist not Found",
+                        status_code = "404"
+                    };
+                }
+                var lastResult = await db.Results.Where(n => !n.IsDeleted && n.PatientId == patient&&n.SpecialistId==specialist.SpecialistId).Include(x=>x.Question).OrderByDescending(x => x.Question.Character).OrderByDescending(x => x.Question.CharacterPosition).FirstOrDefaultAsync();
                 if (lastResult == null)
                 {
                     return new Response<Question>
@@ -471,9 +481,9 @@ namespace DAL.Repository.Repository
                         status_code = "500",
                     };
                 }
-                chear.Audio = chear2.Audio;
-                chear.Word = chear2.Word;
-                chear.Image = chear2.Image;
+                chear.Audio = chear2.Audio==null?chear.Audio:chear2.Audio;
+                chear.Word = chear2.Word == null ? chear.Word : chear2.Word;
+                chear.Image = chear2.Image == null ? chear.Image : chear2.Image;
                 chear.CharacterPosition = chear2.CharacterPosition;
                 chear.Character = chear2.Character;
                 chear.IsHidden = chear2.IsHidden;

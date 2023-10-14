@@ -65,7 +65,7 @@ namespace BLL.Services.Services
         #endregion
 
         #region Get All of Specialist
-        public async Task<Response<Patient>> GetAllPatientAsync(string userId, int paggingNumber)
+        public async Task<Response<PatientVM>> GetAllPatientOfSpetialistAsync(string userId, int paggingNumber)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace BLL.Services.Services
             }
             catch (Exception e)
             {
-                return new Response<Patient>
+                return new Response<PatientVM>
                 {
                     Success = false,
                     error = e.Message

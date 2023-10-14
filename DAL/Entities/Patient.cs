@@ -16,9 +16,9 @@ namespace SpeakEase.DAL.Entities
         public Gender Gender { get; set; }
         public OME? OME { get; set; }
         public OME? HearingTest { get; set; }
-        public EducationState? EducationState { get; set; }
-        public int? SpecialistId { get; set; }
+        public EducationState? EducationState { get; set; }        
         [ForeignKey(nameof(SpecialistId))]
+        public int? SpecialistId { get; set; }
         public virtual Specialist? Specialist { get; set; }
         public string? Note { get; set; }
     }

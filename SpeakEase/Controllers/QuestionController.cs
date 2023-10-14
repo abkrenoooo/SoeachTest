@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace SpeakEase.Controllers
 {
-    [Authorize(Roles = "Server,Admin,SuperAdmin")]
+    [Authorize(Roles = "Server,Admin,SuperAdmin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class QuestionController : ControllerBase

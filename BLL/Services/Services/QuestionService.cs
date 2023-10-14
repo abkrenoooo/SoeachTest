@@ -304,7 +304,7 @@ namespace BLL.Services.Services
         }
         #endregion
 
-        #region update
+        #region Update
         public async Task<Response<Question>> UpdateQuestionAsync(int Id, QuestionEditVM QuestionVM)
         {
             try
@@ -320,7 +320,10 @@ namespace BLL.Services.Services
                 {
                     var FileVedio = UploadFileHelper.SaveFile(QuestionVM.Audio, "Question/Audio");
                     question.Audio = _httpContextAccessor.HttpContext.Request.Host.Value + "/Question/Audio/" + FileVedio[0];
-                    
+                }
+                else
+                {
+
                 }
                 if (QuestionVM.Image is not null)
                 {

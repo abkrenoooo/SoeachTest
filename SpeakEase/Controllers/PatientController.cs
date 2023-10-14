@@ -48,7 +48,7 @@ namespace SpeakEase.Controllers
         public async Task<IActionResult> GetAllPatientOfSpetialist(int pagging)
         {
             var userId = User.FindFirst("uid")!.Value;
-            var result = await _patientService.GetAllPatientAsync(userId, pagging);
+            var result = await _patientService.GetAllPatientOfSpetialistAsync(userId, pagging);
             return Ok(result);
         }
         #endregion

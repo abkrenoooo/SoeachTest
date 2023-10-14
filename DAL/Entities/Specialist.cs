@@ -15,7 +15,7 @@ namespace SpeakEase.DAL.Entities
         public bool? IsAccepted { get; set; } = false;
         [ForeignKey(nameof(UserId))]
         public string UserId { get; set; }
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser? User { get; set; }
         public virtual List<Patient>? Patients { get; set; }
 
     }

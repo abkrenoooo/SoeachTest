@@ -20,7 +20,7 @@ namespace Bll.ExtensionMethods
                 Country = specialistVM.Country,
                 Hospital = specialistVM.Hospital,
                 IdNumber = specialistVM.IdNumber,
-                //SpecialistId = specialistVM.SpecialistId,
+                SpecialistId = specialistVM.SpecialistId,
                 //UserId = specialistVM.UserId,
             };
         }

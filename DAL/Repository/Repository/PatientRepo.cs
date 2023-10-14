@@ -1,4 +1,6 @@
-﻿using DAL.Repository.IRepository;
+﻿using DAL.ExtensionMethods;
+using DAL.Models.Patient;
+using DAL.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using SpeakEase.DAL.Data;
 using SpeakEase.DAL.Entities;
@@ -43,7 +45,6 @@ namespace DAL.Repository.Repository
                 patient.SpecialistId = specialist.SpecialistId;
                 await db.Patients.AddAsync(patient);
                 await db.SaveChangesAsync();
-
                 return new Response<Patient>
                 {
                     Success = true,
@@ -105,14 +106,14 @@ namespace DAL.Repository.Repository
 
         #region Get All Of Spetialist
 
-        public async Task<Response<Patient>> GetAll_PatientAsync(string userId, int paggingNumber)
+        public async Task<Response<PatientVM>> GetAll_PatientAsync(string userId, int paggingNumber)
         {
             try
             {
-                var specialist = await db.Specialists.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                var specialist = await db.Specialists.FirstOrDefaultAsync(x => x.UserId == userId);
                 if (specialist == null)
                 {
-                    return new Response<Patient>
+                    return new Response<PatientVM>
                     {
                         Success = false,
                         error = "This Spetialist not Found",
@@ -120,12 +121,13 @@ namespace DAL.Repository.Repository
                     };
                 }
                 int AllPatientcount = await db.Patients.Where(x => x.SpecialistId == specialist.SpecialistId).CountAsync();
-                var AllPatient = await db.Patients.Where(x => x.SpecialistId == specialist.SpecialistId).Skip((paggingNumber - 1) * 10).Take(10).ToListAsync(); ;
-                return new Response<Patient>
+                var AllPatient = await db.Patients.Where(x => x.SpecialistId == specialist.SpecialistId).Skip((paggingNumber - 1) * 10).Take(10).ToListAsync(); 
+
+                return new Response<PatientVM>
                 {
                     Success = true,
                     Message = "All patient",
-                    Data = AllPatient,
+                    Data = AllPatient.ConvertAll(x=>x.FromPatient().Result),
                     CountOfData = AllPatientcount,
                     paggingNumber = paggingNumber,
                     status_code = "200"
@@ -134,7 +136,7 @@ namespace DAL.Repository.Repository
             }
             catch (Exception e)
             {
-                return new Response<Patient>
+                return new Response<PatientVM>
                 {
                     Success = false,
                     error = e.Message,
@@ -144,7 +146,7 @@ namespace DAL.Repository.Repository
         }
         #endregion
 
-        #region Get Of Spetialist
+        #region Get Patient 
 
         public async Task<Response<Patient>> Get_PatientAsync(string userId, int patientId)
         {
@@ -198,7 +200,6 @@ namespace DAL.Repository.Repository
         {
             try
             {
-                
                 int AllPatientcount = await db.Patients.CountAsync();
                 var AllPatient = await db.Patients.Skip((paggingNumber - 1) * 10).Take(10).ToListAsync(); ;
                 return new Response<Patient>
@@ -291,6 +292,8 @@ namespace DAL.Repository.Repository
                 patient2.Note = patient.Note;
 
                 await db.SaveChangesAsync();
+                patient.Specialist = null;
+
                 return new Response<Patient>
                 {
                     Success = true,

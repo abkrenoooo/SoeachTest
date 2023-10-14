@@ -6,7 +6,7 @@ namespace DAL.Models.SpecialistModel
 {
     public class SpecialistVM
     {
-        //public int SpecialistId { get; set; }
+        public int SpecialistId { get; set; }
         [MaxLength(15)]
         [MinLength(2)]
         [Required]
